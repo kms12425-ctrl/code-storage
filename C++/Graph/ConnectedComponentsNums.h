@@ -1,5 +1,3 @@
-int h = 0;
-
 void DFS_2(ALGraph &G, int v, bool visited[])
 {
     visited[v] = 1;
@@ -11,7 +9,7 @@ void DFS_2(ALGraph &G, int v, bool visited[])
     return;
 }
 
-status DFSTraverse_2(ALGraph &G)
+status DFSTraverse_2(ALGraph &G, int h)
 // 对图G进行深度优先搜索遍历，依次对图中的每一个顶点使用函数visit访问一次，且仅访问一次
 {
     // 请在这里补充代码，完成本关任务
@@ -31,6 +29,7 @@ status DFSTraverse_2(ALGraph &G)
 
 int ConnectedComponentsNums(ALGraph G)
 {
-    DFSTraverse_2(G);
+    int h = 0;
+    DFSTraverse_2(G, h);
     return h;
 }
