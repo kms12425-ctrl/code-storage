@@ -46,5 +46,12 @@ int BFS_2(ALGraph &G, int v, vector<int> &dis)
             }
         }
     }
+    for (int i = 0; i < G.vexnum; i++)
+    {
+        if (visited[i] == 0)
+        {
+            dis[i] = 1000;
+        }
+    }
     return 1;
 }
