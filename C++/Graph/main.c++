@@ -440,5 +440,5 @@ int main()
         } // end of switch
     } // end of while
     printf("欢迎下次再使用本系统！\n");
-    return 0;
+    return 0; //
 } // end of main()
