@@ -1,4 +1,3 @@
-#include <vector>
 using namespace std;
 int BFS_2(ALGraph &G, int v, vector<int> &dis);
 void VerticesSetLessThanK(ALGraph &G, int v, int k)
