@@ -1,23 +1,59 @@
-#include "def.h"
-#include "with_file.h"
-#include "RemoveList.h"
-#include "PriorElem.h"
-#include "NextElem.h"
-#include "LocateList.h"
-#include "LocateElem.h"
-#include "ListTraverse.h"
-#include "ListLength.h"
-#include "ListInsert.h"
-#include "ListEmpty.h"
-#include "ListDelete.h"
-#include "GetElem.h"
-#include "DestroyList.h"
-#include "ClearList.h"
-#include "AddList.h"
-#include "sortList.h"
-#include "SubArrayNum.h"
-#include "MaxSubArray.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+// 宏定义和类型定义（来自 def.h）
+#define TRUE 1
+#define FALSE 0
+#define OK 1
+#define ERROR 0
+#define INFEASIBLE -1
+#define OVERFLOW -2
 
+typedef int status;
+typedef int ElemType; // 数据元素类型定义
+
+#define LIST_INIT_SIZE 100
+#define LISTINCREMENT 10
+
+typedef struct
+{ // 顺序表（顺序结构）的定义
+    ElemType *elem;
+    int length;
+    int listsize;
+} SqList;
+typedef struct
+{ // 线性表的管理表定义
+    struct
+    {
+        char name[30];
+        SqList L;
+    } elem[10];
+    int length;
+    int listsize;
+} LISTS;
+status SaveList(SqList &L, char FileName[]);
+status LoadList(SqList &L, char FileName[]);
+void AddList(LISTS &Lists, char ListName[]);
+status PriorElem(SqList L, ElemType e, ElemType &pre);
+status NextElem(SqList L, ElemType e, ElemType &next);
+int LocateList(LISTS Lists, char ListName[]);
+status ListTraverse(SqList L);
+status RemoveList(LISTS &Lists, char ListName[]);
+int LocateElem(SqList L, ElemType e);
+status ListLength(SqList L);
+status ListInsert(SqList &L, int i, ElemType e);
+status ListEmpty(SqList L);
+status ListDelete(SqList &L, int i, ElemType &e);
+status GetElem(SqList L, int i, ElemType &e);
+status DestroyList(SqList &L);
+status ClearList(SqList &L);
+int sortList(SqList &L);
+void SubArrayNum(SqList L);
+void MaxSubArray(SqList L);
+void swap(int *a, int *b);
+int medianOfThree(int arr[], int low, int high);
+int partition(int arr[], int low, int high);
+void quickSort(int arr[], int low, int high); // 快速排序
 int main()
 {
     LISTS Lists;
@@ -333,3 +369,327 @@ int main()
     printf("欢迎下次再使用本系统！\n");
     return 0;
 } // end of main()
+
+status SaveList(SqList &L, char FileName[])
+// 如果线性表L存在，将线性表L的的元素写到FileName文件中，返回OK，否则返回INFEASIBLE。
+{
+    if (L.elem == NULL)
+        return -1;
+    else
+    {
+        FILE *fp = fopen(FileName, "wb");
+        fwrite(&L.length, sizeof(ElemType), 1, fp);
+        fwrite(L.elem, sizeof(ElemType), L.length, fp);
+        fclose(fp);
+        return 1;
+    }
+}
+status LoadList(SqList &L, char FileName[])
+// 如果线性表L不存在，将FileName文件中的数据读入到线性表L中，返回OK，否则返回INFEASIBLE。
+{
+    if (L.length != 0)
+        return -1;
+    else
+    {
+        FILE *fp = fopen(FileName, "rb");
+        fread(&L.length, sizeof(ElemType), 1, fp);
+        L.elem = (ElemType *)malloc(sizeof(ElemType) * LIST_INIT_SIZE);
+        fread(L.elem, sizeof(ElemType), L.length, fp);
+        fclose(fp);
+        return 1;
+    }
+}
+void AddList(LISTS &Lists, char ListName[])
+{
+    SqList L;
+    Lists.elem[Lists.length++].L.elem = (ElemType *)malloc(sizeof(ElemType) * LIST_INIT_SIZE);
+    Lists.elem[Lists.length - 1].L.length = 0;
+    Lists.elem[Lists.length - 1].L.listsize = LIST_INIT_SIZE;
+    strcpy(Lists.elem[Lists.length - 1].name, ListName);
+}
+status PriorElem(SqList L, ElemType e, ElemType &pre)
+{
+    if (L.elem == NULL)
+        return -1;
+    else
+    {
+        for (int i = 0; i < L.length; i++)
+        {
+            if (L.elem[i] == e && i > 0)
+            {
+                pre = L.elem[i - 1];
+                return 1;
+            }
+        }
+        return 0;
+    }
+}
+status NextElem(SqList L, ElemType e, ElemType &next)
+{
+    if (L.elem == NULL)
+        return -1;
+    else
+    {
+        for (int i = 0; i < L.length; i++)
+        {
+            if (L.elem[i] == e && i < L.length - 1)
+            {
+                next = L.elem[i + 1];
+                return 1;
+            }
+        }
+        return 0;
+    }
+}
+int LocateList(LISTS Lists, char ListName[])
+{
+    for (int i = 0; i < Lists.length; i++)
+    {
+        if (strcmp(Lists.elem[i].name, ListName) == 0)
+            return i + 1;
+    }
+    return 0;
+}
+status ListTraverse(SqList L)
+{
+    if (L.elem == NULL)
+        return -1;
+    if (L.length == 0)
+        return 1;
+    else
+    {
+        int i;
+        for (i = 0; i < L.length - 1; i++)
+            printf("%d ", L.elem[i]);
+        printf("%d", L.elem[i]);
+        return 1;
+    }
+}
+status RemoveList(LISTS &Lists, char ListName[])
+{
+    for (int i = 0; i < Lists.length; i++)
+    {
+        if (strcmp(Lists.elem[i].name, ListName) == 0)
+        {
+            for (int j = i; j < Lists.length; j++)
+            {
+                Lists.elem[j] = Lists.elem[j + 1];
+            }
+            Lists.length--;
+            return 1;
+        }
+    }
+    return 0;
+}
+int LocateElem(SqList L, ElemType e)
+{
+    if (L.elem == NULL)
+        return -1;
+    else
+    {
+        for (int i = 0; i < L.length; i++)
+        {
+            if (L.elem[i] == e)
+                return i + 1;
+        }
+        return 0;
+    }
+}
+status ListLength(SqList L)
+{
+    if (L.elem == NULL)
+        return -1;
+    else
+        return L.length;
+}
+#include <malloc.h>
+status ListInsert(SqList &L, int i, ElemType e)
+{
+    if (i < 1 || i > L.length + 1)
+        return 0;
+    else if (L.elem == NULL)
+        return -1;
+    else
+    {
+        L.elem = (ElemType *)realloc(L.elem, sizeof(ElemType) * 11);
+        int j;
+        for (j = L.length - 1; j > i - 2; j--)
+        {
+            L.elem[j + 1] = L.elem[j];
+        }
+        L.elem[j + 1] = e;
+        L.length++;
+        return 1;
+    }
+}
+status ListEmpty(SqList L)
+{
+    if (L.length == 0 && L.elem != NULL)
+        return 1;
+    else if (L.length != 0 && L.elem != NULL)
+        return 0;
+    else
+        return -1;
+}
+status ListDelete(SqList &L, int i, ElemType &e)
+{
+    if (i < 1 || i >= L.length + 1)
+        return 0;
+    else if (L.elem == NULL)
+        return -1;
+    else
+    {
+        e = L.elem[i - 1];
+        for (int j = i - 1; j < L.length; j++)
+        {
+            L.elem[j] = L.elem[j + 1];
+        }
+        L.length--;
+        return 1;
+    }
+}
+status GetElem(SqList L, int i, ElemType &e)
+{
+    if (L.elem == NULL)
+        return -1;
+    else if (i < 1 || i > L.length)
+        return 0;
+    else
+    {
+        e = L.elem[i - 1];
+        return 1;
+    }
+}
+status DestroyList(SqList &L)
+{
+    if (L.elem == NULL)
+        return -1;
+    else
+    {
+        L.elem = 0;
+        free(L.elem);
+        return 1;
+    }
+}
+status ClearList(SqList &L)
+{
+    if (L.elem == NULL)
+        return -1;
+    else
+    {
+        L.length = 0;
+        return 1;
+    }
+}
+void swap(int *a, int *b);
+int medianOfThree(int arr[], int low, int high);
+int partition(int arr[], int low, int high);
+void quickSort(int arr[], int low, int high); // 快速排序
+int sortList(SqList &L)
+{
+    if (L.elem == NULL || L.length == 0)
+    {
+        printf("线性表为空\n");
+        return 0;
+    }
+    quickSort(L.elem, 0, L.length - 1);
+    return 1;
+}
+void swap(int *a, int *b)
+{
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+int medianOfThree(int arr[], int low, int high)
+{
+    int mid = low + (high - low) / 2;
+    if (arr[low] > arr[mid])
+        swap(&arr[low], &arr[mid]);
+    if (arr[low] > arr[high])
+        swap(&arr[low], &arr[high]);
+    if (arr[mid] > arr[high])
+        swap(&arr[mid], &arr[high]);
+    return mid;
+}
+int partition(int arr[], int low, int high)
+{
+    int pivotIndex = medianOfThree(arr, low, high);
+    swap(&arr[pivotIndex], &arr[high]);
+    int pivot = arr[high];
+    int i = low - 1;
+    for (int j = low; j < high; j++)
+    {
+        if (arr[j] < pivot)
+        {
+            i++;
+            swap(&arr[i], &arr[j]);
+        }
+    }
+    swap(&arr[i + 1], &arr[high]);
+    return i + 1;
+}
+void quickSort(int arr[], int low, int high)
+{
+    while (low < high)
+    {
+        int pi = partition(arr, low, high);
+        if (pi - low < high - pi)
+        {
+            quickSort(arr, low, pi - 1);
+            low = pi + 1;
+        }
+        else
+        {
+            quickSort(arr, pi + 1, high);
+            high = pi - 1;
+        }
+    }
+}
+void SubArrayNum(SqList L)
+{
+    if (L.elem == NULL || L.length == 0)
+    {
+        printf("线性表为空\n");
+        return;
+    }
+    int k;
+    printf("请输入你想求和的连续子数组k\n");
+    int result = 0;
+    scanf("%d", &k);
+    for (int i = 0; i < L.length; i++)
+    {
+        int count = 0;
+        for (int j = i; j < L.length; j++)
+        {
+            count = count + L.elem[j];
+            if (count == k)
+            {
+                result++;
+            }
+        }
+    }
+    printf("有%d个这样的子数组", result);
+    return;
+}
+void MaxSubArray(SqList L)
+{
+    if (L.elem == NULL || L.length == 0)
+    {
+        printf("线性表为空\n");
+        return;
+    }
+    int k;
+    int count = 0;
+    int max_count = 0;
+    for (int i = 0; i < L.length; i++)
+    {
+        count = count + L.elem[i];
+        if (count > max_count)
+            max_count = count;
+        if (count <= 0)
+            count = 0;
+    }
+    printf("最大连续子数组和为:%d", max_count);
+    return;
+}

@@ -1,26 +1,68 @@
-#include "def.h"
-#include <vector>
-#include "file_using.h"
-#include "PreOrderTraverse.h"
-#include "PostOrderTraverse.h"
-#include "LocateNode.h"
-#include "LevelOrderTraverse.h"
-#include "InsertNode.h"
-#include "InOrderTraverse.h"
-#include "GetSibling.h"
-#include "DestroyBiTree.h"
-#include "DeleteNode.h"
-#include "ClearBiTree.h"
-#include "CreateBiTree_pre.h"
-#include "BiTreeDepth.h"
-#include "Assign.h"
-#include "AddList.h"
-#include "LocateList.h"
-#include "RemoveList.h"
-#include "reverseTree.h"
-#include "get_definition.h"
-#include "MaxPathSum.h"
-#include "LowestCommonAncestor.h"
+#include "stdio.h"
+#include "stdlib.h"
+#include "string.h"
+
+#define TRUE 1
+#define FALSE 0
+#define OK 1
+#define ERROR 0
+#define INFEASIBLE -1
+#define OVERFLOW -2
+
+typedef int status;
+typedef int KeyType;
+typedef struct
+{
+    KeyType key;
+    char others[20];
+} TElemType; // 二叉树结点类型定义
+
+typedef struct BiTNode
+{ // 二叉链表结点的定义
+    TElemType data;
+    struct BiTNode *lchild, *rchild;
+} BiTNode, *BiTree;
+void visit(BiTree T)
+{
+    printf(" %d,%s", T->data.key, T->data.others);
+}
+
+typedef struct
+{ // 线性表的管理表定义
+    struct
+    {
+        char name[30];
+        BiTree T;
+    } elem[10];
+    int length;
+    int listsize;
+} LISTS;
+int z, count_3;
+void visit(BiTree T);
+BiTree create_Node(TElemType definition);
+status SaveBiTree(BiTree T, char FileName[]);
+status LoadBiTree(BiTree &T, char FileName[]);
+status PreOrderTraverse(BiTree T);
+status PostOrderTraverse(BiTree T);
+struct BiTNode *LocateNode(BiTree T, KeyType e);
+status LevelOrderTraverse(BiTree T);
+status InsertNode(BiTree &T, KeyType e, int LR, TElemType c);
+status InOrderTraverse(BiTree T);
+struct BiTNode *GetSibling(BiTree T, KeyType e);
+status DestroyBiTree(BiTree &T);
+status DeleteNode(BiTree &T, KeyType e);
+status ClearBiTree(BiTree &T);
+status CreateBiTree_pre(BiTree &T, TElemType definition[]);
+int BiTreeDepth(BiTree T);
+status Assign(BiTree &T, KeyType e, TElemType value);
+void AddList(LISTS &Lists, char ListName[]);
+int LocateList(LISTS Lists, char ListName[]);
+status RemoveList(LISTS &Lists, char ListName[]);
+status InvertTree(BiTree &T);
+void get_definition(TElemType definition[]);
+void MaxPathSum(BiTree &T, int &result);
+BiTree LowestCommonAncestor(BiTree &T, int p, int q);
+BiTree create_tree(TElemType definition[]);
 
 int main()
 {
@@ -98,8 +140,6 @@ int main()
                 break;
             }
             AddList(Lists, firstname);
-            // printf("1. 前序输入 \n2. 中序输入\n3. 后序输入\n");
-            // scanf("%d", &i);
             printf("请问你想如何创建二叉树?\n关键字为0时,表示空子树\n-1表示输入结束\n");
             get_definition(definition);
             // if (i == 1)
@@ -383,3 +423,570 @@ int main()
     printf("欢迎下次再使用本系统！\n");
     return 0;
 } // end of main()
+BiTree create_Node(TElemType definition)
+{
+    BiTree Node = (BiTree)malloc(sizeof(struct BiTNode));
+    Node->data.key = definition.key;
+    strcpy(Node->data.others, definition.others);
+    Node->lchild = Node->rchild = NULL;
+    return Node;
+}
+// file_using.h
+status SaveBiTree(BiTree T, char FileName[])
+{
+    int i = 0;
+    if (!T)
+        return -1;
+    FILE *fp = fopen(FileName, "wb");
+    BiTree stack[100];
+    TElemType definition[100];
+    BiTree p = T;
+    int top = 0;
+    if (T)
+        stack[top++] = p;
+    while (top)
+    {
+        p = stack[--top];
+        if (p)
+        {
+            definition[i].key = p->data.key;
+            strcpy(definition[i++].others, p->data.others);
+        }
+        else
+        {
+            definition[i].key = 0;
+            strcpy(definition[i++].others, "null");
+        }
+        if (p)
+        {
+            stack[top++] = p->rchild;
+        }
+        if (p)
+            stack[top++] = p->lchild;
+    }
+    fwrite(&i, sizeof(int), 1, fp);
+    fwrite(&definition, sizeof(TElemType), i, fp);
+    fclose(fp);
+    return 1;
+}
+status LoadBiTree(BiTree &T, char FileName[])
+// 读入文件FileName的结点数据，创建二叉树
+{
+    // 请在这里补充代码，完成本关任务
+    /********** Begin 2 *********/
+    z = 0;
+    FILE *fp = fopen(FileName, "rb");
+    fread(&count_3, sizeof(int), 1, fp);
+    TElemType definition[count_3];
+    fread(&definition, sizeof(TElemType), count_3, fp);
+    T = create_tree(definition);
+    return 1;
+    /********** End 2 **********/
+}
+BiTree create_tree(TElemType definition[])
+{
+    if (definition[z].key == 0)
+    {
+        z++;
+        return NULL;
+    }
+    BiTree root = create_Node(definition[z]);
+    if (z == count_3)
+        return root;
+    z++;
+    root->lchild = create_tree(definition);
+    root->rchild = create_tree(definition);
+    return root;
+}
+// PreOrderTraverse.h
+status PreOrderTraverse(BiTree T)
+{
+    if (T)
+    {
+        visit(T);
+        PreOrderTraverse(T->lchild);
+        PreOrderTraverse(T->rchild);
+    }
+    return 1;
+}
+// PostOrderTraverse.h
+status PostOrderTraverse(BiTree T)
+{
+    if (T)
+    {
+        PostOrderTraverse(T->lchild);
+        PostOrderTraverse(T->rchild);
+        visit(T);
+    }
+    return 1;
+}
+// LocateNode.h
+struct BiTNode *LocateNode(BiTree T, KeyType e)
+{
+    struct BiTNode *stack[100];
+    struct BiTNode *p = T;
+    int top = 0;
+    if (T)
+        stack[top++] = T;
+    while (top)
+    {
+        p = stack[--top];
+        if (p->data.key == e)
+            return p;
+        if (p->rchild != NULL)
+            stack[top++] = p->rchild;
+        if (p->lchild != NULL)
+            stack[top++] = p->lchild;
+    }
+    return NULL;
+}
+// LevelOrderTraverse.h
+status LevelOrderTraverse(BiTree T)
+{
+    BiTree queue[100];
+    int front = 0, rear = 0;
+    if (T)
+        queue[rear++] = T;
+    BiTree p = T;
+    while (front != rear)
+    {
+        if (p->lchild)
+            queue[rear++] = p->lchild;
+        if (p->rchild)
+            queue[rear++] = p->rchild;
+        visit(p);
+        p = queue[++front];
+    }
+    return 1;
+}
+// InsertNode.h
+int list_treaverse(BiTree T, TElemType value)
+{
+    struct BiTNode *stack[100];
+    BiTree p = T;
+    int top = 0;
+    if (T)
+        stack[top++] = p;
+    while (top)
+    {
+        p = stack[--top];
+        if (p->data.key == value.key)
+            return 1;
+        if (p->rchild)
+            stack[top++] = p->rchild;
+        if (p->lchild)
+            stack[top++] = p->lchild;
+    }
+    return 0;
+}
+status InsertNode(BiTree &T, KeyType e, int LR, TElemType c)
+{
+    if (list_treaverse(T, c))
+        return 0;
+    BiTree p;
+    p = (BiTree)malloc(sizeof(struct BiTNode));
+    p->data = c;
+    if (LR == -1)
+    {
+        p->rchild = T;
+        p->lchild = NULL;
+        T = p;
+        return 1;
+    }
+    struct BiTNode *stack[100];
+    BiTree q = T;
+    int top = 0;
+    if (T)
+        stack[top++] = q;
+    while (top)
+    {
+        q = stack[--top];
+        if (q->data.key == e)
+        {
+            if (LR == 0)
+            {
+                BiTree temp = q->lchild;
+                q->lchild = p;
+                p->rchild = temp;
+                p->lchild = NULL;
+            }
+            else if (LR == 1)
+            {
+                BiTree temp = q->rchild;
+                q->rchild = p;
+                p->rchild = temp;
+                p->lchild = NULL;
+            }
+            return 1;
+        }
+        if (q->rchild)
+            stack[top++] = q->rchild;
+        if (q->lchild)
+            stack[top++] = q->lchild;
+    }
+    return 0;
+}
+// InOrderTraverse.h
+status InOrderTraverse(BiTree T)
+{
+    if (T)
+    {
+        InOrderTraverse(T->lchild);
+        visit(T);
+        InOrderTraverse(T->rchild);
+    }
+    return 1;
+}
+// GetSibling.h
+struct BiTNode *GetSibling(BiTree T, KeyType e)
+{
+    struct BiTNode *stack[100];
+    BiTree p = T;
+    int top = 0;
+    if (T)
+        stack[top++] = p;
+    while (top)
+    {
+        p = stack[--top];
+        if (p->rchild != NULL && p->lchild != NULL && p->lchild->data.key == e)
+            return p->rchild;
+        if (p->lchild != NULL && p->rchild != NULL && p->rchild->data.key == e)
+            return p->lchild;
+        if (p->rchild)
+            stack[top++] = p->rchild;
+        if (p->lchild)
+            stack[top++] = p->lchild;
+    }
+    return NULL;
+}
+// DestroyBiTree.h
+status DestroyBiTree(BiTree &T)
+{
+    if (T)
+    {
+        DestroyBiTree(T->lchild);
+        DestroyBiTree(T->rchild);
+        free(T);
+        T = NULL;
+    }
+    return 1;
+}
+// DeleteNode.h
+void delete_right_node(BiTree &q, BiTree &p, KeyType e)
+{
+    BiTree temp = p;
+    if (p->lchild == NULL && p->rchild == NULL)
+    {
+        q->rchild = NULL;
+        free(p);
+    }
+    else if (p->lchild == NULL && p->rchild != NULL)
+    {
+        q->rchild = p->rchild;
+        free(p);
+    }
+    else if (p->rchild == NULL && p->lchild != NULL)
+    {
+        q->rchild = p->lchild;
+        free(p);
+    }
+    else if (p->lchild != NULL && p->rchild != NULL)
+    {
+        q->rchild = p->lchild;
+        BiTree temp2 = p->rchild;
+        BiTree t = p->lchild;
+        free(p);
+        while (t->rchild)
+            t = t->rchild;
+        t->rchild = temp2;
+    }
+}
+void delete_left_node(BiTree &q, BiTree &p, KeyType e)
+{
+    BiTree temp = p;
+    if (p->lchild == NULL && p->rchild == NULL)
+    {
+        q->lchild = NULL;
+        free(p);
+    }
+    else if (p->lchild == NULL && p->rchild != NULL)
+    {
+        q->lchild = p->rchild;
+        free(p);
+    }
+    else if (p->rchild == NULL && p->lchild != NULL)
+    {
+        q->lchild = p->lchild;
+        free(p);
+    }
+    else if (p->lchild != NULL && p->rchild != NULL)
+    {
+        q->lchild = p->lchild;
+        BiTree temp2 = p->rchild;
+        BiTree t = p->lchild;
+        free(p);
+        while (t->rchild)
+            t = t->rchild;
+        t->rchild = temp2;
+    }
+}
+status DeleteNode(BiTree &T, KeyType e)
+{
+    struct BiTNode *stack[100];
+    BiTree p = T;
+    if (p->data.key == e)
+    {
+        if (p->lchild == NULL && p->rchild == NULL)
+            free(p);
+        else if (p->lchild == NULL && p->rchild != NULL)
+        {
+            T = p->rchild;
+            free(p);
+        }
+        else if (p->rchild == NULL && p->lchild != NULL)
+        {
+            T = p->lchild;
+            free(p);
+        }
+        else if (p->lchild != NULL && p->rchild != NULL)
+        {
+            T = T->lchild;
+            BiTree temp = p->rchild;
+            struct BiTNode *temP_2 = p->lchild;
+            free(p);
+            while (temP_2->rchild)
+                temP_2 = temP_2->rchild;
+            temP_2->rchild = temp;
+        }
+        return 1;
+    }
+    int top = 0;
+    if (T)
+        stack[top++] = p;
+    while (top)
+    {
+        p = stack[--top];
+        if (p->lchild != NULL && p->lchild->data.key == e)
+        {
+            delete_left_node(p, p->lchild, e);
+            return 1;
+        }
+        if (p->rchild != NULL && p->rchild->data.key == e)
+        {
+            delete_right_node(p, p->rchild, e);
+            return 1;
+        }
+        if (p->rchild)
+            stack[top++] = p->rchild;
+        if (p->lchild)
+            stack[top++] = p->lchild;
+    }
+    return 0;
+}
+// ClearBiTree.h
+status ClearBiTree(BiTree &T)
+{
+    if (T && (T->lchild || T->rchild))
+    {
+        ClearBiTree(T->lchild);
+        ClearBiTree(T->rchild);
+        free(T);
+        T = NULL;
+    }
+    return 1;
+}
+// CreateBiTree_pre.h
+int count_1 = 0;
+BiTree create_tree_pre(TElemType definition[])
+{
+    if (definition[count_1].key == 0)
+    {
+        count_1++;
+        return NULL;
+    }
+    BiTree root = create_Node(definition[count_1]);
+    if (definition[count_1].key == -1)
+        return root;
+    count_1++;
+    root->lchild = create_tree_pre(definition);
+    root->rchild = create_tree_pre(definition);
+    return root;
+}
+status CreateBiTree_pre(BiTree &T, TElemType definition[])
+{
+    count_1 = 0;
+    int temp[200000] = {0};
+    for (int i = 0; definition[i].key != -1; i++)
+    {
+        temp[definition[i].key]++;
+        if (temp[definition[i].key] > 1 && definition[i].key != 0)
+        {
+            return 0;
+        }
+    }
+    T = create_tree_pre(definition);
+    return 1;
+}
+// BiTreeDepth.h
+int BiTreeDepth(BiTree T)
+{
+    int leftdepth = 0, rightdepth = 0;
+    if (T && T->lchild == NULL && T->rchild == NULL)
+        return 1;
+    else if (!T)
+        return 0;
+    else if (T->lchild || T->rchild)
+    {
+        if (T->lchild)
+            leftdepth = BiTreeDepth(T->lchild);
+        if (T->rchild)
+            rightdepth = BiTreeDepth(T->rchild);
+    }
+    int result = 1 + (leftdepth > rightdepth ? leftdepth : rightdepth);
+    return result;
+}
+// Assign.h
+int list_treaverse(BiTree T, KeyType e, TElemType value)
+{
+    struct BiTNode *stack[100];
+    BiTree p = T;
+    int top = 0;
+    if (T)
+        stack[top++] = p;
+    while (top)
+    {
+        p = stack[--top];
+        if (p->data.key == value.key && p->data.key != e)
+            return 1;
+        if (p->rchild)
+            stack[top++] = p->rchild;
+        if (p->lchild)
+            stack[top++] = p->lchild;
+    }
+    return 0;
+}
+status Assign(BiTree &T, KeyType e, TElemType value)
+{
+    struct BiTNode *stack[100];
+    BiTree p = T;
+    int top = 0;
+    if (list_treaverse(T, e, value))
+        return 0;
+    if (T)
+        stack[top++] = p;
+    while (top)
+    {
+        p = stack[--top];
+        if (p->data.key == e)
+        {
+            p->data.key = value.key;
+            strcpy(p->data.others, value.others);
+            return 1;
+        }
+        if (p->rchild)
+            stack[top++] = p->rchild;
+        if (p->lchild)
+            stack[top++] = p->lchild;
+    }
+    return 0;
+}
+// AddList.h
+void AddList(LISTS &Lists, char ListName[])
+{
+    Lists.elem[Lists.length++].T = (BiTree)malloc(sizeof(struct BiTNode));
+    Lists.elem[Lists.length - 1].T->lchild = NULL;
+    Lists.elem[Lists.length - 1].T->rchild = NULL;
+    strcpy(Lists.elem[Lists.length - 1].name, ListName);
+}
+// LocateList.h
+int LocateList(LISTS Lists, char ListName[])
+{
+    for (int i = 0; i < Lists.length; i++)
+    {
+        if (strcmp(Lists.elem[i].name, ListName) == 0)
+            return i + 1;
+    }
+    return 0;
+}
+// RemoveList.h
+status RemoveList(LISTS &Lists, char ListName[])
+{
+    for (int i = 0; i < Lists.length; i++)
+    {
+        if (strcmp(Lists.elem[i].name, ListName) == 0)
+        {
+            DestroyBiTree(Lists.elem[i].T);
+            strcpy(Lists.elem[i].name, "0");
+            return 1;
+        }
+    }
+    return 0;
+}
+// reverseTree.h
+status InvertTree(BiTree &T)
+{
+    if (T)
+    {
+        BiTree p = T->lchild;
+        T->lchild = T->rchild;
+        T->rchild = p;
+        InvertTree(T->lchild);
+        InvertTree(T->rchild);
+    }
+    return 1;
+}
+// get_definition.h
+void get_definition(TElemType definition[])
+{
+    int i = 0;
+    do
+    {
+        scanf("%d%s", &definition[i].key, definition[i].others);
+    } while (definition[i++].key != -1);
+    return;
+}
+// MaxPathSum.h
+void travers(BiTree &p, int &result, int &temp_result)
+{
+    temp_result = temp_result + p->data.key;
+    if (p->lchild == NULL && p->rchild == NULL)
+    {
+        result = temp_result > result ? temp_result : result;
+    }
+    if (p->lchild)
+    {
+        travers(p->lchild, result, temp_result);
+        temp_result = temp_result - p->lchild->data.key;
+    }
+    if (p->rchild)
+    {
+        travers(p->rchild, result, temp_result);
+        temp_result = temp_result - p->rchild->data.key;
+    }
+    return;
+}
+void MaxPathSum(BiTree &T, int &result)
+{
+    BiTree p = T;
+    int temp_result = 0;
+    travers(p, result, temp_result);
+    return;
+}
+// LowestCommonAncestor.h
+BiTree LowestCommonAncestor(BiTree &T, int p, int q)
+{
+    if (T == NULL)
+        return NULL;
+    if (T->data.key == p || T->data.key == q)
+        return T;
+    BiTree l = LowestCommonAncestor(T->lchild, p, q);
+    BiTree r = LowestCommonAncestor(T->rchild, p, q);
+    if (l && r)
+        return T;
+    else if (l && !r)
+        return l;
+    else if (!l && r)
+        return r;
+    else
+        return NULL;
+}

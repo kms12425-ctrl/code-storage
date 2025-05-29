@@ -1,23 +1,56 @@
-#include "def.h"
-#include "file_using.h"
-#include "InitList.h"
-#include "PriorElem.h"
-#include "NextElem.h"
-#include "LocateElem.h"
-#include "ListTraverse.h"
-#include "ListLength.h"
-#include "ListInsert.h"
-#include "ListEmpty.h"
-#include "ListDelete.h"
-#include "GetElem.h"
-#include "DestroyList.h"
-#include "ClearList.h"
-#include "AddList.h"
-#include "LocateList.h"
-#include "RemoveList.h"
-#include "sortList.h"
-#include "reverseList.h"
-#include "RemoveNthFromEnd.h"
+#include "stdio.h"
+#include "stdlib.h"
+#include "string.h"
+#define TRUE 1
+#define FALSE 0
+#define OK 1
+#define ERROR 0
+#define INFEASIBLE -1
+#define OVERFLOW -2
+
+typedef int status;
+typedef int ElemType;
+#define LIST_INIT_SIZE 100
+#define LISTINCREMENT 10
+typedef struct LNode
+{
+    ElemType data;
+    struct LNode *next;
+} LNode, *LinkList;
+typedef struct
+{
+    struct
+    {
+        char name[30];
+        LinkList L;
+    } elem[10];
+    int length;
+    int listsize;
+} LISTS;
+status SaveList(LinkList L, char FileName[]);
+status LoadList(LinkList &L, char FileName[]);
+void AddList(LISTS &Lists, char ListName[]);
+status PriorElem(LinkList L, ElemType e, ElemType &pre);
+status NextElem(LinkList L, ElemType e, ElemType &next);
+status InitList(LinkList &L);
+status ListTraverse(LinkList L);
+int ListLength(LinkList L);
+status ListInsert(LinkList &L, int i, ElemType e);
+status ListEmpty(LinkList L);
+status ListDelete(LinkList &L, int i, ElemType &e);
+status GetElem(LinkList L, int i, ElemType &e);
+status DestroyList(LinkList &L);
+status ClearList(LinkList &L);
+int LocateList(LISTS Lists, char ListName[]);
+status RemoveList(LISTS &Lists, char ListName[]);
+status LocateElem(LinkList L, ElemType e);
+int sortList(LinkList L);
+void swap(int *a, int *b);
+int medianOfThree(int arr[], int low, int high);
+int partition(int arr[], int low, int high);
+void quickSort(int arr[], int low, int high);
+status reverseList(LinkList &L);
+status RemoveNthFromEnd(LinkList &L, int n);
 
 int main()
 {
@@ -363,3 +396,446 @@ int main()
     printf("欢迎下次再使用本系统！\n");
     return 0;
 } // end of main()
+
+// file_using.h
+status SaveList(LinkList L, char FileName[])
+{
+    if (L == NULL)
+        return -1;
+    FILE *fp = fopen(FileName, "wb");
+    LNode *p = L;
+    int count = -1;
+    while (p)
+    {
+        p = p->next;
+        count++;
+    }
+    fwrite(&count, sizeof(ElemType), 1, fp);
+    p = L->next;
+    for (int i = 0; i < count; i++, p = p->next)
+        fwrite(&p->data, sizeof(ElemType), 1, fp);
+    fclose(fp);
+    return 1;
+}
+status LoadList(LinkList &L, char FileName[])
+{
+    if (L->next != NULL)
+        return -1;
+    int count;
+    L = (LinkList)malloc(sizeof(LNode));
+    LNode *tail = L;
+    LinkList p;
+    FILE *fp = fopen(FileName, "rb");
+    fread(&count, sizeof(ElemType), 1, fp);
+    for (int i = 0; i < count; i++, p = p->next)
+    {
+        p = (LinkList)malloc(sizeof(LNode));
+        fread(&p->data, sizeof(ElemType), 1, fp);
+        tail->next = p;
+        tail = tail->next;
+    }
+    tail->next = NULL;
+    fclose(fp);
+    return 1;
+}
+
+// AddList.h
+void AddList(LISTS &Lists, char ListName[])
+{
+    Lists.elem[Lists.length++].L = (LinkList)malloc(sizeof(LNode));
+    Lists.elem[Lists.length - 1].L->next = NULL;
+    strcpy(Lists.elem[Lists.length - 1].name, ListName);
+}
+
+// PriorElem.h
+status PriorElem(LinkList L, ElemType e, ElemType &pre)
+{
+    if (L == NULL)
+        return -1;
+    L = L->next;
+    while (L)
+    {
+        if (L->next != NULL && L->next->data == e)
+        {
+            pre = L->data;
+            return 1;
+        }
+        L = L->next;
+    }
+    return 0;
+}
+
+// NextElem.h
+status NextElem(LinkList L, ElemType e, ElemType &next)
+{
+    if (L == NULL)
+        return -1;
+    L = L->next;
+    while (L)
+    {
+        if (L->next != NULL && L->data == e)
+        {
+            next = L->next->data;
+            return 1;
+        }
+        L = L->next;
+    }
+    return 0;
+}
+
+// InitList.h
+status InitList(LinkList &L)
+{
+    if (L != NULL)
+        return -1;
+    else
+    {
+        L = (LinkList)malloc(sizeof(LNode));
+        L->next = NULL;
+        return 1;
+    }
+}
+
+// ListTraverse.h
+status ListTraverse(LinkList L)
+{
+    if (L == NULL)
+        return -1;
+    else if (L->next == NULL)
+        return 1;
+    LNode *p = L->next;
+    while (p)
+    {
+        printf("%d ", p->data);
+        p = p->next;
+    }
+    return 1;
+}
+
+// ListLength.h
+int ListLength(LinkList L)
+{
+    if (L == NULL)
+        return -1;
+    else
+    {
+        LinkList p = L->next;
+        int count = 0;
+        while (p != NULL)
+        {
+            p = p->next;
+            count++;
+        }
+        return count;
+    }
+}
+
+// ListInsert.h
+status ListInsert(LinkList &L, int i, ElemType e)
+{
+    if (L == NULL)
+        return -1;
+    LNode *p = L;
+    int count = 0;
+    while (p)
+    {
+        p = p->next;
+        count++;
+    }
+    if (i <= 0 || i > count)
+        return 0;
+    LNode *b;
+    b = (LNode *)malloc(sizeof(LNode));
+    b->data = e;
+    p = L;
+    for (int j = 0; j < i - 1; j++)
+        p = p->next;
+    b->next = p->next;
+    p->next = b;
+    return 1;
+}
+
+// ListEmpty.h
+status ListEmpty(LinkList L)
+{
+    if (L == NULL)
+        return -1;
+    else if (L->next == NULL)
+        return 1;
+    else
+        return 0;
+}
+
+// ListDelete.h
+status ListDelete(LinkList &L, int i, ElemType &e)
+{
+    if (L == NULL)
+        return -1;
+    LNode *p = L;
+    LNode *q = L;
+    int count = -1;
+    while (p)
+    {
+        p = p->next;
+        count++;
+    }
+    if (i <= 0 || i > count)
+        return 0;
+    p = L;
+    for (int j = 0; j < i - 1; j++)
+        p = p->next;
+    e = p->next->data;
+    q = p->next;
+    p->next = q->next;
+    free(q);
+    return 1;
+}
+
+// GetElem.h
+status GetElem(LinkList L, int i, ElemType &e)
+{
+    if (L == NULL)
+        return -1;
+    else
+    {
+        LinkList p = L->next;
+        int count = 0;
+        while (p != NULL)
+        {
+            p = p->next;
+            count++;
+        }
+        if (i < 1 || i > count)
+            return 0;
+        else
+        {
+            p = L->next;
+            for (int j = 0; j < i - 1; j++)
+                p = p->next;
+            e = p->data;
+            return 1;
+        }
+    }
+}
+
+// DestroyList.h
+status DestroyList(LinkList &L)
+{
+    if (L == NULL)
+        return -1;
+    else
+    {
+        LinkList temp_1 = L->next;
+        LinkList temp_2;
+        while (temp_1 != NULL)
+        {
+            temp_2 = temp_1;
+            temp_1 = temp_1->next;
+            free(temp_2);
+        }
+        free(L);
+        L = NULL;
+        return 1;
+    }
+}
+
+// ClearList.h
+status ClearList(LinkList &L)
+{
+    if (L == NULL)
+        return -1;
+    else
+    {
+        LinkList temp_1 = L->next;
+        LinkList temp_2;
+        while (temp_1 != NULL)
+        {
+            temp_2 = temp_1;
+            temp_1 = temp_1->next;
+            free(temp_2);
+        }
+        L->next = NULL;
+        return 1;
+    }
+}
+
+// LocateList.h
+int LocateList(LISTS Lists, char ListName[])
+{
+    for (int i = 0; i < Lists.length; i++)
+    {
+        if (strcmp(Lists.elem[i].name, ListName) == 0)
+            return i + 1;
+    }
+    return 0;
+}
+
+// RemoveList.h
+status RemoveList(LISTS &Lists, char ListName[])
+{
+    for (int i = 0; i < Lists.length; i++)
+    {
+        if (strcmp(Lists.elem[i].name, ListName) == 0)
+        {
+            LinkList temp_1 = Lists.elem[i].L->next;
+            LinkList temp_2;
+            while (temp_1 != NULL)
+            {
+                temp_2 = temp_1;
+                temp_1 = temp_1->next;
+                free(temp_2);
+            }
+            free(Lists.elem[i].L);
+            Lists.elem[i].L = NULL;
+            Lists.elem[i].name[0] = '\0';
+            return 1;
+        }
+    }
+    return 0;
+}
+
+// LocateElem.h
+status LocateElem(LinkList L, ElemType e)
+{
+    if (L == NULL)
+        return -1;
+    L = L->next;
+    int count = 0;
+    while (L)
+    {
+        count++;
+        if (L->data == e)
+            return count;
+        L = L->next;
+    }
+    return 0;
+}
+
+// sortList.h
+int sortList(LinkList L)
+{
+    if (L == NULL || L->next == NULL)
+    {
+        printf("线性表为空\n");
+        return 0;
+    }
+    LinkList p = L->next;
+    int count = 0;
+    while (p != NULL)
+    {
+        p = p->next;
+        count++;
+    }
+    int temp_array[count];
+    p = L->next;
+    for (int i = 0; i < count; i++, p = p->next)
+    {
+        temp_array[i] = p->data;
+    }
+    quickSort(temp_array, 0, count - 1);
+    p = L->next;
+    for (int i = 0; i < count; p = p->next, i++)
+    {
+        p->data = temp_array[i];
+    }
+    return 1;
+}
+void swap(int *a, int *b)
+{
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+int medianOfThree(int arr[], int low, int high)
+{
+    int mid = low + (high - low) / 2;
+    if (arr[low] > arr[mid])
+        swap(&arr[low], &arr[mid]);
+    if (arr[low] > arr[high])
+        swap(&arr[low], &arr[high]);
+    if (arr[mid] > arr[high])
+        swap(&arr[mid], &arr[high]);
+    return mid;
+}
+int partition(int arr[], int low, int high)
+{
+    int pivotIndex = medianOfThree(arr, low, high);
+    swap(&arr[pivotIndex], &arr[high]);
+    int pivot = arr[high];
+    int i = low - 1;
+    for (int j = low; j < high; j++)
+    {
+        if (arr[j] < pivot)
+        {
+            i++;
+            swap(&arr[i], &arr[j]);
+        }
+    }
+    swap(&arr[i + 1], &arr[high]);
+    return i + 1;
+}
+void quickSort(int arr[], int low, int high)
+{
+    while (low < high)
+    {
+        int pi = partition(arr, low, high);
+        if (pi - low < high - pi)
+        {
+            quickSort(arr, low, pi - 1);
+            low = pi + 1;
+        }
+        else
+        {
+            quickSort(arr, pi + 1, high);
+            high = pi - 1;
+        }
+    }
+}
+
+// reverseList.h
+status reverseList(LinkList &L)
+{
+    if (L == NULL)
+        return -1;
+    if (L->next->next == NULL)
+        return 0;
+    LinkList pre = L->next->next, pro = L->next, temp = pro->next;
+    pro->next = NULL;
+    while (pre->next)
+    {
+        temp = pre;
+        pre = pre->next;
+        temp->next = pro;
+        pro = temp;
+    }
+    temp = pre;
+    temp->next = pro;
+    pro = temp;
+    L->next = pre;
+    return 1;
+}
+
+// RemoveNthFromEnd.h
+status RemoveNthFromEnd(LinkList &L, int n)
+{
+    if (L == NULL)
+        return -1;
+    LinkList p = L->next;
+    int count = 0;
+    while (p != NULL)
+    {
+        p = p->next;
+        count++;
+    }
+    if (n > count || n < 0)
+        return 0;
+    p = L->next;
+    for (int i = 1; i < count - n; i++)
+    {
+        p = p->next;
+    }
+    LinkList temp = p->next;
+    p->next = temp->next;
+    free(temp);
+    return 1;
+}
