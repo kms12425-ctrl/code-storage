@@ -1,6 +1,7 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "string.h"
+#include <windows.h>
 #define TRUE 1
 #define FALSE 0
 #define OK 1
@@ -54,6 +55,7 @@ status RemoveNthFromEnd(LinkList &L, int n);
 
 int main()
 {
+    SetConsoleOutputCP(CP_UTF8);
     LISTS Lists;
     Lists.length = 0;
     int op = 1;

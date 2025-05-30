@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <windows.h>
 #include <string.h>
 // 宏定义和类型定义（来自 def.h）
 #define TRUE 1
@@ -56,6 +57,7 @@ int partition(int arr[], int low, int high);
 void quickSort(int arr[], int low, int high); // 快速排序
 int main()
 {
+    SetConsoleOutputCP(CP_UTF8);
     LISTS Lists;
     Lists.length = 0;
     int op = 1;

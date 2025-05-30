@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <windows.h>
 // def.h
 #define MAX_VERTEX_NUM 30
 #define OK 1
@@ -70,6 +70,7 @@ int LoadGraph(ALGraph &G, char FileName[]);
 
 int main()
 {
+    SetConsoleOutputCP(CP_UTF8);
     LISTS Lists;
     Lists.length = 0;
     int op = 1;

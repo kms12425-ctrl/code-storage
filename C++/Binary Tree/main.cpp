@@ -1,7 +1,7 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "string.h"
-
+#include <windows.h>
 #define TRUE 1
 #define FALSE 0
 #define OK 1
@@ -66,6 +66,7 @@ BiTree create_tree(TElemType definition[]);
 
 int main()
 {
+    SetConsoleOutputCP(CP_UTF8);
     LISTS Lists;
     Lists.length = 0;
     TElemType definition[100];
