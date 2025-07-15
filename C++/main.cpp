@@ -1,13 +1,19 @@
-#include <malloc.h>
-#include <math.h>
-#include <algorithm>
 #include <iostream>
+#include <algorithm>
+#include <cstring>
+#include <cctype>
+#include <vector>
+#include <cmath>
+#include <queue>
+#include <map>
+#include <stack>
+#include <unordered_set>
+#include <deque>
+#include <array>
+#include <list>
+#include <unordered_map>
 using namespace std;
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <bitset>
-
+void dp(int n, vector<int> &dp);
 // int isprime(int n);
 // void swap(int *a, int *b);
 // int binary_low(int arr[], int n, int p);
@@ -25,22 +31,30 @@ using namespace std;
 // }
 int main()
 {
+
     int n;
     cin >> n;
-    int arr[n];
-    for (int i = 0; i < n; i++)
+    vector<int> dp_arr;
+    dp_arr.push_back(1);
+    for (int i = 1; i <= n; i++)
     {
-        cin >> arr[i];
+        dp(n, dp_arr);
     }
-    int count = 0;
-    int tem_count = 0;
-    for (int i = 0; i < n - 1; i++)
-    {
-    }
-    cout << count;
+    cout << dp_arr[n];
     return 0;
 }
-
+void dp(int n, vector<int> &dp)
+{
+    for (int i = 1; i <= n; i++)
+    {
+        if (i == 1)
+            return;
+        else
+        {
+            return;
+        }
+    }
+}
 // void swap(int *a, int *b)
 // {
 //     int temp = *a;
