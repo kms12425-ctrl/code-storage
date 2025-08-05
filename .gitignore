@@ -1,0 +1,14 @@
+# 开发环境缓存/临时文件
+.ruff_cache/
+.DS_Store
+*.tmp
+
+# IDE配置（选择性忽略）
+.vscode/*
+!.vscode/extensions.json   # 例外：允许共享扩展推荐
+!.vscode/settings.json     # 例外：基础共享设置（无敏感信息）
+
+# 系统/编译文件
+__pycache__/
+*.py[cod]
+node_modules/

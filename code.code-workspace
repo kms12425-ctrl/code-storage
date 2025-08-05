@@ -2,6 +2,10 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"name": "visionx.org",
+			"path": "../../../学习资料/背景提升/实习项目/Vision X/code/visionx.org"
 		}
 	],
 	"settings": {
