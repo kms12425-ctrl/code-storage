@@ -76,7 +76,8 @@
 			"unordered_set": "cpp"
 		},
 		"Codegeex.RepoIndex": true,
-		"cquery.cacheDirectory": "${workspaceFolder}/.vscode/cquery_cached_index/"
+		"cquery.cacheDirectory": "${workspaceFolder}/.vscode/cquery_cached_index/",
+		"liveServer.settings.multiRootWorkspaceName": "visionx.org"
 	},
 	"launch": {
 		"version": "0.2.0",
