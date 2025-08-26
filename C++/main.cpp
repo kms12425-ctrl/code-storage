@@ -12,6 +12,7 @@
 #include <array>
 #include <list>
 #include <unordered_map>
+#include <windows.h>
 using namespace std;
 void dp(int n, vector<int> &dp);
 // int isprime(int n);
@@ -31,7 +32,9 @@ void dp(int n, vector<int> &dp);
 // }
 int main()
 {
-
+    SetConsoleOutputCP(65001); // UTF-8 代码页
+    SetConsoleCP(65001);
+    printf("你好");
     int n;
     cin >> n;
     vector<int> dp_arr;
