@@ -6,10 +6,10 @@ void main_sudoku() // 数独主函数
     int play_board[SIZE + 1][SIZE + 1] = {0};   // 用来玩的数独
     bool is_num[SIZE + 1][SIZE + 1] = {0};      // 判断数独某个位置存不存在数字
     int choice = 1;
-    display_sudoku();
     bool flag = 0;
     while (choice)
     {
+        display_sudoku();
         scanf("%d", &choice);
         switch (choice)
         {
@@ -42,7 +42,7 @@ void main_sudoku() // 数独主函数
                 printf("请先生成数独\n");
                 continue;
             }
-            play_sudoku(answer_board, play_board);
+            play_sudoku(answer_board, play_board, is_num);
             //
             break;
         case 0: // Exit
@@ -58,13 +58,13 @@ void generate_sudoku(int (&fixed_board)[SIZE + 1][SIZE + 1], int (&answer_board)
 {
 }
 
-void play_sudoku(int answer_board[SIZE + 1][SIZE + 1], int (&play_board)[SIZE + 1][SIZE + 1])
+void play_sudoku(int answer_board[SIZE + 1][SIZE + 1], int (&play_board)[SIZE + 1][SIZE + 1], bool is_num[SIZE + 1][SIZE + 1])
 {
     while (1)
     {
-
+        print_board(play_board);
         int hang, lie;
-        printf("请输入行与列,如'2 2'\n查看答案就输入'0 0'\n退出程序就输入'-1 -1'\n提交总答案就输入'-2 -2'\n");
+        printf("请输入要插入的行与列,如'2 2'\n查看答案就输入'0 0'\n退出程序就输入'-1 -1'\n提交总答案就输入'-2 -2'\n");
         scanf("%d %d", &hang, &lie);
         if (hang == 0 && lie == 0) // 查看答案
         {
@@ -81,7 +81,6 @@ void play_sudoku(int answer_board[SIZE + 1][SIZE + 1], int (&play_board)[SIZE + 
             for (int i = 1; i < SIZE + 1; i++)
             {
                 if (is_complete == 0)
-
                     break;
 
                 for (int j = 1; j < SIZE + 1; j++)
@@ -111,9 +110,9 @@ void play_sudoku(int answer_board[SIZE + 1][SIZE + 1], int (&play_board)[SIZE + 
             continue;
         }
 
-        else if (play_board[hang][lie])
+        else if (is_num[hang][lie])
         {
-            printf("此位置已经存在数值,请重新输入\n");
+            printf("此位置已经存在提示数值,请重新输入\n");
             continue;
         }
 
@@ -125,11 +124,10 @@ void play_sudoku(int answer_board[SIZE + 1][SIZE + 1], int (&play_board)[SIZE + 
             printf("数值非法,请重新输入\n");
             continue;
         }
-        if (is_valid(hang, lie, value, answer_board))
+        if (is_valid(hang, lie, value, play_board))
         {
             printf("插入成功!\n");
             play_board[hang][lie] = value;
-            print_board(play_board);
         }
         else
             printf("错误答案,请重新输入");
@@ -158,6 +156,68 @@ void print_board(int board[SIZE + 1][SIZE + 1]) // 打印数独
         }
     }
 }
-bool is_valid(int hang, int lie, int value, int answer_board[SIZE + 1][SIZE + 1]) // 判断插入的数字在那个位置是不是有效的
+bool is_valid(int hang, int lie, int value, int play_board[SIZE + 1][SIZE + 1]) // 判断插入的数字在那个位置是不是有效的
 {
+    for (int i = 1; i < SIZE + 1; i++) // 一行不能有相同数字
+    {
+        if (i != lie && value == play_board[hang][i])
+            return 0;
+    }
+    for (int i = 1; i < SIZE + 1; i++) // 一列不能有相同数字
+    {
+        if (i != hang && value == play_board[i][lie])
+            return 0;
+    }
+
+    // 每个3x3单元格里面不能有相同数字
+    int start_hang = (hang - 1) / 3 * 3 + 1;
+    int start_lie = (lie - 1) / 3 * 3 + 1;
+    for (int i = start_hang; i < start_hang + 3; i++)
+    {
+        for (int j = start_lie; j < start_lie + 3; j++)
+        {
+            if ((i != hang || j != lie) && value == play_board[i][j])
+                return 0;
+        }
+    }
+
+    // 副对角线不能有相同数字
+    if (hang + lie == 10)
+    {
+        for (int i = 1, j = SIZE; i < SIZE + 1, j >= 0; i++, j--)
+        {
+            if ((i != hang || j != lie) && value == play_board[i][j])
+                return 0;
+        }
+    }
+
+    // 百分号窗口不能有相同数字
+    bool in_a = 0, in_b = 0;
+    if ((hang >= 1 && hang <= 3) && (lie >= 1 && lie <= 3))
+        in_a = 1;
+    else if ((hang >= 6 && hang <= 8) && (lie >= 6 && lie <= 8))
+        in_b = 1;
+    if (in_a) // 在左上的窗口
+    {
+        for (int i = 1; i <= 3; i++)
+        {
+            for (int j = 1; j <= 3; j++)
+            {
+                if ((i != hang || j != lie) && value == play_board[i][j])
+                    return 0;
+            }
+        }
+    }
+    else if (in_b) // 在右下的窗口
+    {
+        for (int i = 6; i <= 8; i++)
+        {
+            for (int j = 6; j <= 8; j++)
+            {
+                if ((i != hang || j != lie) && value == play_board[i][j])
+                    return 0;
+            }
+        }
+    }
+    return 1;
 }
