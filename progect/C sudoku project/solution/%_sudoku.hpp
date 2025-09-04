@@ -1,10 +1,15 @@
 #include "SAT.hpp"
+// 两个窗口
+static const int percentA[9][2] = {
+    {2, 2}, {2, 3}, {2, 4}, {3, 2}, {3, 3}, {3, 4}, {4, 2}, {4, 3}, {4, 4}};
+static const int percentB[9][2] = {
+    {6, 6}, {6, 7}, {6, 8}, {7, 6}, {7, 7}, {7, 8}, {8, 6}, {8, 7}, {8, 8}};
 void main_sudoku() // 数独主函数
 {
     int fixed_board[SIZE + 1][SIZE + 1] = {0};  // 生成的数独
     int answer_board[SIZE + 1][SIZE + 1] = {0}; // 答案数独
     int play_board[SIZE + 1][SIZE + 1] = {0};   // 用来玩的数独
-    bool is_num[SIZE + 1][SIZE + 1] = {0};      // 判断数独某个位置存不存在数字
+    bool is_num[SIZE + 1][SIZE + 1] = {0};      // 判断数独某个位置存不存在提示数字
     int choice = 1;
     bool flag = 0;
     while (choice)

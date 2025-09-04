@@ -625,44 +625,6 @@ status Slove(int board[SIZE + 1][SIZE + 1], bool value[SIZE * SIZE * SIZE + 1])
 }
 
 /*
- @ 函数名称: Fill_Box
- @ 接受参数: int[][],int[][],int[][],int,int
- @ 函数功能: 填充3x3的宫格
- @ 返回值: status
- */
-status Fill_Box(int board[SIZE + 1][SIZE + 1], int newBoard[SIZE + 1][SIZE + 1], int newBoard2[SIZE + 1][SIZE + 1], int rowStart, int colStart)
-{
-    int n[SIZE - 3];       // 除了对角线以外的6个格子
-    bool flag[SIZE] = {0}; // 标记1-9是否已经填入
-    for (int i = 0; i < 3; i++)
-    {
-        flag[board[rowStart + i][colStart + i] - 1] = 1; // 对角线的3个格子上的数字标记为已填入
-    }
-    int index = 0;
-    for (int i = 0; i < SIZE; i++)
-    {
-        if (!flag[i])
-            n[index++] = i + 1;
-    }
-    Shuffle(n, 6); // 打乱数组
-    index = 0;
-    for (int i = 0; i < 3; i++)
-    {
-        for (int j = 0; j < 3; j++)
-        {
-            if (board[rowStart + i][colStart + j] == 0) // 没有填入
-            {
-                board[rowStart + i][colStart + j] = n[index];
-                newBoard[rowStart + i][colStart + j] = n[index];
-                newBoard2[rowStart + i][colStart + j] = n[index];
-                index++;
-            }
-        }
-    }
-    return OK;
-}
-
-/*
  @ 函数名称: Shuffle
  @ 接受参数: int[],int
  @ 函数功能: 洗牌算法,打乱数组顺序
@@ -708,6 +670,43 @@ void Shuffle(int arr[], int n)
 //                 newBoard2[row][col] = v;
 //                 isFixed[row][col] = TRUE;
 //                 num--;
+//             }
+//         }
+//     }
+//     return OK;
+// }
+/*
+ @ 函数名称: Fill_Box
+ @ 接受参数: int[][],int[][],int[][],int,int
+ @ 函数功能: 填充3x3的宫格
+ @ 返回值: status
+ */
+// status Fill_Box(int board[SIZE + 1][SIZE + 1], int newBoard[SIZE + 1][SIZE + 1], int newBoard2[SIZE + 1][SIZE + 1], int rowStart, int colStart)
+// {
+//     int n[SIZE - 3];       // 除了对角线以外的6个格子
+//     bool flag[SIZE] = {0}; // 标记1-9是否已经填入
+//     for (int i = 0; i < 3; i++)
+//     {
+//         flag[board[rowStart + i][colStart + i] - 1] = 1; // 对角线的3个格子上的数字标记为已填入
+//     }
+//     int index = 0;
+//     for (int i = 0; i < SIZE; i++)
+//     {
+//         if (!flag[i])
+//             n[index++] = i + 1;
+//     }
+//     Shuffle(n, 6); // 打乱数组
+//     index = 0;
+//     for (int i = 0; i < 3; i++)
+//     {
+//         for (int j = 0; j < 3; j++)
+//         {
+//             if (board[rowStart + i][colStart + j] == 0) // 没有填入
+//             {
+//                 board[rowStart + i][colStart + j] = n[index];
+//                 newBoard[rowStart + i][colStart + j] = n[index];
+//                 newBoard2[rowStart + i][colStart + j] = n[index];
+//                 index++;
 //             }
 //         }
 //     }

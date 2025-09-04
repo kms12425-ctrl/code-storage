@@ -29,9 +29,6 @@ bool read_file(char file_name[], CNF &cnf)
         free(cnf);
         return 0;
     }
-
-    // 分配 CNF 结构
-
     cnf->root = NULL;
 
     clause_list last_clause = NULL;
@@ -84,16 +81,20 @@ bool read_file(char file_name[], CNF &cnf)
     printf("读取成功！\n");
     return 1;
 }
-bool destroy_cnf(CNF &cnf)
+void destroy_cnf(CNF &cnf)
 {
     for (int i = 0; i < cnf->clause_count; i++)
     {
         clause_list temp = cnf->root;
-        clause_list delete_node = temp;
-        while (temp)
+        literal_list delete_node = temp->head;
+        while (delete_node)
         {
-            free(delete_node);
-            temp = temp->next;
+            literal_list p = delete_node;
+            delete_node = delete_node->next;
+            free(p);
         }
+        temp = temp->next;
     }
+    cnf->root = NULL;
+    return;
 }
