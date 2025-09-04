@@ -77,6 +77,7 @@ void simplify(clause_list &cl, int lit) // 化简子句
         }
     }
 }
+
 clause_list copy_cnf(clause_list cl)
 {
     clause_list new_cnf = new clause_node;
@@ -132,9 +133,90 @@ int choose_literal_1(CNF cnf) // 没有优化的选择
 {
     return cnf->root->head->literal;
 }
-int choose_literal_2(CNF cnf) // 优化的选择
+int choose_literal_2(CNF cnf) // 找出现最多的字
+{
+
+    int *value = new int[cnf->bool_count * 2 + 1];
+    for (int i = 0; i < cnf->bool_count * 2 + 1; i++)
+        value[i] = 0;
+    for (clause_list cl = cnf->root; cl != NULL; cl = cl->next)
+    {
+        for (literal_list lit = cl->head; lit != NULL; lit = lit->next)
+        {
+            if (lit->literal > 0)
+                value[lit->literal]++;
+            else
+                value[cnf->bool_count - lit->literal]++;
+        }
+    }
+    int max = 0, max_lit;
+    for (int i = 0; i < cnf->bool_count; i++)
+    {
+        if (value[i] > max)
+        {
+            max = value[i];
+            max_lit = i;
+        }
+    }
+    if (max == 0)
+    {
+        for (int i = cnf->bool_count; i < cnf->bool_count * 2; i++)
+        {
+            if (value[i] > max)
+            {
+                max = value[i];
+                max_lit = cnf->bool_count - i;
+            }
+        }
+    }
+    delete[] value;
+    return max_lit;
+}
+
+int choose_literal_3(CNF cnf) // 在最小子句找出现次数最多的字
+{
+
+    clause_list max_cl;
+    int *value = new int[cnf->bool_count * 2 + 1];
+    for (int i = 0; i <= cnf->bool_count * 2; i++)
+        value[i] = 0;
+    int max = INT_MAX;
+    for (clause_list cl = cnf->root; cl; cl = cl->next)
+    {
+        int count = 0;
+        literal_list lit = cl->head;
+        while (lit)
+        {
+            count++;
+            lit = lit->next;
+        }
+        if (count < max)
+        {
+            max = count;
+            max_cl = cl;
+        }
+    }
+    for (literal_list lit = max_cl->head; lit != NULL; lit = lit->next)
+    {
+        value[lit->literal + cnf->bool_count]++;
+    }
+    max = 0;
+    int max_lit;
+    for (int i = 0; i < cnf->bool_count * 2 + 1; i++)
+    {
+        if (value[i] > max)
+        {
+            max = value[i];
+            max_lit = i - cnf->bool_count;
+        }
+    }
+    delete[] value;
+    return max_lit;
+}
+
+bool save_file()
 {
 }
-bool save_file()
+int DPLL(CNF cnf, bool value[], int flag)
 {
 }

@@ -168,7 +168,7 @@ int ChooseLiteral_2(CNF cnf)
 	literalList dp;
 	int *count, MaxWord, max; // count记录每个文字出现次数,MaxWord记录出现最多次数的文字
 	count = (int *)malloc(sizeof(int) * (cnf->boolCount * 2 + 1));
-	for (int i = 0; i <= cnf->boolCount * 2; i++)
+	for (int i = 0; i <= cnf->boolCount * 2 + 1; i++)
 		count[i] = 0; // 初始化
 	// 计算子句中各文字出现次数
 	for (lp = cnf->root; lp != NULL; lp = lp->next)

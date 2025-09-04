@@ -51,4 +51,6 @@ bool is_satisfy(clause_list cl);
 bool is_empty_clause(clause_list cl);
 int choose_literal_1(CNF cnf);
 int choose_literal_2(CNF cnf);
+int choose_literal_3(CNF cnf);
 clause_list copy_cnf(clause_list cl);
+int DPLL(CNF cnf, bool value[], int flag);

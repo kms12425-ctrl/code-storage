@@ -68,8 +68,16 @@ void main_display()
             else
                 printf("无解\n");
             printf("\n Time: %lf ms(not optimized)\n", time * 1000);
-            printf("是否要保存到文件中?\n");
             /* code */
+            printf("是否要保存到文件中?[1/0]\n");
+            scanf("%d", &ch);
+            if (ch)
+            {
+                if (save_file()) //
+                    printf("保存成功!\n");
+                else
+                    printf("保存失败\n");
+            }
             break;
         }
         case 2: // 百分号数独游戏
