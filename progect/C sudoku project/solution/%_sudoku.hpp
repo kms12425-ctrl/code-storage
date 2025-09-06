@@ -9,7 +9,8 @@ void main_sudoku() // 数独主函数
     int fixed_board[SIZE + 1][SIZE + 1] = {0};  // 生成的数独
     int answer_board[SIZE + 1][SIZE + 1] = {0}; // 答案数独
     int play_board[SIZE + 1][SIZE + 1] = {0};   // 用来玩的数独
-    bool is_num[SIZE + 1][SIZE + 1] = {0};      // 判断数独某个位置存不存在提示数字
+    bool is_num[SIZE + 1][SIZE + 1];            // 判断数独某个位置存不存在提示数字
+    bool value[SIZE * SIZE * SIZE + 1];
     int choice = 1;
     bool flag = 0;
     while (choice)
@@ -28,7 +29,7 @@ void main_sudoku() // 数独主函数
                 if (hint < 18 || hint > 81)
                     printf("数字无效，请重新输入");
             } while (hint < 18 || hint > 81);
-            generate_sudoku(fixed_board, answer_board, play_board, hint);
+            generate_sudoku(fixed_board, answer_board, play_board, hint, value, is_num);
             printf("生成成功!\n");
             break;
         case 2: // 查看答案
@@ -48,6 +49,7 @@ void main_sudoku() // 数独主函数
                 continue;
             }
             play_sudoku(answer_board, play_board, is_num);
+            flag = 0;
             //
             break;
         case 0: // Exit
@@ -59,8 +61,40 @@ void main_sudoku() // 数独主函数
     }
 }
 
-void generate_sudoku(int (&fixed_board)[SIZE + 1][SIZE + 1], int (&answer_board)[SIZE + 1][SIZE + 1], int (&play_board)[SIZE + 1][SIZE + 1], int hint)
+void generate_sudoku(int (&fixed_board)[SIZE + 1][SIZE + 1], int (&answer_board)[SIZE + 1][SIZE + 1], int (&play_board)[SIZE + 1][SIZE + 1], int hint, bool value[SIZE * SIZE * SIZE + 1], bool (&is_num)[SIZE + 1][SIZE + 1])
 {
+    char file_name[100] = "percent_sudoku.cnf";
+    for (int i = 1; i <= SIZE; i++)
+    {
+        for (int j = 1; j <= SIZE; j++)
+            is_num[i][j] = 1;
+    }
+    int nA[9], nB[9];
+    for (int i = 0; i < SIZE; i++)
+    {
+        nA[i] = i;
+        nB[i] = i;
+    }
+    shuffle(nA, SIZE);
+    shuffle(nB, SIZE);
+    for (int i = 0; i < SIZE; i++)
+    {
+        int hang = percentA[i][0];
+        int lie = percentA[i][1];
+        play_board[hang][lie] = nA[i];
+        fixed_board[hang][lie] = nA[i];
+        answer_board[hang][lie] = nA[i];
+        is_num[hang][lie] = 1;
+    }
+    for (int i = 0; i < SIZE; i++)
+    {
+        int hang = percentB[i][0];
+        int lie = percentB[i][1];
+        play_board[hang][lie] = nB[i];
+        fixed_board[hang][lie] = nB[i];
+        answer_board[hang][lie] = nB[i];
+        is_num[hang][lie] = 1;
+    }
 }
 
 void play_sudoku(int answer_board[SIZE + 1][SIZE + 1], int (&play_board)[SIZE + 1][SIZE + 1], bool is_num[SIZE + 1][SIZE + 1])
@@ -117,7 +151,7 @@ void play_sudoku(int answer_board[SIZE + 1][SIZE + 1], int (&play_board)[SIZE + 
 
         else if (is_num[hang][lie])
         {
-            printf("此位置已经存在提示数值,请重新输入\n");
+            printf("这个位置已经存在提示数值,请重新输入\n");
             continue;
         }
 
@@ -133,6 +167,8 @@ void play_sudoku(int answer_board[SIZE + 1][SIZE + 1], int (&play_board)[SIZE + 
         {
             printf("插入成功!\n");
             play_board[hang][lie] = value;
+            print_board(play_board);
+            printf("\n");
         }
         else
             printf("错误答案,请重新输入");
@@ -147,7 +183,7 @@ void print_board(int board[SIZE + 1][SIZE + 1]) // 打印数独
         {
             if (board[i][j] == 0)
             {
-                printf(" .");
+                printf(" x");
             }
             else
                 printf("%2d", board[i][j]);
@@ -225,4 +261,16 @@ bool is_valid(int hang, int lie, int value, int play_board[SIZE + 1][SIZE + 1]) 
         }
     }
     return 1;
+}
+void shuffle(int (&arr)[], int size)
+{
+    srand(time(NULL));
+    for (int i = size - 1; i >= 0; i--)
+    {
+        int j = rand() % (i + 1);
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+    return;
 }

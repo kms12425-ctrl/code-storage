@@ -119,7 +119,7 @@ bool is_satisfy(clause_list cl) // 判断cnf是否可以满足
         return 1;
     return 0;
 }
-bool is_empty_clause(clause_list cl)
+bool is_empty_clause(clause_list cl) // 判断有没有空子句
 {
     while (cl)
     {
@@ -214,9 +214,87 @@ int choose_literal_3(CNF cnf) // 在最小子句找出现次数最多的字
     return max_lit;
 }
 
-bool save_file()
+bool save_file(int result, char file_name[], double time, bool value[], int bool_count, double time_)
 {
+    FILE *fp;
+    char name[100];
+    for (int i = 0; file_name[i] != '\0'; i++)
+    {
+        if (file_name[i] == '.' && file_name[i + 4] == '\0')
+        {
+            name[i] = '.';
+            name[i + 1] = 'r';
+            name[i + 2] = 'e';
+            name[i + 3] = 's';
+            name[i + 4] = '\0';
+        }
+        name[i] = file_name[i];
+    }
+    if (fopen_s(&fp, name, "w"))
+    {
+        printf("保存失败\n");
+        return 0;
+    }
+    fprintf(fp, "s %d", result);
+    if (result == 1)
+    {
+        fprintf(fp, "\nv\n");
+        for (int i = 0; i < bool_count; i++)
+        {
+            if (value[i] == 1)
+                fprintf(fp, "%d ", i);
+            else
+                fprintf(fp, "%d", -i);
+        }
+    }
+    fprintf(fp, "\nt %lfms", time * 1000);
+    return 1;
 }
-int DPLL(CNF cnf, bool value[], int flag)
+bool DPLL(CNF cnf, bool value[], int flag) // 核心算法
 {
+    int unit_lit = find_unit_clause(cnf->root);
+    while (unit_lit != 0)
+    {
+        value[abs(unit_lit)] = (unit_lit > 0) ? 1 : 0;
+        simplify(cnf->root, unit_lit);
+        if (is_empty_clause(cnf->root))
+            return 0;
+        if (is_satisfy(cnf->root))
+            return 1;
+        unit_lit = find_unit_clause(cnf->root);
+    }
+    int lit;
+    if (flag == 1)
+        lit = choose_literal_1(cnf);
+    else if (flag == 2)
+        lit = choose_literal_2(cnf);
+    else if (flag == 3)
+        lit = choose_literal_3(cnf);
+    // 令其为TRUE
+
+    CNF cnf_new = new cnf_node;
+    cnf_new->root = copy_cnf(cnf->root);
+    cnf_new->bool_count = cnf->bool_count;
+    cnf_new->clause_count = cnf->clause_count;
+
+    clause_list cl_new = new clause_node;
+    cl_new->head = new literal_node;
+    cl_new->head->next = NULL;
+    cl_new->head->literal = lit;
+    cl_new->next = cnf_new->root;
+    cnf_new->root = cl_new;
+    if (DPLL(cnf_new, value, flag) == 1)
+    {
+        destroy_cnf(cnf_new);
+        return 1;
+    }
+    destroy_cnf(cnf_new);
+    // 令其为FALSE
+    clause_list cl_new2 = new clause_node;
+    cl_new2->head = new literal_node;
+    cl_new2->head->next = NULL;
+    cl_new2->head->literal = -lit;
+    cl_new2->next = cnf->root;
+    cnf->root = cl_new2;
+    return DPLL(cnf, value, flag);
 }

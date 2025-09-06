@@ -35,11 +35,12 @@ void display_menu();
 //%_sudoku.hpp
 void main_sudoku();
 void display_sudoku();
-void generate_sudoku(int (&fixed_board)[SIZE + 1][SIZE + 1], int (&answer_board)[SIZE + 1][SIZE + 1], int (&play_board)[SIZE + 1][SIZE + 1], int hint);
+void generate_sudoku(int (&fixed_board)[SIZE + 1][SIZE + 1], int (&answer_board)[SIZE + 1][SIZE + 1], int (&play_board)[SIZE + 1][SIZE + 1], int hint, bool value[SIZE * SIZE * SIZE + 1], bool (&is_num)[SIZE + 1][SIZE + 1]);
 void print_board(int board[SIZE + 1][SIZE + 1]);
 void play_sudoku(int answer_board[SIZE + 1][SIZE + 1], int (&play_board)[SIZE + 1][SIZE + 1], bool is_num[SIZE + 1][SIZE + 1]);
 void print_board(int board[SIZE + 1][SIZE + 1]);
 bool is_valid(int hang, int lie, int value, int play_board[SIZE + 1][SIZE + 1]);
+void shuffle(int (&arr)[], int size);
 // cnfparser.hpp
 bool read_file(char file_name[], CNF &cnf);
 void destroy_cnf(CNF &cnf);
@@ -53,4 +54,5 @@ int choose_literal_1(CNF cnf);
 int choose_literal_2(CNF cnf);
 int choose_literal_3(CNF cnf);
 clause_list copy_cnf(clause_list cl);
-int DPLL(CNF cnf, bool value[], int flag);
+bool save_file(int result, char file_name[], double time, bool value[], int bool_count, double time_);
+bool DPLL(CNF cnf, bool value[], int flag);

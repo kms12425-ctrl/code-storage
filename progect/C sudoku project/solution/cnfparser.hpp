@@ -83,7 +83,7 @@ bool read_file(char file_name[], CNF &cnf)
 }
 void destroy_cnf(CNF &cnf)
 {
-    for (int i = 0; i < cnf->clause_count; i++)
+    while (cnf->root)
     {
         clause_list temp = cnf->root;
         literal_list delete_node = temp->head;
@@ -91,9 +91,10 @@ void destroy_cnf(CNF &cnf)
         {
             literal_list p = delete_node;
             delete_node = delete_node->next;
-            free(p);
+            delete p;
         }
-        temp = temp->next;
+        cnf->root = cnf->root->next;
+        delete temp;
     }
     cnf->root = NULL;
     return;

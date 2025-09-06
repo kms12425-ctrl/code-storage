@@ -38,6 +38,7 @@ void main_display()
                     } while (!read_file(file_name, cnf));
                 }
             }
+            printf("求解中...\n");
             CNF cnf_new = new cnf_node;
             cnf_new->root = copy_cnf(cnf->root);
             cnf_new->bool_count = cnf->bool_count;
@@ -45,13 +46,14 @@ void main_display()
             bool *value = new bool[cnf->bool_count + 1];
             for (int i = 1; i <= cnf->bool_count; i++)
                 value[i] = 1;
+
             LARGE_INTEGER frequency, frequency_;    // 计时器频率
             LARGE_INTEGER start, start_, end, end_; // 设置时间变量
             double time, time_;
-            // 未优化的时间
+
             QueryPerformanceFrequency(&frequency);
             QueryPerformanceCounter(&start); // 计时开始;
-            int result = DPLL(cnf_new, value, 1);
+            int result = DPLL(cnf_new, value, 2);
             QueryPerformanceCounter(&end);                                       // 结束
             time = (double)(end.QuadPart - start.QuadPart) / frequency.QuadPart; // 计算运行时间
             if (result == 1)
@@ -73,7 +75,7 @@ void main_display()
             scanf("%d", &ch);
             if (ch)
             {
-                if (save_file()) //
+                if (save_file(result, file_name, time, value, cnf->bool_count, time_)) //
                     printf("保存成功!\n");
                 else
                     printf("保存失败\n");
@@ -95,12 +97,12 @@ void main_display()
 void display_menu()
 {
     printf("\n|--------------------------------------------|\n");
-    printf("|----------------请给出你的选择---------------|\n");
+    printf("|----------------请给出你的选择--------------|\n");
     printf("|--------------------------------------------|\n\n");
     printf("|==================Main Menu=================|\n");
     printf("|--------------------------------------------|\n");
     printf("|            1. SAT求解                      |\n");
-    printf("|            2. 百分号数独游戏                |\n");
+    printf("|            2. 百分号数独游戏               |\n");
     printf("|            0.  EXIT                        |\n");
     printf("|============================================|\n\n");
     printf("请选择[1/2/0]\n");
