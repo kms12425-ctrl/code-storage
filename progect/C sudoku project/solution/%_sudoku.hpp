@@ -64,41 +64,48 @@ void main_sudoku() // 数独主函数
 void generate_sudoku(int (&fixed_board)[SIZE + 1][SIZE + 1], int (&answer_board)[SIZE + 1][SIZE + 1], int (&play_board)[SIZE + 1][SIZE + 1], int hint, bool value[SIZE * SIZE * SIZE + 1], bool (&is_num)[SIZE + 1][SIZE + 1])
 {
     char file_name[100] = "percent_sudoku.cnf";
-    for (int i = 1; i <= SIZE; i++)
+    while (1)
     {
-        for (int j = 1; j <= SIZE; j++)
-            is_num[i][j] = 1;
+        for (int i = 1; i <= SIZE; i++)
+        {
+            for (int j = 1; j <= SIZE; j++)
+                is_num[i][j] = 1;
+        }
+        int nA[9], nB[9];
+        for (int i = 0; i < SIZE; i++)
+        {
+            nA[i] = i + 1;
+            nB[i] = i + 1;
+        }
+        shuffle(nA, SIZE);
+        shuffle(nB, SIZE);
+        for (int i = 0; i < SIZE; i++)
+        {
+            int hang = percentA[i][0];
+            int lie = percentA[i][1];
+            play_board[hang][lie] = nA[i];
+            fixed_board[hang][lie] = nA[i];
+            answer_board[hang][lie] = nA[i];
+            is_num[hang][lie] = 1;
+        }
+        for (int i = 0; i < SIZE; i++)
+        {
+            int hang = percentB[i][0];
+            int lie = percentB[i][1];
+            play_board[hang][lie] = nB[i];
+            fixed_board[hang][lie] = nB[i];
+            answer_board[hang][lie] = nB[i];
+            is_num[hang][lie] = 1;
+        }
+        write_file(fixed_board, 27, file_name);
+        CNF cnf = new cnf_node;
+        cnf->root = NULL;
+        read_file(file_name, cnf);
+        if (DPLL(cnf, value, 3) == 0)
+            continue;
+
+        return;
     }
-    int nA[9], nB[9];
-    for (int i = 0; i < SIZE; i++)
-    {
-        nA[i] = i + 1;
-        nB[i] = i + 1;
-    }
-    shuffle(nA, SIZE);
-    shuffle(nB, SIZE);
-    for (int i = 0; i < SIZE; i++)
-    {
-        int hang = percentA[i][0];
-        int lie = percentA[i][1];
-        play_board[hang][lie] = nA[i];
-        fixed_board[hang][lie] = nA[i];
-        answer_board[hang][lie] = nA[i];
-        is_num[hang][lie] = 1;
-    }
-    for (int i = 0; i < SIZE; i++)
-    {
-        int hang = percentB[i][0];
-        int lie = percentB[i][1];
-        play_board[hang][lie] = nB[i];
-        fixed_board[hang][lie] = nB[i];
-        answer_board[hang][lie] = nB[i];
-        is_num[hang][lie] = 1;
-    }
-    write_file(fixed_board, 27, file_name);
-    CNF cnf = new cnf_node;
-    cnf->root = NULL;
-    read_file(file_name, cnf);
 }
 
 void play_sudoku(int answer_board[SIZE + 1][SIZE + 1], int (&play_board)[SIZE + 1][SIZE + 1], bool is_num[SIZE + 1][SIZE + 1])
@@ -419,8 +426,7 @@ bool write_file(int (&board)[SIZE + 1][SIZE + 1], int num, char name[])
         fprintf(fp, "0\n");
     }
 
-    // 副对角线不能在同一数字上重复
-    for (int k = 1; k <= SIZE; k++)
+    for (int k = 1; k <= SIZE; k++) // 副对角线不能在同一数字上重复
     {
         for (int p = 1; p <= SIZE; p++)
         {
@@ -433,8 +439,8 @@ bool write_file(int (&board)[SIZE + 1][SIZE + 1], int num, char name[])
             }
         }
     }
-    // 两个百分号窗口(9格)对每个数字k必须包含1-9之一
-    for (int k = 1; k <= SIZE; k++)
+
+    for (int k = 1; k <= SIZE; k++) // 两个百分号窗口(9格)对每个数字k必须包含1-9之一
     {
         for (int idx = 0; idx < 9; idx++)
         {
@@ -451,8 +457,8 @@ bool write_file(int (&board)[SIZE + 1][SIZE + 1], int num, char name[])
         }
         fprintf(fp, "0\n");
     }
-    // 窗口内不能有两个相同的数字（分别对两个窗口约束）
-    for (int k = 1; k <= SIZE; k++)
+
+    for (int k = 1; k <= SIZE; k++) // 窗口内不能有两个相同的数字（分别对两个窗口约束）
     {
         for (int a = 0; a < 9; a++)
         {
