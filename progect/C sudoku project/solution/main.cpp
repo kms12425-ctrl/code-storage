@@ -5,6 +5,7 @@
 #include "solver.hpp"
 int main()
 {
+    SetConsoleOutputCP(CP_UTF8);
     main_display();
     return 0;
 }

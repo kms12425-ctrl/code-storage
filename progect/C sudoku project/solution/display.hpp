@@ -53,7 +53,7 @@ void main_display()
 
             QueryPerformanceFrequency(&frequency);
             QueryPerformanceCounter(&start); // 计时开始;
-            int result = DPLL(cnf_new, value, 2);
+            int result = DPLL(cnf_new, value, 1);
             QueryPerformanceCounter(&end);                                       // 结束
             time = (double)(end.QuadPart - start.QuadPart) / frequency.QuadPart; // 计算运行时间
             if (result == 1)

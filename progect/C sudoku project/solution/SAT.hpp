@@ -37,7 +37,7 @@ void main_sudoku();
 void display_sudoku();
 void generate_sudoku(int (&fixed_board)[SIZE + 1][SIZE + 1], int (&answer_board)[SIZE + 1][SIZE + 1], int (&play_board)[SIZE + 1][SIZE + 1], int hint, bool value[SIZE * SIZE * SIZE + 1], bool (&is_num)[SIZE + 1][SIZE + 1]);
 void print_board(int board[SIZE + 1][SIZE + 1]);
-void play_sudoku(int answer_board[SIZE + 1][SIZE + 1], int (&play_board)[SIZE + 1][SIZE + 1], bool is_num[SIZE + 1][SIZE + 1]);
+void play_sudoku(int answer_board[SIZE + 1][SIZE + 1], int (&play_board)[SIZE + 1][SIZE + 1], bool is_num[SIZE + 1][SIZE + 1], int fixed_board[SIZE + 1][SIZE + 1]);
 void print_board(int board[SIZE + 1][SIZE + 1]);
 bool is_valid(int hang, int lie, int value, int play_board[SIZE + 1][SIZE + 1]);
 bool write_file(int (&board)[SIZE + 1][SIZE + 1], int num, char name[]);

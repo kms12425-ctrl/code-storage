@@ -257,10 +257,10 @@ bool DPLL(CNF cnf, bool value[], int flag) // 核心算法
     {
         value[abs(unit_lit)] = (unit_lit > 0) ? 1 : 0;
         simplify(cnf->root, unit_lit);
-        if (is_empty_clause(cnf->root))
-            return 0;
         if (is_satisfy(cnf->root))
             return 1;
+        if (is_empty_clause(cnf->root))
+            return 0;
         unit_lit = find_unit_clause(cnf->root);
     }
     int lit;
@@ -284,10 +284,7 @@ bool DPLL(CNF cnf, bool value[], int flag) // 核心算法
     cl_new->next = cnf_new->root;
     cnf_new->root = cl_new;
     if (DPLL(cnf_new, value, flag) == 1)
-    {
-        destroy_cnf(cnf_new);
         return 1;
-    }
     destroy_cnf(cnf_new);
     // 令其为FALSE
     clause_list cl_new2 = new clause_node;

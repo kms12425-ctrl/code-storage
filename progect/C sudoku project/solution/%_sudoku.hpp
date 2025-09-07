@@ -6,13 +6,13 @@ static const int percentB[9][2] = {
     {6, 6}, {6, 7}, {6, 8}, {7, 6}, {7, 7}, {7, 8}, {8, 6}, {8, 7}, {8, 8}};
 void main_sudoku() // 数独主函数
 {
+    int choice = 1;
+    bool flag = 0;
     int fixed_board[SIZE + 1][SIZE + 1] = {0};  // 生成的数独
     int answer_board[SIZE + 1][SIZE + 1] = {0}; // 答案数独
     int play_board[SIZE + 1][SIZE + 1] = {0};   // 用来玩的数独
     bool is_num[SIZE + 1][SIZE + 1];            // 判断数独某个位置存不存在提示数字
     bool value[SIZE * SIZE * SIZE + 1] = {0};
-    int choice = 1;
-    bool flag = 0;
     while (choice)
     {
         display_sudoku();
@@ -30,6 +30,7 @@ void main_sudoku() // 数独主函数
                     printf("数字无效，请重新输入");
             } while (hint < 18 || hint > 81);
             generate_sudoku(fixed_board, answer_board, play_board, hint, value, is_num);
+            flag = 1;
             printf("生成成功!\n");
             break;
         case 2: // 查看答案
@@ -39,7 +40,10 @@ void main_sudoku() // 数独主函数
                 continue;
             }
             flag = 0;
+            printf("初始数独是\n");
+            print_board(fixed_board);
             printf("答案是：\n");
+            solve_sudoku(answer_board, value);
             print_board(answer_board);
             break;
         case 3: // 游玩数独
@@ -48,7 +52,8 @@ void main_sudoku() // 数独主函数
                 printf("请先生成数独\n");
                 continue;
             }
-            play_sudoku(answer_board, play_board, is_num);
+            solve_sudoku(answer_board, value);
+            play_sudoku(answer_board, play_board, is_num, fixed_board);
             flag = 0;
             //
             break;
@@ -64,13 +69,19 @@ void main_sudoku() // 数独主函数
 void generate_sudoku(int (&fixed_board)[SIZE + 1][SIZE + 1], int (&answer_board)[SIZE + 1][SIZE + 1], int (&play_board)[SIZE + 1][SIZE + 1], int hint, bool value[SIZE * SIZE * SIZE + 1], bool (&is_num)[SIZE + 1][SIZE + 1])
 {
     char file_name[100] = "percent_sudoku.cnf";
+    srand(time(NULL));
     while (1)
     {
+        // 清空棋盘与标记
         for (int i = 1; i <= SIZE; i++)
-        {
             for (int j = 1; j <= SIZE; j++)
-                is_num[i][j] = 1;
-        }
+            {
+                fixed_board[i][j] = 0;
+                play_board[i][j] = 0;
+                answer_board[i][j] = 0;
+                is_num[i][j] = 0;
+            }
+
         int nA[9], nB[9];
         for (int i = 0; i < SIZE; i++)
         {
@@ -97,18 +108,71 @@ void generate_sudoku(int (&fixed_board)[SIZE + 1][SIZE + 1], int (&answer_board)
             answer_board[hang][lie] = nB[i];
             is_num[hang][lie] = 1;
         }
+
+        // 写入 CNF 并求解前，确保 value 数组清零
+        for (int i = 1; i <= SIZE * SIZE * SIZE; i++)
+            value[i] = 0;
+
         write_file(fixed_board, 27, file_name);
         CNF cnf = new cnf_node;
         cnf->root = NULL;
         read_file(file_name, cnf);
+        printf("生成中\n");
         if (DPLL(cnf, value, 3) == 0)
-            continue;
+        {
+            destroy_cnf(cnf);
+            continue; // 无解则重试
+        }
 
+        // 将 DPLL 的赋值结果写回棋盘（遍历 1..SIZE^3）
+        for (int i = 1; i <= SIZE * SIZE * SIZE; i++)
+        {
+            if (value[i])
+            {
+                int hang = (i - 1) / (SIZE * SIZE) + 1;
+                int lie = ((i - 1) / SIZE) % SIZE + 1;
+                int val = (i - 1) % SIZE + 1;
+                fixed_board[hang][lie] = play_board[hang][lie] = answer_board[hang][lie] = val;
+                is_num[hang][lie] = 1;
+            }
+        }
+
+        // 挖洞：按行挖每行 per_row 个，再随机挖 rem 个
+        int remove = 81 - hint;
+        int per_row = remove / SIZE;
+        int rem = remove % SIZE;
+        for (int hang = 1; hang <= SIZE; hang++)
+        {
+            int to_remove = per_row;
+            while (to_remove > 0)
+            {
+                int lie = rand() % SIZE + 1;
+                if (fixed_board[hang][lie] != 0)
+                {
+                    fixed_board[hang][lie] = play_board[hang][lie] = answer_board[hang][lie] = 0;
+                    is_num[hang][lie] = 0;
+                    to_remove--;
+                }
+            }
+        }
+        while (rem > 0)
+        {
+            int r = rand() % SIZE + 1;
+            int c = rand() % SIZE + 1;
+            if (fixed_board[r][c] != 0)
+            {
+                fixed_board[r][c] = play_board[r][c] = answer_board[r][c] = 0;
+                is_num[r][c] = 0;
+                rem--;
+            }
+        }
+
+        destroy_cnf(cnf);
         return;
     }
 }
 
-void play_sudoku(int answer_board[SIZE + 1][SIZE + 1], int (&play_board)[SIZE + 1][SIZE + 1], bool is_num[SIZE + 1][SIZE + 1])
+void play_sudoku(int answer_board[SIZE + 1][SIZE + 1], int (&play_board)[SIZE + 1][SIZE + 1], bool is_num[SIZE + 1][SIZE + 1], int fixed_board[SIZE + 1][SIZE + 1])
 {
     while (1)
     {
@@ -118,6 +182,9 @@ void play_sudoku(int answer_board[SIZE + 1][SIZE + 1], int (&play_board)[SIZE + 
         scanf("%d %d", &hang, &lie);
         if (hang == 0 && lie == 0) // 查看答案
         {
+            printf("初始数独是\n");
+            print_board(fixed_board);
+            printf("答案是：\n");
             print_board(answer_board);
             return;
         }
@@ -182,29 +249,34 @@ void play_sudoku(int answer_board[SIZE + 1][SIZE + 1], int (&play_board)[SIZE + 
             printf("\n");
         }
         else
-            printf("错误答案,请重新输入");
+            printf("错误答案,请重新输入\n");
     }
 }
 
-void print_board(int board[SIZE + 1][SIZE + 1]) // 打印数独
+void print_board(int board[SIZE + 1][SIZE + 1])
 {
-    for (int i = 1; i < SIZE + 1; i++)
+    for (int i = 1; i <= SIZE; i++)
     {
-        for (int j = 1; j < SIZE + 1; j++)
+        for (int j = 1; j <= SIZE; j++)
         {
             if (board[i][j] == 0)
-            {
-                printf(" x");
-            }
+                printf(" . ");
             else
-                printf("%2d", board[i][j]);
-            if (j % 3 == 0 || j != SIZE)
-                printf(" |");
+                printf("%2d ", board[i][j]);
+
+            if (j % 3 == 0 && j != SIZE)
+                printf("|");
         }
         printf("\n");
-        if (i % 3 == 0 || i != SIZE)
+        if (i % 3 == 0 && i != SIZE)
         {
-            printf("-------+-------+-------\n");
+            for (int k = 1; k <= SIZE; k++)
+            {
+                printf("---");
+                if (k % 3 == 0 && k != SIZE)
+                    printf("+");
+            }
+            printf("\n");
         }
     }
 }
@@ -236,7 +308,7 @@ bool is_valid(int hang, int lie, int value, int play_board[SIZE + 1][SIZE + 1]) 
     // 副对角线不能有相同数字
     if (hang + lie == 10)
     {
-        for (int i = 1, j = SIZE; i < SIZE + 1, j >= 0; i++, j--)
+        for (int i = 1, j = SIZE; i < SIZE + 1, j >= 1; i++, j--)
         {
             if ((i != hang || j != lie) && value == play_board[i][j])
                 return 0;
@@ -245,15 +317,15 @@ bool is_valid(int hang, int lie, int value, int play_board[SIZE + 1][SIZE + 1]) 
 
     // 百分号窗口不能有相同数字
     bool in_a = 0, in_b = 0;
-    if ((hang >= 1 && hang <= 3) && (lie >= 1 && lie <= 3))
+    if ((hang >= 2 && hang <= 4) && (lie >= 2 && lie <= 4))
         in_a = 1;
     else if ((hang >= 6 && hang <= 8) && (lie >= 6 && lie <= 8))
         in_b = 1;
     if (in_a) // 在左上的窗口
     {
-        for (int i = 1; i <= 3; i++)
+        for (int i = 2; i <= 4; i++)
         {
-            for (int j = 1; j <= 3; j++)
+            for (int j = 2; j <= 4; j++)
             {
                 if ((i != hang || j != lie) && value == play_board[i][j])
                     return 0;
@@ -288,16 +360,15 @@ void shuffle(int (&arr)[], int size)
 
 bool write_file(int (&board)[SIZE + 1][SIZE + 1], int num, char name[])
 {
-
     FILE *fp;
     if (fopen_s(&fp, name, "w"))
     {
-        printf("cnf文件写入失败");
-        return 0;
+        printf(" Fail!\n");
+        return ERROR;
     }
     fprintf(fp, "c %s\n", name);
-    fprintf(fp, "p cnf 729 %d", num + 12654);
-    for (int i = 1; i <= SIZE; i++) //
+    fprintf(fp, "p cnf 729 %d\n", num + 12654);
+    for (int i = 1; i <= SIZE; i++)
     {
         for (int j = 1; j <= SIZE; j++)
         {
@@ -306,7 +377,7 @@ bool write_file(int (&board)[SIZE + 1][SIZE + 1], int num, char name[])
         }
     }
 
-    for (int i = 1; i <= SIZE; i++) // 每个单元格必须要有数字
+    for (int i = 1; i <= SIZE; i++) // 每个格子必须填入一个数字
     {
         for (int j = 1; j <= SIZE; j++)
         {
@@ -318,19 +389,21 @@ bool write_file(int (&board)[SIZE + 1][SIZE + 1], int num, char name[])
         }
     }
 
-    for (int i = 1; i <= SIZE; i++) // 每个格子只能有一个数字
+    for (int i = 1; i <= SIZE; i++) // 每个格子不能填入两个数字
     {
         for (int j = 1; j <= SIZE; j++)
         {
             for (int k = 1; k <= SIZE; k++)
             {
-                for (int l = k + 1; k <= SIZE; k++)
-                    fprintf(fp, "%d %d 0", -((i - 1) * SIZE * SIZE + (j - 1) * SIZE + k), -((i - 1) * SIZE * SIZE + (j - 1) * SIZE + l));
+                for (int l = k + 1; l <= SIZE; l++)
+                {
+                    fprintf(fp, "%d %d 0\n", 0 - ((i - 1) * SIZE * SIZE + (j - 1) * SIZE + k), 0 - ((i - 1) * SIZE * SIZE + (j - 1) * SIZE + l));
+                }
             }
         }
     }
 
-    for (int i = 1; i <= SIZE; i++) // 每行要有1~9
+    for (int i = 1; i <= SIZE; i++) // 每一行必须填入1~9
     {
         for (int j = 1; j <= SIZE; j++)
         {
@@ -342,19 +415,21 @@ bool write_file(int (&board)[SIZE + 1][SIZE + 1], int num, char name[])
         }
     }
 
-    for (int i = 1; i <= SIZE; i++) // 每行数字不能重复
+    for (int i = 1; i <= SIZE; i++) // 每一行不能填入两个相同的数字
     {
         for (int j = 1; j <= SIZE; j++)
         {
             for (int k = 1; k <= SIZE; k++)
             {
-                for (int l = k + 1; k <= SIZE; k++)
-                    fprintf(fp, "%d %d 0", -((i - 1) * SIZE * SIZE + (k - 1) * SIZE + j), -((i - 1) * SIZE * SIZE + (l - 1) * SIZE + j));
+                for (int l = k + 1; l <= SIZE; l++)
+                {
+                    fprintf(fp, "%d %d 0\n", 0 - ((i - 1) * SIZE * SIZE + (k - 1) * SIZE + j), 0 - ((i - 1) * SIZE * SIZE + (l - 1) * SIZE + j));
+                }
             }
         }
     }
 
-    for (int i = 1; i <= SIZE; i++) // 每列要有1~9
+    for (int i = 1; i <= SIZE; i++) // 每一列必须填入1-9
     {
         for (int j = 1; j <= SIZE; j++)
         {
@@ -366,14 +441,16 @@ bool write_file(int (&board)[SIZE + 1][SIZE + 1], int num, char name[])
         }
     }
 
-    for (int i = 1; i <= SIZE; i++) // 每列数字不能重复
+    for (int i = 1; i <= SIZE; i++) // 每一列不能填入两个相同的数字
     {
         for (int j = 1; j <= SIZE; j++)
         {
             for (int k = 1; k <= SIZE; k++)
             {
-                for (int l = k + 1; k <= SIZE; k++)
-                    fprintf(fp, "%d %d 0", -((k - 1) * SIZE * SIZE + (i - 1) * SIZE + j), -((l - 1) * SIZE * SIZE + (i - 1) * SIZE + j));
+                for (int l = k + 1; l <= SIZE; l++)
+                {
+                    fprintf(fp, "%d %d 0\n", 0 - ((k - 1) * SIZE * SIZE + (i - 1) * SIZE + j), 0 - ((l - 1) * SIZE * SIZE + (i - 1) * SIZE + j));
+                }
             }
         }
     }
@@ -396,7 +473,7 @@ bool write_file(int (&board)[SIZE + 1][SIZE + 1], int num, char name[])
         }
     }
 
-    for (int i = 1; i <= SIZE; i += 3) // 每个3x3宫格不能填入两个相同的数字
+    for (int i = 1; i <= SIZE; i += 3) // 每个3x3宫格不能填入两个一样的数字
     {
         for (int j = 1; j <= SIZE; j += 3)
         {
@@ -416,17 +493,18 @@ bool write_file(int (&board)[SIZE + 1][SIZE + 1], int num, char name[])
         }
     }
 
-    for (int i = 1; i <= SIZE; i++) // 副对角线要有1~9
+    for (int k = 1; k <= SIZE; k++) // 副对角线上要有1~9
     {
-        for (int k = 1; k <= SIZE; k++)
+        for (int i = 1; i <= SIZE; i++)
         {
-            int hang = k, lie = SIZE - k + 1;
-            fprintf(fp, "%d ", (hang - 1) * SIZE * SIZE + (lie - 1) * SIZE + k);
+            int row = i;
+            int col = SIZE - i + 1;
+            fprintf(fp, "%d ", (row - 1) * SIZE * SIZE + (col - 1) * SIZE + k);
         }
         fprintf(fp, "0\n");
     }
 
-    for (int k = 1; k <= SIZE; k++) // 副对角线不能在同一数字上重复
+    for (int k = 1; k <= SIZE; k++) // 不能重复副对角线上的数字
     {
         for (int p = 1; p <= SIZE; p++)
         {
@@ -440,7 +518,7 @@ bool write_file(int (&board)[SIZE + 1][SIZE + 1], int num, char name[])
         }
     }
 
-    for (int k = 1; k <= SIZE; k++) // 两个百分号窗口(9格)对每个数字k必须包含1-9之一
+    for (int k = 1; k <= SIZE; k++) // 百分号窗口中要有1~9
     {
         for (int idx = 0; idx < 9; idx++)
         {
@@ -458,7 +536,7 @@ bool write_file(int (&board)[SIZE + 1][SIZE + 1], int num, char name[])
         fprintf(fp, "0\n");
     }
 
-    for (int k = 1; k <= SIZE; k++) // 窗口内不能有两个相同的数字（分别对两个窗口约束）
+    for (int k = 1; k <= SIZE; k++) // 窗口内不能有两个一样的数字
     {
         for (int a = 0; a < 9; a++)
         {
