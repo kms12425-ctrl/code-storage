@@ -40,7 +40,9 @@ void print_board(int board[SIZE + 1][SIZE + 1]);
 void play_sudoku(int answer_board[SIZE + 1][SIZE + 1], int (&play_board)[SIZE + 1][SIZE + 1], bool is_num[SIZE + 1][SIZE + 1]);
 void print_board(int board[SIZE + 1][SIZE + 1]);
 bool is_valid(int hang, int lie, int value, int play_board[SIZE + 1][SIZE + 1]);
+bool write_file(int (&board)[SIZE + 1][SIZE + 1], int num, char name[]);
 void shuffle(int (&arr)[], int size);
+bool solve_sudoku(int (&board)[SIZE + 1][SIZE + 1], bool (&value)[SIZE * SIZE * SIZE + 1]);
 // cnfparser.hpp
 bool read_file(char file_name[], CNF &cnf);
 void destroy_cnf(CNF &cnf);
