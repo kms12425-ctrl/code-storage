@@ -8,6 +8,7 @@
 #include <time.h>
 #include <windows.h>
 #include <winnt.h>
+#include <chrono>
 
 typedef struct literal_node // 子句中的文字的链表
 {
@@ -58,3 +59,5 @@ int choose_literal_3(CNF cnf);
 clause_list copy_cnf(clause_list cl);
 bool save_file(int result, char file_name[], double time, bool value[], int bool_count, double time_);
 bool DPLL(CNF cnf, bool value[], int flag);
+int DPLL_2(CNF cnf, bool value[], int flag, const std::chrono::steady_clock::time_point &start, double timeout_seconds);
+int solve_with_timeout(CNF cnf, bool value[], int init_flag, double timeout_seconds);

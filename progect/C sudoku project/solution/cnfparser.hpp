@@ -8,15 +8,12 @@ bool read_file(char file_name[], CNF &cnf)
         return 0;
     }
     cnf = new cnf_node;
-    // 读取头部，跳过以 'c' 开头的注释行，找到 'p cnf' 行
     char ch;
-    // 跳过注释
     while ((ch = getc(fp)) == 'c')
     {
         while ((ch = getc(fp)) != '\n')
             continue;
     }
-    // 跳过p cnf
     getc(fp);
     getc(fp);
     getc(fp);
@@ -34,16 +31,12 @@ bool read_file(char file_name[], CNF &cnf)
     clause_list last_clause = NULL;
     for (int ci = 0; ci < cnf->clause_count; ++ci)
     {
-        // 创建新的 clause 节点
         clause_list cl = new clause_node;
         cl->head = NULL;
         cl->next = NULL;
 
         literal_list last_lit = NULL;
-
-        // 读取一个子句：一系列整数，以 0 结束
         int lit;
-        // 用fscanf 连续读取整数
         while (fscanf(fp, "%d", &lit) == 1)
         {
             if (lit == 0)
@@ -54,17 +47,11 @@ bool read_file(char file_name[], CNF &cnf)
             ln->next = NULL;
 
             if (last_lit == NULL)
-            {
                 cl->head = ln;
-            }
             else
-            {
                 last_lit->next = ln;
-            }
             last_lit = ln;
         }
-
-        // 即使子句为空（不应该），仍加入链表以保持个数一致
         if (cnf->root == NULL)
         {
             cnf->root = cl;

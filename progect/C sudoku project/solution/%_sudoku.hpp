@@ -20,7 +20,6 @@ void main_sudoku() // 数独主函数
         switch (choice)
         {
         case 1: // 生成数独
-            /* code */
             printf("你想要多少个提示数[18~81]\n");
             int hint;
             do
@@ -40,9 +39,9 @@ void main_sudoku() // 数独主函数
                 continue;
             }
             flag = 0;
-            printf("初始数独是\n");
+            printf("           初始数独\n");
             print_board(fixed_board);
-            printf("答案是：\n");
+            printf("             答案\n");
             solve_sudoku(answer_board, value);
             print_board(answer_board);
             break;
@@ -109,7 +108,6 @@ void generate_sudoku(int (&fixed_board)[SIZE + 1][SIZE + 1], int (&answer_board)
             is_num[hang][lie] = 1;
         }
 
-        // 写入 CNF 并求解前，确保 value 数组清零
         for (int i = 1; i <= SIZE * SIZE * SIZE; i++)
             value[i] = 0;
 
@@ -121,10 +119,9 @@ void generate_sudoku(int (&fixed_board)[SIZE + 1][SIZE + 1], int (&answer_board)
         if (DPLL(cnf, value, 3) == 0)
         {
             destroy_cnf(cnf);
-            continue; // 无解则重试
+            continue;
         }
 
-        // 将 DPLL 的赋值结果写回棋盘（遍历 1..SIZE^3）
         for (int i = 1; i <= SIZE * SIZE * SIZE; i++)
         {
             if (value[i])
@@ -137,7 +134,6 @@ void generate_sudoku(int (&fixed_board)[SIZE + 1][SIZE + 1], int (&answer_board)
             }
         }
 
-        // 挖洞：按行挖每行 per_row 个，再随机挖 rem 个
         int remove = 81 - hint;
         int per_row = remove / SIZE;
         int rem = remove % SIZE;
@@ -285,12 +281,18 @@ bool is_valid(int hang, int lie, int value, int play_board[SIZE + 1][SIZE + 1]) 
     for (int i = 1; i < SIZE + 1; i++) // 一行不能有相同数字
     {
         if (i != lie && value == play_board[hang][i])
+        {
+            printf("一行不能有相同数字\n");
             return 0;
+        }
     }
     for (int i = 1; i < SIZE + 1; i++) // 一列不能有相同数字
     {
         if (i != hang && value == play_board[i][lie])
+        {
+            printf("一列不能有相同数字\n");
             return 0;
+        }
     }
 
     // 每个3x3单元格里面不能有相同数字
@@ -301,7 +303,10 @@ bool is_valid(int hang, int lie, int value, int play_board[SIZE + 1][SIZE + 1]) 
         for (int j = start_lie; j < start_lie + 3; j++)
         {
             if ((i != hang || j != lie) && value == play_board[i][j])
+            {
+                printf("每个3x3单元格里面不能有相同数字\n");
                 return 0;
+            }
         }
     }
 
@@ -311,7 +316,10 @@ bool is_valid(int hang, int lie, int value, int play_board[SIZE + 1][SIZE + 1]) 
         for (int i = 1, j = SIZE; i < SIZE + 1, j >= 1; i++, j--)
         {
             if ((i != hang || j != lie) && value == play_board[i][j])
+            {
+                printf("副对角线不能有相同数字\n");
                 return 0;
+            }
         }
     }
 
@@ -328,7 +336,10 @@ bool is_valid(int hang, int lie, int value, int play_board[SIZE + 1][SIZE + 1]) 
             for (int j = 2; j <= 4; j++)
             {
                 if ((i != hang || j != lie) && value == play_board[i][j])
+                {
+                    printf("百分号窗口中不能有相同数字\n");
                     return 0;
+                }
             }
         }
     }
@@ -339,7 +350,10 @@ bool is_valid(int hang, int lie, int value, int play_board[SIZE + 1][SIZE + 1]) 
             for (int j = 6; j <= 8; j++)
             {
                 if ((i != hang || j != lie) && value == play_board[i][j])
+                {
+                    printf("百分号窗口中不能有相同数字\n");
                     return 0;
+                }
             }
         }
     }
@@ -497,9 +511,9 @@ bool write_file(int (&board)[SIZE + 1][SIZE + 1], int num, char name[])
     {
         for (int i = 1; i <= SIZE; i++)
         {
-            int row = i;
-            int col = SIZE - i + 1;
-            fprintf(fp, "%d ", (row - 1) * SIZE * SIZE + (col - 1) * SIZE + k);
+            int hang = i;
+            int lie = SIZE - i + 1;
+            fprintf(fp, "%d ", (hang - 1) * SIZE * SIZE + (lie - 1) * SIZE + k);
         }
         fprintf(fp, "0\n");
     }
