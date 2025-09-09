@@ -135,11 +135,11 @@ void generate_sudoku(int (&fixed_board)[SIZE + 1][SIZE + 1], int (&answer_board)
         }
 
         int remove = 81 - hint;
-        int per_row = remove / SIZE;
+        int per_hang = remove / SIZE;
         int rem = remove % SIZE;
         for (int hang = 1; hang <= SIZE; hang++)
         {
-            int to_remove = per_row;
+            int to_remove = per_hang;
             while (to_remove > 0)
             {
                 int lie = rand() % SIZE + 1;

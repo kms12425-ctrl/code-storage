@@ -86,3 +86,28 @@ void destroy_cnf(CNF &cnf)
     cnf->root = NULL;
     return;
 }
+void print_cnf(CNF cnf)
+{
+    clause_list p = cnf->root;
+    if (p == NULL) // 如果没有子句
+    {
+        printf(" 没有句子\n");
+        return;
+    }
+    printf("  The CNF is:\n");
+    printf("  boolCount:%d\n", cnf->bool_count);
+    printf("  clauseCount:%d\n", cnf->clause_count);
+    while (p)
+    {
+        literal_list q = p->head;
+        printf("  ");
+        while (q)
+        {
+            printf("%-5d", q->literal);
+            q = q->next;
+        }
+        printf("0\n");
+        p = p->next;
+    }
+    return;
+}

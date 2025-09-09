@@ -30,6 +30,8 @@ typedef struct cnfNode // 总的cnf文件链表
 } cnf_node, *CNF;
 
 #define SIZE 9
+#define MIN(x, y) ((x) < (y) ? (x) : (y))
+#define MAX(x, y) ((x) > (y) ? (x) : (y))
 // display.hpp
 void main_display();
 void display_menu();
@@ -47,6 +49,7 @@ bool solve_sudoku(int (&board)[SIZE + 1][SIZE + 1], bool (&value)[SIZE * SIZE * 
 // cnfparser.hpp
 bool read_file(char file_name[], CNF &cnf);
 void destroy_cnf(CNF &cnf);
+void print_cnf(CNF cnf);
 // solver.hpp
 int find_unit_clause(clause_list cl);
 void remove_clause(clause_list &cl);
@@ -60,4 +63,4 @@ clause_list copy_cnf(clause_list cl);
 bool save_file(int result, char file_name[], double time, bool value[], int bool_count, double time_);
 bool DPLL(CNF cnf, bool value[], int flag);
 int DPLL_2(CNF cnf, bool value[], int flag, const std::chrono::steady_clock::time_point &start, double timeout_seconds);
-int solve_with_timeout(CNF cnf, bool value[], int init_flag, double timeout_seconds);
+int solve_with_timeout_flag(CNF cnf, bool value[], int flag, double timeout_seconds, double &elapsed_seconds);

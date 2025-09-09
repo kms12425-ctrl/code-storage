@@ -259,7 +259,7 @@ bool save_file(int result, char file_name[], double time, bool value[], int bool
     return 1;
 }
 
-int choose_literal_4(CNF cnf)
+int choose_literal_4(CNF cnf) // MOMS
 {
     if (!cnf || !cnf->root)
         return 0;
@@ -295,6 +295,7 @@ int choose_literal_4(CNF cnf)
                 cnt_neg[-L]++;
         }
     }
+
     int best_v = 0, best_total = -1;
     for (int v = 1; v <= V; ++v)
     {
@@ -305,6 +306,7 @@ int choose_literal_4(CNF cnf)
             best_v = v;
         }
     }
+
     int res = 0;
     if (best_total > 0)
         res = (cnt_pos[best_v] >= cnt_neg[best_v]) ? best_v : -best_v;
@@ -337,7 +339,7 @@ void vsids_init_from_cnf(CNF cnf)
 }
 
 // 用静态 VSIDS 分数选择 literal
-int choose_literal_vsids_static(CNF cnf)
+int choose_literal_vsids_static(CNF cnf) // https://www.researchgate.net/publication/279633448_Understanding_VSIDS_Branching_Heuristics_in_Conflict-Driven_Clause-Learning_SAT_Solvers
 {
     if (!cnf || !cnf->root)
         return 0;
@@ -476,16 +478,16 @@ int DPLL_2(CNF cnf, bool value[], int flag, const std::chrono::steady_clock::tim
         return 0;
 
     int lit;
+    // if (flag == 1)
+    //     lit = choose_literal_1(cnf);
+    // else if (flag == 2)
+    //     lit = choose_literal_2(cnf);
     if (flag == 1)
-        lit = choose_literal_1(cnf);
-    else if (flag == 2)
-        lit = choose_literal_2(cnf);
-    else if (flag == 3)
         lit = choose_literal_3(cnf);
-    else if (flag == 4)
+    else if (flag == 2)
         lit = choose_literal_4(cnf);
-    else if (flag == 5)
-        lit = choose_literal_vsids_static(cnf);
+    else if (flag == 3)
+        lit = choose_literal_1(cnf);
     if (timed_out())
         return -1;
 
@@ -525,49 +527,24 @@ int DPLL_2(CNF cnf, bool value[], int flag, const std::chrono::steady_clock::tim
     return DPLL_2(cnf, value, flag, start, timeout_seconds);
 }
 
-int solve_with_timeout(CNF cnf, bool value[], int init_flag, double timeout_seconds)
+int solve_with_timeout_flag(CNF cnf, bool value[], int flag, double timeout_seconds, double &elapsed_seconds)
 {
-    for (int t = 0; t < 5; t++)
-    {
-        int flag = ((init_flag - 1 + t) % 5) + 1;
-        if (flag == 1)
-        {
-            timeout_seconds = 8.0;
-            printf("尝试直接将第一个子句的第一个单词作为lit\n");
-        }
-        else if (flag == 2)
-        {
-            timeout_seconds = 8.0;
-            printf("尝试将出现最多的字作为lit\n");
-        }
-        else if (flag == 3)
-        {
-            timeout_seconds = 8.0;
-            printf("尝试将在最小子句找出现次数最多的字作为lit\n");
-        }
-        else if (flag == 4)
-        {
-            timeout_seconds = 30.0;
-            printf("尝试使用MOMS算法\n");
-        }
-        else if (flag == 5)
-        {
-            timeout_seconds = 15.0;
-            printf("尝试使用静态 VSIDS算法\n");
-        }
-        auto _start = std::chrono::steady_clock::now();
-        CNF cnf_copy = new cnf_node;
-        cnf_copy->root = copy_cnf(cnf->root);
-        cnf_copy->bool_count = cnf->bool_count;
-        cnf_copy->clause_count = cnf->clause_count;
-        for (int i = 1; i <= cnf->bool_count; i++)
-            value[i] = 1;
-        if (flag == 5)
-            vsids_init_from_cnf(cnf_copy);
-        int res = DPLL_2(cnf_copy, value, flag, _start, timeout_seconds);
-        destroy_cnf(cnf_copy);
-        if (res == 1 || res == 0)
-            return res;
-    }
-    return -1;
+    auto _start = std::chrono::steady_clock::now();
+    // 复制 CNF 给 DPLL 使用
+    CNF cnf_copy = new cnf_node;
+    cnf_copy->root = copy_cnf(cnf->root);
+    cnf_copy->bool_count = cnf->bool_count;
+    cnf_copy->clause_count = cnf->clause_count;
+
+    // 重置 assignment 为未赋值（0）
+    for (int i = 1; i <= cnf->bool_count; ++i)
+        value[i] = 1;
+
+    int res = DPLL_2(cnf_copy, value, flag, _start, timeout_seconds);
+
+    auto _end = std::chrono::steady_clock::now();
+    elapsed_seconds = std::chrono::duration<double>(_end - _start).count();
+
+    destroy_cnf(cnf_copy);
+    return res; // 1=SAT, 0=UNSAT, -1=TIMEOUT
 }
