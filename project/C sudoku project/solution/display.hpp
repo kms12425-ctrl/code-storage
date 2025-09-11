@@ -111,7 +111,6 @@ void main_display()
             {
                 printf("两种方法均无有效结论。\n");
             }
-            // 你原来的保存逻辑使用 final_result/time 等，可按需求改用 t1/t2 中更合适的时间值
             printf("\n");
             delete[] value;
             break;
