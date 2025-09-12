@@ -256,7 +256,7 @@ void print_board(int board[SIZE + 1][SIZE + 1])
         for (int j = 1; j <= SIZE; j++)
         {
             if (board[i][j] == 0)
-                printf(" . ");
+                printf(" x ");
             else
                 printf("%2d ", board[i][j]);
 
