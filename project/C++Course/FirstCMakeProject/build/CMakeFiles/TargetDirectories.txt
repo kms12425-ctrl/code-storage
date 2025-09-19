@@ -1,0 +1,3 @@
+C:/Users/Owner/code/project/C++Course/FirstCMakeProject/build/CMakeFiles/FirstCMakeProject.dir
+C:/Users/Owner/code/project/C++Course/FirstCMakeProject/build/CMakeFiles/edit_cache.dir
+C:/Users/Owner/code/project/C++Course/FirstCMakeProject/build/CMakeFiles/rebuild_cache.dir
