@@ -1,0 +1,14 @@
+{
+    "cmake.configureOnOpen": true,
+    "cmake.useCMakePresets": "always",
+    "cmake.defaultConfigurePreset": "mingw-debug",
+    "cmake.environment": {
+        "TEMP": "C:/tmp",
+        "TMP": "C:/tmp"
+    },
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+    "files.associations": {
+        "*.cmake": "cmake",
+        "CMakeLists.txt": "cmake"
+    }
+}

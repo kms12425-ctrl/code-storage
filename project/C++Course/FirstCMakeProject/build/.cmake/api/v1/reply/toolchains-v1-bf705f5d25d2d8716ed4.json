@@ -47,7 +47,7 @@
 					"linkFrameworkDirectories" : [],
 					"linkLibraries" : []
 				},
-				"path" : "C:/Program Files/mingw64/bin/c++.exe",
+				"path" : "C:/Program Files/mingw64/bin/g++.exe",
 				"version" : "14.2.0"
 			},
 			"language" : "CXX",

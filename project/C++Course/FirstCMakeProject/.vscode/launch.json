@@ -1,0 +1,35 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug FirstCMakeProject",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/FirstCMakeProject.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [
+                {
+                    "name": "TEMP",
+                    "value": "C:/tmp"
+                },
+                {
+                    "name": "TMP",
+                    "value": "C:/tmp"
+                }
+            ],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "C:/Program Files/mingw64/bin/gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "为 gdb 启用整齐打印",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "cmake configure"
+        }
+    ]
+}

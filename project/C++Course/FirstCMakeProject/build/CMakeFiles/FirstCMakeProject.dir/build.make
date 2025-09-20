@@ -75,15 +75,15 @@ CMakeFiles/FirstCMakeProject.dir/main.cpp.obj: CMakeFiles/FirstCMakeProject.dir/
 CMakeFiles/FirstCMakeProject.dir/main.cpp.obj: C:/Users/Owner/code/project/C++Course/FirstCMakeProject/main.cpp
 CMakeFiles/FirstCMakeProject.dir/main.cpp.obj: CMakeFiles/FirstCMakeProject.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Owner\code\project\C++Course\FirstCMakeProject\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/FirstCMakeProject.dir/main.cpp.obj"
-	C:\PROGRA~1\mingw64\bin\C__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/FirstCMakeProject.dir/main.cpp.obj -MF CMakeFiles\FirstCMakeProject.dir\main.cpp.obj.d -o CMakeFiles\FirstCMakeProject.dir\main.cpp.obj -c C:\Users\Owner\code\project\C++Course\FirstCMakeProject\main.cpp
+	C:\PROGRA~1\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/FirstCMakeProject.dir/main.cpp.obj -MF CMakeFiles\FirstCMakeProject.dir\main.cpp.obj.d -o CMakeFiles\FirstCMakeProject.dir\main.cpp.obj -c C:\Users\Owner\code\project\C++Course\FirstCMakeProject\main.cpp
 
 CMakeFiles/FirstCMakeProject.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/FirstCMakeProject.dir/main.cpp.i"
-	C:\PROGRA~1\mingw64\bin\C__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\Owner\code\project\C++Course\FirstCMakeProject\main.cpp > CMakeFiles\FirstCMakeProject.dir\main.cpp.i
+	C:\PROGRA~1\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\Owner\code\project\C++Course\FirstCMakeProject\main.cpp > CMakeFiles\FirstCMakeProject.dir\main.cpp.i
 
 CMakeFiles/FirstCMakeProject.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/FirstCMakeProject.dir/main.cpp.s"
-	C:\PROGRA~1\mingw64\bin\C__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\Owner\code\project\C++Course\FirstCMakeProject\main.cpp -o CMakeFiles\FirstCMakeProject.dir\main.cpp.s
+	C:\PROGRA~1\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\Owner\code\project\C++Course\FirstCMakeProject\main.cpp -o CMakeFiles\FirstCMakeProject.dir\main.cpp.s
 
 # Object files for target FirstCMakeProject
 FirstCMakeProject_OBJECTS = \

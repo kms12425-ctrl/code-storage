@@ -23,5 +23,6 @@
             "envManager": "ms-python.python:system",
             "packageManager": "ms-python.python:pip"
         }
-    ]
+    ],
+    "cmake.sourceDirectory": "C:/Users/Owner/code/project/C++Course/FirstCMakeProject"
 }

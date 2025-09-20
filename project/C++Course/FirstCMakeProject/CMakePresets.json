@@ -1,0 +1,49 @@
+{
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "mingw-debug",
+            "displayName": "MinGW Debug",
+            "description": "Debug build using MinGW",
+            "generator": "MinGW Makefiles",
+            "binaryDir": "${sourceDir}/build",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_CXX_STANDARD": "17",
+                "CMAKE_CXX_COMPILER": "C:/Program Files/mingw64/bin/g++.exe",
+                "CMAKE_C_COMPILER": "C:/Program Files/mingw64/bin/gcc.exe"
+            },
+            "environment": {
+                "TEMP": "C:/tmp",
+                "TMP": "C:/tmp"
+            }
+        },
+        {
+            "name": "mingw-release",
+            "displayName": "MinGW Release",
+            "description": "Release build using MinGW",
+            "generator": "MinGW Makefiles",
+            "binaryDir": "${sourceDir}/build-release",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_CXX_STANDARD": "17",
+                "CMAKE_CXX_COMPILER": "C:/Program Files/mingw64/bin/g++.exe",
+                "CMAKE_C_COMPILER": "C:/Program Files/mingw64/bin/gcc.exe"
+            },
+            "environment": {
+                "TEMP": "C:/tmp",
+                "TMP": "C:/tmp"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "mingw-debug",
+            "configurePreset": "mingw-debug"
+        },
+        {
+            "name": "mingw-release",
+            "configurePreset": "mingw-release"
+        }
+    ]
+}
