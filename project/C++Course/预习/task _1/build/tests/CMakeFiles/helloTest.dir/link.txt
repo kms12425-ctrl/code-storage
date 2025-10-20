@@ -1,0 +1,3 @@
+"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\helloTest.dir/objects.a
+C:\PROGRA~1\mingw64\bin\ar.exe qc CMakeFiles\helloTest.dir/objects.a @CMakeFiles\helloTest.dir\objects1.rsp
+C:\PROGRA~1\mingw64\bin\C__~1.EXE -Wno-deprecated-declarations -Wl,--whole-archive CMakeFiles\helloTest.dir/objects.a -Wl,--no-whole-archive -o helloTest.exe -Wl,--out-implib,libhelloTest.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\helloTest.dir\linkLibs.rsp

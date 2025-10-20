@@ -1,0 +1,2 @@
+C:\PROGRA~1\mingw64\bin\ar.exe qc libhello.a CMakeFiles/hello.dir/func.cpp.obj CMakeFiles/hello.dir/new_func.cpp.obj CMakeFiles/hello.dir/sut.cpp.obj
+C:\PROGRA~1\mingw64\bin\ranlib.exe libhello.a

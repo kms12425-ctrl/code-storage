@@ -1,0 +1,16 @@
+C:/Users/Owner/code/project/C++Course/task _1/build/CMakeFiles/test.dir
+C:/Users/Owner/code/project/C++Course/task _1/build/CMakeFiles/edit_cache.dir
+C:/Users/Owner/code/project/C++Course/task _1/build/CMakeFiles/rebuild_cache.dir
+C:/Users/Owner/code/project/C++Course/task _1/build/bin/CMakeFiles/hello.dir
+C:/Users/Owner/code/project/C++Course/task _1/build/bin/CMakeFiles/helloExe.dir
+C:/Users/Owner/code/project/C++Course/task _1/build/bin/CMakeFiles/test.dir
+C:/Users/Owner/code/project/C++Course/task _1/build/bin/CMakeFiles/edit_cache.dir
+C:/Users/Owner/code/project/C++Course/task _1/build/bin/CMakeFiles/rebuild_cache.dir
+C:/Users/Owner/code/project/C++Course/task _1/build/lib/CMakeFiles/funclib.dir
+C:/Users/Owner/code/project/C++Course/task _1/build/lib/CMakeFiles/test.dir
+C:/Users/Owner/code/project/C++Course/task _1/build/lib/CMakeFiles/edit_cache.dir
+C:/Users/Owner/code/project/C++Course/task _1/build/lib/CMakeFiles/rebuild_cache.dir
+C:/Users/Owner/code/project/C++Course/task _1/build/tests/CMakeFiles/helloTest.dir
+C:/Users/Owner/code/project/C++Course/task _1/build/tests/CMakeFiles/test.dir
+C:/Users/Owner/code/project/C++Course/task _1/build/tests/CMakeFiles/edit_cache.dir
+C:/Users/Owner/code/project/C++Course/task _1/build/tests/CMakeFiles/rebuild_cache.dir

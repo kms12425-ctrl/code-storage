@@ -1,0 +1,44 @@
+[
+{
+  "directory": "C:/Users/Owner/code/project/C++Course/task _1/build/bin",
+  "command": "C:\\PROGRA~1\\mingw64\\bin\\C__~1.EXE  @CMakeFiles/hello.dir/includes_CXX.rsp -Wno-deprecated-declarations -o CMakeFiles\\hello.dir\\func.cpp.obj -c \"C:\\Users\\Owner\\code\\project\\C++Course\\task _1\\src\\func.cpp\"",
+  "file": "C:/Users/Owner/code/project/C++Course/task _1/src/func.cpp",
+  "output": "bin/CMakeFiles/hello.dir/func.cpp.obj"
+},
+{
+  "directory": "C:/Users/Owner/code/project/C++Course/task _1/build/bin",
+  "command": "C:\\PROGRA~1\\mingw64\\bin\\C__~1.EXE  @CMakeFiles/hello.dir/includes_CXX.rsp -Wno-deprecated-declarations -o CMakeFiles\\hello.dir\\new_func.cpp.obj -c \"C:\\Users\\Owner\\code\\project\\C++Course\\task _1\\src\\new_func.cpp\"",
+  "file": "C:/Users/Owner/code/project/C++Course/task _1/src/new_func.cpp",
+  "output": "bin/CMakeFiles/hello.dir/new_func.cpp.obj"
+},
+{
+  "directory": "C:/Users/Owner/code/project/C++Course/task _1/build/bin",
+  "command": "C:\\PROGRA~1\\mingw64\\bin\\C__~1.EXE  @CMakeFiles/hello.dir/includes_CXX.rsp -Wno-deprecated-declarations -o CMakeFiles\\hello.dir\\sut.cpp.obj -c \"C:\\Users\\Owner\\code\\project\\C++Course\\task _1\\src\\sut.cpp\"",
+  "file": "C:/Users/Owner/code/project/C++Course/task _1/src/sut.cpp",
+  "output": "bin/CMakeFiles/hello.dir/sut.cpp.obj"
+},
+{
+  "directory": "C:/Users/Owner/code/project/C++Course/task _1/build/bin",
+  "command": "C:\\PROGRA~1\\mingw64\\bin\\C__~1.EXE  @CMakeFiles/helloExe.dir/includes_CXX.rsp -Wno-deprecated-declarations -o CMakeFiles\\helloExe.dir\\main.cpp.obj -c \"C:\\Users\\Owner\\code\\project\\C++Course\\task _1\\src\\main.cpp\"",
+  "file": "C:/Users/Owner/code/project/C++Course/task _1/src/main.cpp",
+  "output": "bin/CMakeFiles/helloExe.dir/main.cpp.obj"
+},
+{
+  "directory": "C:/Users/Owner/code/project/C++Course/task _1/build/lib",
+  "command": "C:\\PROGRA~1\\mingw64\\bin\\C__~1.EXE  @CMakeFiles/funclib.dir/includes_CXX.rsp -Wno-deprecated-declarations -o CMakeFiles\\funclib.dir\\funclib.cpp.obj -c \"C:\\Users\\Owner\\code\\project\\C++Course\\task _1\\lib\\funclib.cpp\"",
+  "file": "C:/Users/Owner/code/project/C++Course/task _1/lib/funclib.cpp",
+  "output": "lib/CMakeFiles/funclib.dir/funclib.cpp.obj"
+},
+{
+  "directory": "C:/Users/Owner/code/project/C++Course/task _1/build/tests",
+  "command": "C:\\PROGRA~1\\mingw64\\bin\\C__~1.EXE -DGTEST_HAS_QUICK_EXIT=0 @CMakeFiles/helloTest.dir/includes_CXX.rsp -Wno-deprecated-declarations -o CMakeFiles\\helloTest.dir\\main.cpp.obj -c \"C:\\Users\\Owner\\code\\project\\C++Course\\task _1\\tests\\main.cpp\"",
+  "file": "C:/Users/Owner/code/project/C++Course/task _1/tests/main.cpp",
+  "output": "tests/CMakeFiles/helloTest.dir/main.cpp.obj"
+},
+{
+  "directory": "C:/Users/Owner/code/project/C++Course/task _1/build/tests",
+  "command": "C:\\PROGRA~1\\mingw64\\bin\\C__~1.EXE -DGTEST_HAS_QUICK_EXIT=0 @CMakeFiles/helloTest.dir/includes_CXX.rsp -Wno-deprecated-declarations -o CMakeFiles\\helloTest.dir\\test.cpp.obj -c \"C:\\Users\\Owner\\code\\project\\C++Course\\task _1\\tests\\test.cpp\"",
+  "file": "C:/Users/Owner/code/project/C++Course/task _1/tests/test.cpp",
+  "output": "tests/CMakeFiles/helloTest.dir/test.cpp.obj"
+}
+]
