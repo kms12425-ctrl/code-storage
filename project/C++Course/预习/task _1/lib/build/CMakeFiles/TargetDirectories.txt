@@ -1,3 +1,0 @@
-C:/Users/Owner/code/project/C++Course/task _1/lib/build/CMakeFiles/funclib.dir
-C:/Users/Owner/code/project/C++Course/task _1/lib/build/CMakeFiles/edit_cache.dir
-C:/Users/Owner/code/project/C++Course/task _1/lib/build/CMakeFiles/rebuild_cache.dir

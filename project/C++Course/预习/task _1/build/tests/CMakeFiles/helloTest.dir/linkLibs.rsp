@@ -1,1 +1,0 @@
- ../bin/libhello.a "C:/Users/Owner/code/project/C++Course/task _1/third_party/gtest/lib/libgtest.a" -lmingwex -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 
