@@ -103,7 +103,14 @@ def mine():
 
 @app.route('/transcations/new', methods=['POST'])
 def new_transaction():
-    return 'We will add a new transaction'
+    values=response.get_json()
+     # Check that the required fields are in the POST'ed data
+     required=['sender','recipient','amount']
+     if not all(k in values for k in required):
+        return 'Missing value',400
+     # Create a new Transaction
+     index=Blockchain.new_transaction(sender='')
+
 
 
 @app.route('/chain', methods=['GET'])
