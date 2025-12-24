@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
-// 分治，递归
+// 分治，递归(棋盘面积)
 typedef long long ll;
 typedef vector<int> vi;
 typedef pair<int, int> pii;

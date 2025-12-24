@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-// 拓朴排序+深度搜索
+// 拓朴排序+深度搜索(n+m)
 using namespace std;
 
 typedef long long ll;
@@ -21,7 +21,7 @@ int cnt = 0; // 初始入度为0的节点数
 // int max_jinwei = 0;
 int dp[MAXN];
 
-int dfs(int v)
+int bfs(int v)
 {
     if (dp[v] != 0)
         return dp[v];
@@ -32,7 +32,7 @@ int dfs(int v)
     }
     for (auto vv : animal[v])
     {
-        dp[v] = (dp[v] + dfs(vv)) % MOD;
+        dp[v] = (dp[v] + bfs(vv)) % MOD;
     }
     return dp[v];
 }
@@ -62,7 +62,7 @@ int main()
     {
         if (in_degree[i] != 0)
             continue;
-        cnt = (cnt + dfs(i)) % MOD;
+        cnt = (cnt + bfs(i)) % MOD;
     }
     cout << cnt;
     // for (int i = 0; i < cnt; i++) // 开始统计每个初始入度为0的动物的最长路径

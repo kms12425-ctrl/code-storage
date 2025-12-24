@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
-// BFS,广度搜索
+// 广度搜索(m*n)
 typedef long long ll;
 typedef vector<int> vi;
 typedef pair<int, int> pii;

@@ -1,10 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
-
+// 线段树，扫描线，离散化(N*L)
 typedef long long ll;
 typedef vector<int> vi;
 typedef pair<int, int> pii;
-// 线段树，扫描线
+
 int height[5003] = {0};
 int main()
 {

@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
-// 递归，分治
+// 递归，分治(nlgn)
 int L, N, M;   // L:起点到终点的距离，N:起点和终点之间的岩石数(一共N+1块石头)，M:组委会至多移走的岩石数。
 int D[500000]; // 表示第 i 块岩石与起点的距离
 

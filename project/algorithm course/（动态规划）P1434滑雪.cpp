@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
-// 动态规划
+// 动态规划(行*列)
 typedef long long ll;
 typedef vector<int> vi;
 typedef pair<int, int> pii;

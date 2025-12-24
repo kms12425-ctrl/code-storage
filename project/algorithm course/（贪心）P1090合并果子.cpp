@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
-// 贪心算法
+// 贪心算法(nlgn)
 typedef long long ll;
 typedef vector<int> vi;
 typedef pair<int, int> pii;

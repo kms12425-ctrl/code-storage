@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
-// 贪心算法
+// 贪心算法(nlgn)
 typedef long long ll;
 typedef vector<int> vi;
 typedef pair<int, int> pii;
@@ -33,7 +33,7 @@ int main()
     {
         for (int j = N; j >= 1; j--)
         {
-            if (pocket[j] <= i + 1)
+            if (pocket[j] <= i + 1) // 从右往左找第一个<=i+1的面值
             {
                 sum++;
                 i = i + pocket[j];
