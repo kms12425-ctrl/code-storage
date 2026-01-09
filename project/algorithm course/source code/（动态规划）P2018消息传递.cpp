@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
-// 动态规划
+// 动态规划O(Nlog(max_degree))
 typedef long long ll;
 typedef vector<int> vi;
 

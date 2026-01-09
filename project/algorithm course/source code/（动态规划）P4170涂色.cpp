@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
-
+// 区间动态规划 O(n^3)
 typedef long long ll;
 typedef vector<int> vi;
 typedef pair<int, int> pii;
@@ -15,6 +15,7 @@ int main()
 {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
+    // 解题代码
 
     if (!(cin >> s))
         return 0;
