@@ -1,0 +1,5 @@
+﻿  Assembling computeAverageScore.asm...
+  main.c
+C:\Users\Owner\code\project\Foundations of Computer Systems\LAB_2\汇编和C的混合编程及优化\汇编和C的混合编程及优化\main.c(79,33): warning C4090: “函数”: 不同的“const”限定符
+C:\Users\Owner\code\project\Foundations of Computer Systems\LAB_2\汇编和C的混合编程及优化\汇编和C的混合编程及优化\main.c(79,33): warning C4113: “int (__cdecl *)(void *,void *)”和“_CoreCrtNonSecureSearchSortCompareFunction”的参数列表不同
+  汇编和C的混合编程及优化.vcxproj -> C:\Users\Owner\code\project\Foundations of Computer Systems\LAB_2\汇编和C的混合编程及优化\Debug\汇编和C的混合编程及优化.exe

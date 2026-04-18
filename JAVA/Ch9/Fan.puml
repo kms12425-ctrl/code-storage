@@ -1,0 +1,31 @@
+@startuml Fan
+package Ch9 {
+class Fan {
++ {static} final int SLOW = 1
++ {static} final int MEDIUM = 2
++ {static} final int FAST = 3
+- int speed
+- boolean on
+- double radius
+~ String color
+~ Fan()
+~ Fan(int, boolean, double, String)
++ int getSpeed()
++ void setSpeed(int)
++ boolean isOn()
++ void setOn(boolean)
++ double getRadius()
++ void setRadius(double)
++ String getColor()
++ void setColor(String)
+- String speedToString()
++ String toString()
+}
+
+class Test {
++ static void main(String[] args)
+}
+
+Test ..> Fan : uses
+}
+@enduml

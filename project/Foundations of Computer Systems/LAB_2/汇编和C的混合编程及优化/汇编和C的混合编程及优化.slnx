@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="汇编和C的混合编程及优化/汇编和C的混合编程及优化.vcxproj" />
+</Solution>

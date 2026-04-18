@@ -13,11 +13,25 @@ Starting from where we left off, I have focused on **optimizing the model** by a
 
 **Reflections on Training Dynamics & Tuning:**
 During the experiments, I made several key observations regarding how the model learns:
-1. **Impact of Optimization Step Size**: The learning rate essentially dictates our path to the solution. Pushing it aggressively high (0.1) caused the model to erraticly overshoot the minimum (divergence). Conversely, an excessively tiny rate (0.00001) dragged the progression to a crawl. Discovering that sweet spot (0.001) was crucial for a prompt, stable descent.
+<!-- 1. **Impact of Optimization Step Size**: The learning rate essentially dictates our path to the solution. Pushing it aggressively high (0.1) caused the model to erraticly overshoot the minimum (divergence). Conversely, an excessively tiny rate (0.00001) dragged the progression to a crawl. Discovering that sweet spot (0.001) was crucial for a prompt, stable descent.
 2. **Identifying the Memorization Trap**: Tracking the batch sizes and epochs, I noticed training scores climbing endlessly while validation performance hit a brick wall. This widening gap was the textbook definition of **overfitting**—the network was treating random dataset noise as undeniable facts.
-3. **Structured Parameter Selection**: I realized that dialing in these settings shouldn't be based on trial-and-error. The proper methodology involves deploying systematic sweeps—like a targeted Grid Search or wide Random Search—and strictly evaluating the resulting validation metrics to isolate the best configuration."
+3. **Structured Parameter Selection**: I realized that dialing in these settings shouldn't be based on trial-and-error. The proper methodology involves deploying systematic sweeps—like a targeted Grid Search or wide Random Search—and strictly evaluating the resulting validation metrics to isolate the best configuration." -->
 
-*[Show corresponding validation vs. training accuracy/loss comparison charts here]*
+Learning Rate — Controls how big each update step is during training. Too high and the model overshoots the optimal solution; too low and it learns painfully slowly.
+Batch Size — How many training samples the model sees before updating its weights. Larger batches = smoother but slower updates; smaller batches = noisier but more frequent updates.
+Epoch — One complete pass through the entire training dataset. More epochs give the model more chances to learn, but too many can lead to overfitting.
+
+Think of it like studying: learning rate is how much you absorb per session, batch size is how many pages you read before pausing to reflect, and epochs is how many times you re-read the whole book.
+
+
+Learning Rate is the dominant factor:
+
+LR=0.1 completely fails (~10% accuracy), the learning rate is too large to converge
+LR=0.001 performs best (~47% accuracy) with stable, fast convergence
+LR=0.00001 learns too slowly and hasn't fully converged by epoch 14
+
+Batch size has minimal impact when LR=0.001 — all three batch sizes (32/64/256) reach similar final accuracy (~46-47%), though smaller batches show more noisy curves.
+Best config: LR=0.001, Batch=64 — best balance of speed, stability, and performance. Further gains likely require architectural improvements rather than hyperparameter tuning.
 
 ---
 
