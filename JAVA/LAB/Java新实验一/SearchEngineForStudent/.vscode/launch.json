@@ -1,0 +1,28 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "StringSplitter",
+            "request": "launch",
+            "mainClass": "hust.cs.javacourse.search.util.StringSplitter",
+            "projectName": "SearchEngineForStudent_884935bf"
+        },
+        {
+            "type": "java",
+            "name": "Build Index",
+            "request": "launch",
+            "mainClass": "hust.cs.javacourse.search.run.TestBuildIndex",
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "Build Java Project"
+        },
+        {
+            "type": "java",
+            "name": "Search Index",
+            "request": "launch",
+            "mainClass": "hust.cs.javacourse.search.run.TestSearchIndex",
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "Build Java Project"
+        }
+    ]
+}

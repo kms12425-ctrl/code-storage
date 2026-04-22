@@ -20,6 +20,7 @@ public class Index extends AbstractIndex {
      */
     @Override
     public String toString() {
+        // TODO: implement this method
         return null;
     }
 
@@ -30,7 +31,7 @@ public class Index extends AbstractIndex {
      */
     @Override
     public void addDocument(AbstractDocument document) {
-
+        // TODO: implement this method
     }
 
     /**
@@ -41,7 +42,7 @@ public class Index extends AbstractIndex {
      */
     @Override
     public void load(File file) {
-
+        // TODO: implement this method
     }
 
     /**
@@ -52,7 +53,7 @@ public class Index extends AbstractIndex {
      */
     @Override
     public void save(File file) {
-
+        // TODO: implement this method
     }
 
     /**
@@ -63,6 +64,7 @@ public class Index extends AbstractIndex {
      */
     @Override
     public AbstractPostingList search(AbstractTerm term) {
+        // TODO: implement this method
         return null;
     }
 
@@ -73,6 +75,7 @@ public class Index extends AbstractIndex {
      */
     @Override
     public Set<AbstractTerm> getDictionary() {
+        // TODO: implement this method
         return null;
     }
 
@@ -86,7 +89,7 @@ public class Index extends AbstractIndex {
      */
     @Override
     public void optimize() {
-
+        // TODO: implement this method
     }
 
     /**
@@ -97,6 +100,7 @@ public class Index extends AbstractIndex {
      */
     @Override
     public String getDocName(int docId) {
+        // TODO: implement this method
         return null;
     }
 
@@ -107,7 +111,7 @@ public class Index extends AbstractIndex {
      */
     @Override
     public void writeObject(ObjectOutputStream out) {
-
+        // TODO: implement this method
     }
 
     /**
@@ -117,6 +121,6 @@ public class Index extends AbstractIndex {
      */
     @Override
     public void readObject(ObjectInputStream in) {
-
+        // TODO: implement this method
     }
 }
