@@ -5,6 +5,7 @@ import hust.cs.javacourse.search.index.AbstractPostingList;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -13,74 +14,82 @@ import java.util.List;
 public class PostingList extends AbstractPostingList {
     @Override
     public void add(AbstractPosting posting) {
-        // TODO: implement this method
+        if (!this.contains(posting))
+            this.list.add(posting);
     }
 
     @Override
     public String toString() {
-        // TODO: implement this method
-        return null;
+        StringBuffer sb = new StringBuffer();
+        for (AbstractPosting tmp : this.list) {
+            sb.append(tmp.toString());
+        }
+        return sb.toString();
     }
 
     @Override
     public void add(List<AbstractPosting> postings) {
-        // TODO: implement this method
+        for (AbstractPosting tmp : postings) {
+            if (!this.contains(tmp))
+                this.add(tmp);
+        }
     }
 
     @Override
     public AbstractPosting get(int index) {
-        // TODO: implement this method
-        return null;
+        return this.list.get(index);
     }
 
     @Override
     public int indexOf(AbstractPosting posting) {
-        // TODO: implement this method
-        return 0;
+        return this.list.indexOf(posting);
     }
 
     @Override
     public int indexOf(int docId) {
-        // TODO: implement this method
-        return 0;
+        for (int i = 0; i < this.list.size(); i++) {
+            if (this.list.get(i).getDocId() == docId)
+                return i;
+        }
+        return -1;
     }
 
     @Override
     public boolean contains(AbstractPosting posting) {
-        // TODO: implement this method
-        return false;
+        return this.list.contains(posting);
     }
 
     @Override
     public void remove(int index) {
-        // TODO: implement this method
+        this.list.remove(index);
     }
 
     @Override
     public void remove(AbstractPosting posting) {
-        // TODO: implement this method
+        this.list.remove(posting);
     }
 
     @Override
     public int size() {
-        // TODO: implement this method
-        return 0;
+        return this.list.size();
     }
 
     @Override
     public void clear() {
-        // TODO: implement this method
+        this.list.clear();
     }
 
     @Override
     public boolean isEmpty() {
-        // TODO: implement this method
-        return false;
+        return this.list.isEmpty();
     }
 
     @Override
     public void sort() {
-        // TODO: implement this method
+        Collections.sort(this.list);
+        for (AbstractPosting tmp : this.list) {
+            tmp.sort();
+        }
     }
 
     @Override

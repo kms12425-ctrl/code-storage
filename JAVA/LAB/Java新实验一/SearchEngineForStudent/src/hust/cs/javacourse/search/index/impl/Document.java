@@ -11,58 +11,58 @@ import java.util.List;
 public class Document extends AbstractDocument {
     @Override
     public int getDocId() {
-        // TODO: implement this method
-        return 0;
+        return this.docId;
     }
 
     @Override
     public void setDocId(int docId) {
-        // TODO: implement this method
+        this.docId = docId;
     }
 
     @Override
     public String getDocPath() {
-        // TODO: implement this method
-        return null;
+        return docPath;
     }
 
     @Override
     public void setDocPath(String docPath) {
-        // TODO: implement this method
+        this.docPath = docPath;
     }
 
     @Override
     public List<AbstractTermTuple> getTuples() {
-        // TODO: implement this method
-        return null;
+        return this.tuples;
     }
 
     @Override
     public void addTuple(AbstractTermTuple tuple) {
-        // TODO: implement this method
+        this.tuples.add(tuple);
     }
 
     @Override
     public boolean contains(AbstractTermTuple tuple) {
-        // TODO: implement this method
-        return false;
+        return (this.tuples.contains(tuple));
     }
 
     @Override
     public AbstractTermTuple getTuple(int index) {
-        // TODO: implement this method
-        return null;
+        return this.tuples.get(index);
     }
 
     @Override
     public int getTupleSize() {
-        // TODO: implement this method
-        return 0;
+        return this.tuples.size();
     }
 
     @Override
     public String toString() {
-        // TODO: implement this method
-        return null;
+        StringBuffer sb = new StringBuffer();
+        sb.append("docID: " + this.getDocId() + "\n");
+        sb.append("docPath: " + this.getDocPath() + "\n");
+        sb.append("tuples: \n");
+        for (AbstractTermTuple tmp : this.tuples) {
+            sb.append(tmp.toString());
+        }
+        return sb.toString();
     }
 }

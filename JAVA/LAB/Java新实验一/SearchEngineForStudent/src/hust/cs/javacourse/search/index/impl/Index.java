@@ -1,12 +1,15 @@
 package hust.cs.javacourse.search.index.impl;
 
 import hust.cs.javacourse.search.index.AbstractDocument;
+import hust.cs.javacourse.search.index.AbstractTermTuple;
 import hust.cs.javacourse.search.index.AbstractIndex;
+import hust.cs.javacourse.search.index.AbstractPosting;
 import hust.cs.javacourse.search.index.AbstractPostingList;
 import hust.cs.javacourse.search.index.AbstractTerm;
 import java.io.File;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.Set;
 
 /**
@@ -20,8 +23,17 @@ public class Index extends AbstractIndex {
      */
     @Override
     public String toString() {
-        // TODO: implement this method
-        return null;
+        StringBuffer sb = new StringBuffer();
+        sb.append("docIdToDocPathMapping: \n");
+        for (Integer id : this.docIdToDocPathMapping.keySet()) {
+            sb.append(id).append("->").append(this.docIdToDocPathMapping.get(id)).append("\n");
+        }
+        sb.append("termToPostingListMapping: \n");
+        for (AbstractTerm term : this.termToPostingListMapping.keySet()) {
+            sb.append(term.toString()).append("->").append(this.termToPostingListMapping.get(term).toString())
+                    .append("\n");
+        }
+        return sb.toString();
     }
 
     /**
@@ -31,7 +43,28 @@ public class Index extends AbstractIndex {
      */
     @Override
     public void addDocument(AbstractDocument document) {
-        // TODO: implement this method
+        this.docIdToDocPathMapping.put(document.getDocId(), document.getDocPath());
+
+        for (AbstractTermTuple tmp : document.getTuples()) {
+            PostingList postingList = (PostingList) this.termToPostingListMapping.get(tmp.term);
+
+            if (postingList == null) {
+                postingList = new PostingList();
+                this.termToPostingListMapping.put(tmp.term, postingList);
+            }
+
+            int i = postingList.indexOf(document.getDocId());
+
+            if (i == -1) {
+                Posting posting = new Posting(document.getDocId(), 1, new ArrayList<Integer>());
+                posting.getPositions().add(tmp.curPos);
+                postingList.add(posting);
+            } else {
+                AbstractPosting posting = postingList.get(i);
+                posting.setFreq(posting.getFreq() + 1);
+                posting.getPositions().add(tmp.curPos);
+            }
+        }
     }
 
     /**
@@ -64,8 +97,7 @@ public class Index extends AbstractIndex {
      */
     @Override
     public AbstractPostingList search(AbstractTerm term) {
-        // TODO: implement this method
-        return null;
+        return this.termToPostingListMapping.get(term);
     }
 
     /**
@@ -75,8 +107,7 @@ public class Index extends AbstractIndex {
      */
     @Override
     public Set<AbstractTerm> getDictionary() {
-        // TODO: implement this method
-        return null;
+        return this.termToPostingListMapping.keySet();
     }
 
     /**
@@ -100,8 +131,7 @@ public class Index extends AbstractIndex {
      */
     @Override
     public String getDocName(int docId) {
-        // TODO: implement this method
-        return null;
+        return this.docIdToDocPathMapping.get(docId);
     }
 
     /**

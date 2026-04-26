@@ -1,69 +1,80 @@
 package hust.cs.javacourse.search.index.impl;
 
 import hust.cs.javacourse.search.index.AbstractPosting;
+import hust.cs.javacourse.search.index.AbstractTerm;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * AbstractPosting的具体实现类
  */
 public class Posting extends AbstractPosting {
+    public Posting() {
+        super();
+    }
+
+    public Posting(int docId, int freq, List<Integer> positions) {
+        super(docId, freq, positions);
+    }
+
     @Override
     public boolean equals(Object obj) {
-        // TODO: implement this method
-        return false;
+        if (this == obj)
+            return true;
+        if (!(obj instanceof AbstractPosting))
+            return false;
+        AbstractPosting tmp = (AbstractPosting) obj;
+        return (tmp.getDocId() == this.docId && tmp.getFreq() == this.freq
+                && Objects.equals(tmp.getPositions(), this.positions));
     }
 
     @Override
     public String toString() {
-        // TODO: implement this method
-        return null;
+        return "docID: " + this.docId + ", freq: " + this.freq + ", positions: " + this.positions + "\n";
     }
 
     @Override
     public int getDocId() {
-        // TODO: implement this method
-        return 0;
+        return this.docId;
     }
 
     @Override
     public void setDocId(int docId) {
-        // TODO: implement this method
+        this.docId = docId;
     }
 
     @Override
     public int getFreq() {
-        // TODO: implement this method
-        return 0;
+        return this.freq;
     }
 
     @Override
     public void setFreq(int freq) {
-        // TODO: implement this method
+        this.freq = freq;
     }
 
     @Override
     public List<Integer> getPositions() {
-        // TODO: implement this method
-        return null;
+        return this.positions;
     }
 
     @Override
     public void setPositions(List<Integer> positions) {
-        // TODO: implement this method
+        this.positions = positions;
     }
 
     @Override
     public int compareTo(AbstractPosting o) {
-        // TODO: implement this method
-        return 0;
+        return this.docId - o.getDocId();
     }
 
     @Override
     public void sort() {
-        // TODO: implement this method
+        Collections.sort(this.positions);
     }
 
     @Override

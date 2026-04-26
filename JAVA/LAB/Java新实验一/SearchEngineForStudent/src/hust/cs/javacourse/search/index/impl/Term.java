@@ -4,6 +4,7 @@ import hust.cs.javacourse.search.index.AbstractTerm;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Objects;
 
 /**
  * AbstractTerm的具体实现类
@@ -11,31 +12,32 @@ import java.io.ObjectOutputStream;
 public class Term extends AbstractTerm {
     @Override
     public boolean equals(Object obj) {
-        // TODO: implement this method
-        return false;
+        if (this == obj)
+            return true;
+        if (!(obj instanceof AbstractTerm))
+            return false;
+        AbstractTerm tmp = (AbstractTerm) obj;
+        return (Objects.equals(tmp.getContent(), this.content));
     }
 
     @Override
     public String toString() {
-        // TODO: implement this method
-        return null;
+        return this.content;
     }
 
     @Override
     public String getContent() {
-        // TODO: implement this method
-        return null;
+        return this.content;
     }
 
     @Override
     public void setContent(String content) {
-        // TODO: implement this method
+        this.content = content;
     }
 
     @Override
     public int compareTo(AbstractTerm o) {
-        // TODO: implement this method
-        return 0;
+        return this.content.compareTo(o.getContent());
     }
 
     @Override
