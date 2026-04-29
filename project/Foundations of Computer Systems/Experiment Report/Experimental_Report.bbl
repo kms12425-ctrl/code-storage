@@ -1,0 +1,42 @@
+\begin{thebibliography}{1}
+\providecommand{\bibauthor}[1]{#1}
+\providecommand{\bibeditor}[1]{#1}
+\providecommand{\bibtranslator}[1]{#1}
+\providecommand{\bibtitle}[1]{#1}
+\providecommand{\bibbooktitle}[1]{#1}
+\providecommand{\bibjournal}[1]{#1}
+\providecommand{\bibmark}[1]{#1}
+\providecommand{\bibcountry}[1]{#1}
+\providecommand{\bibpatentid}[1]{#1}
+\providecommand{\bibedition}[1]{#1}
+\providecommand{\biborganization}[1]{#1}
+\providecommand{\bibaddress}[1]{#1}
+\providecommand{\bibpublisher}[1]{#1}
+\providecommand{\bibinstitution}[1]{#1}
+\providecommand{\bibschool}[1]{#1}
+\providecommand{\bibvolume}[1]{#1}
+\providecommand{\bibnumber}[1]{#1}
+\providecommand{\bibversion}[1]{#1}
+\providecommand{\bibpages}[1]{#1}
+\providecommand{\bibmodifydate}[1]{#1}
+\providecommand{\bibcitedate}[1]{#1}
+\providecommand{\bibyear}[1]{#1}
+\providecommand{\bibdate}[1]{#1}
+\providecommand{\biburl}[1]{\newline\url{#1}}
+
+\bibitem{csapp}
+\bibauthor{BRYANT R~E\@, O'HALLARON D~R}\@. \bibbooktitle{Computer Systems: A
+  Programmer's Perspective}\bibmark{[M]}\@. \bibedition{\mbox{3rd~ed}}\@.
+  \bibaddress{Boston}\thinspace{}\textnormal{: }\bibpublisher{Pearson}\@,
+  \bibyear{2016}\@.
+
+\bibitem{gdb-manual}
+\bibauthor{{GNU Project}}\@. \bibtitle{Debugging with GDB}\bibmark{[EB/OL]}\@.
+  \bibyear{2025} \bibcitedate{[2026-04-27]}\@.
+  \newline\url{https://sourceware.org/gdb/current/onlinedocs/gdb/}\@.
+
+\bibitem{lab-manual}
+\bibbooktitle{计算机系统基础实验指导书}\bibmark{[K]}\@.
+  \bibyear{2026}\@.
+
+\end{thebibliography}

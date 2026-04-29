@@ -1,0 +1,750 @@
+\documentclass[supercite]{Experimental_Report}
+
+\title{~~~~~~计算机系统基础~~~~~~}
+\author{马俊豪}
+\school{计算机科学与技术学院}
+\classnum{2401}
+\stunum{U202490042}
+\instructor{你的指导教师}
+\date{2026年X月X日}
+
+\usepackage{algorithm, multirow}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{bm}
+\usepackage{float}
+\usepackage{framed}
+\usepackage{mathtools}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usepackage{tikzscale}
+\usepackage{pgfplots}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\pgfplotsset{compat=1.16}
+
+\lstdefinelanguage{Shell}{
+  keywords={cd, ls, pwd, cat, grep, make, gcc, gdb, readelf, objdump, hexdump, python, echo, rm},
+  sensitive=true,
+  comment=[l]{\#},
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstdefinestyle{reportcode}{
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true,
+  numbers=left,
+  numberstyle=\tiny,
+  frame=single,
+  captionpos=b,
+  keywordstyle=\color{blue}\bfseries,
+  stringstyle=\color{red},
+  commentstyle=\color{gray}\itshape,
+  showstringspaces=false,
+  tabsize=2,
+  language=C
+}
+
+\lstset{style=reportcode}
+
+\newcommand{\cfig}[3]{
+  \begin{figure}[htb]
+    \centering
+    \includegraphics[width=#2\textwidth]{images/#1.tikz}
+    \caption{#3}
+    \label{fig:#1}
+  \end{figure}
+}
+
+\newcommand{\sfig}[3]{
+  \begin{subfigure}[b]{#2\textwidth}
+    \includegraphics[width=\textwidth]{images/#1.tikz}
+    \caption{#3}
+    \label{fig:#1}
+  \end{subfigure}
+}
+
+\newcommand{\xfig}[3]{
+  \begin{figure}[htb]
+    \centering
+    #3
+    \caption{#2}
+    \label{fig:#1}
+  \end{figure}
+}
+
+\newcommand{\rfig}[1]{\autoref{fig:#1}}
+\newcommand{\ralg}[1]{\autoref{alg:#1}}
+\newcommand{\rthm}[1]{\autoref{thm:#1}}
+\newcommand{\rlem}[1]{\autoref{lem:#1}}
+\newcommand{\reqn}[1]{\autoref{eqn:#1}}
+\newcommand{\rtbl}[1]{\autoref{tbl:#1}}
+
+\algnewcommand\Null{\textsc{null }}
+\algnewcommand\algorithmicinput{\textbf{Input:}}
+\algnewcommand\Input{\item[\algorithmicinput]}
+\algnewcommand\algorithmicoutput{\textbf{Output:}}
+\algnewcommand\Output{\item[\algorithmicoutput]}
+\algnewcommand\algorithmicbreak{\textbf{break}}
+\algnewcommand\Break{\algorithmicbreak}
+\algnewcommand\algorithmiccontinue{\textbf{continue}}
+\algnewcommand\Continue{\algorithmiccontinue}
+\algnewcommand{\LeftCom}[1]{\State $\triangleright$ #1}
+
+\newtheorem{thm}{定理}[section]
+\newtheorem{lem}{引理}[section]
+
+\colorlet{shadecolor}{black!15}
+
+\theoremstyle{definition}
+\newtheorem{alg}{算法}[section]
+
+\def\thmautorefname~#1\null{定理~#1~\null}
+\def\lemautorefname~#1\null{引理~#1~\null}
+\def\algautorefname~#1\null{算法~#1~\null}
+
+\newcommand{\templatehint}[1]{{\color{gray}\textit{#1}}}
+\newcommand{\experimentsection}[1]{
+  \refstepcounter{section}
+  \section*{#1}
+  \addcontentsline{toc}{section}{#1}
+}
+
+\begin{document}
+
+% 如果不希望模板默认展示示例参考文献，可删除下一行 \nocite 命令。
+\nocite{csapp, gdb-manual, lab-manual}
+
+\maketitle
+
+\clearpage
+
+\pagenumbering{Roman}
+
+\tableofcontents[level=3]
+\clearpage
+
+\pagenumbering{arabic}
+
+% 使用说明：
+% 1. 每次新建实验报告时，先修改封面信息。
+% 2. 按需填写“实验1”的完整内容；如果一份报告包含多个实验，复制实验1的结构继续向下写。
+% 3. 插图统一放在 images/Screenshots 下，代码与命令输出建议使用 lstlisting 环境。
+% 4. 如无参考文献，可保留 bibliography 命令；如需引用，请在正文中使用 \cite{...} 并维护 .bib 文件。
+
+\experimentsection{实验1：数据表示和等效运算}
+
+\subsection{实验概述}
+\begin{enumerate}
+  \item 熟练掌握程序开发平台(VS2019/VS2022/VS2023) 的基本用法，包括程序的编译、链接和调试；
+  \item 熟悉数据的表示形式；
+  \item 熟悉地址的计算方法、地址的内存转换；
+  \item 用常见的按位操作（移位、按位与/或/非/异或）等实现运算表达式的等效运算。
+\end{enumerate}
+
+\subsection{实验内容}
+任务1\quad 数据存放的压缩与解压编程
+
+定义了 结构 student ，以及结构数组变量old\_s[N], new\_s[N];  (N=5)
+
+\begin{lstlisting}[language=C]
+struct student {
+    char  name[8];
+    short  age;
+    float  score;
+    char  remark[200];  // 备注信息
+};
+\end{lstlisting}
+
+编写程序，输入N个学生的信息到结构数组old\_s中。将 old\_s[N] 中的所有信息依次紧凑(压缩)存放到一个字符数组message中，然后从 message 解压缩到结构数组 new\_s[N]中。打印压缩前(old\_s)、解压后(new\_s)的结果，以及压缩前、压缩后存放数据的长度。
+
+要求：
+\begin{enumerate}
+  \item 输入的第0个人姓名(name)为自己的名字，分数为学号的最后两位；
+  \item 编写指定接口的函数完成数据压缩
+\end{enumerate}
+
+压缩函数有两个：
+
+\begin{lstlisting}[language=C]
+int  pack_student_bytebybyte(student* s, int sno, char *buf);
+int  pack_student_whole(student* s, int sno, char *buf);
+\end{lstlisting}
+
+s为待压缩数组的起始地址； sno 为压缩人数； buf 为压缩存储区的首地址；两个函数的返回均是调用函数压缩后的字节数。pack\_student\_bytebybyte要求一个字节一个字节的向buf中写数据；pack\_student\_whole要求对short、float字段都只能用一条语句整体写入，用strcpy实现串的写入。
+
+\begin{enumerate}
+  \setcounter{enumi}{2}
+  \item 使用指定方式调用压缩函数
+\end{enumerate}
+
+old\_s数组的前N1（N1=2）个记录压缩调用pack\_student\_bytebybyte 完成；后N2（N2==3）个记录压缩调用pack\_student\_whole，两种压缩函数都只调用1次。
+
+\begin{enumerate}
+  \setcounter{enumi}{3}
+  \item 使用指定的函数完成数据的解压
+\end{enumerate}
+
+解压函数的格式：
+
+\begin{lstlisting}[language=C]
+int restore_student(char *buf, int len, student* s);
+\end{lstlisting}
+
+buf 为压缩区域存储区的首地址；len为buf中存放数据的长度；s为存放解压数据的结构数组的起始地址； 返回解压的人数。解压时不允许使用函数接口之外的信息（即不允许定义其他全局变量）
+
+\begin{enumerate}
+  \setcounter{enumi}{4}
+  \item 仿照调试时看到的内存数据，以十六进制的形式，输出message的前20个字节的内容，并与调试时在内存窗口观察到的message的前20个字节比较是否一致。
+  \item 对于第0个学生的score，根据浮点数的编码规则指出其个部分的编码，并与观察到的内存表示比较，验证是否一致。
+  \item 指出结构数组中个元素的存放规律，指出字符串数组、short类型的数、float型的数的存放规律。
+\end{enumerate}
+
+任务2\quad 编写位运算程序
+
+按照要求完成给定的功能，并自动判断程序的运行结果是否正确。（从逻辑电路与门、或门、非门等等角度，实现CPU的常见功能。所谓自动判断，即用简单的方式实现指定功能，并判断两个函数的输出是否相同。）
+
+\begin{enumerate}
+  \item \texttt{int absVal(int x);}      返回 x 的绝对值
+
+仅使用 !、 \textasciitilde{}、 \&、 \^{}、 |、 +、 <<、 >>， 运算次数不超过 10次
+
+判断函数： \texttt{int absVal\_standard(int x)  \{ return (x < 0) ? -x : x;\}}
+
+  \item \texttt{int negate(int x);}      不使用负号，实现 -x
+
+判断函数： \texttt{int netgate\_standard(int x)  \{ return -x;\}}
+
+  \item \texttt{int bitAnd(int x, int y);}  仅使用 \textasciitilde{} 和 |，实现 \&
+
+判断函数： \texttt{int bitAnd\_standard(int x, int y)  \{ return x \& y;\}}
+
+  \item \texttt{int bitOr(int x, int y);}    仅使用 \textasciitilde{} 和 \&，实现 |
+
+  \item \texttt{int bitXor(int x, int y);}   仅使用 \textasciitilde{} 和 \&，实现 \^{}
+
+  \item \texttt{int isTmax(int x);}    判断x是否为最大的正整数（7FFFFFFF），
+
+只能使用 !、 \textasciitilde{}、 \&、 \^{}、 |、 +
+
+  \item \texttt{int bitCount(int x);}   统计x的二进制表示中 1 的个数
+
+                  只能使用，! \textasciitilde{} \& \^{} | + << >> ，运算次数不超过 40次
+
+  \item \texttt{int bitMask(int highbit, int lowbit);} 产生从lowbit 到 highbit 全为1，其他位为0的数。例如bitMask(5,3) = 0x38 ；要求只使用 ! \textasciitilde{} \& \^{} | + << >> ；运算次数不超过 16次。
+
+  \item \texttt{int addOK(int x, int y);}  当x+y 会产生溢出时返回1，否则返回 0
+
+仅使用 !、 \textasciitilde{}、 \&、 \^{}、 |、 +、 <<、 >>， 运算次数不超过 20次
+
+  \item \texttt{int byteSwap(int x, int n, int m);}  将x的第n个字节与第m个字节交换，返回交换后的结果。 n、m的取值在 0\textasciitilde{}3之间。
+
+例：\texttt{byteSwap(0x12345678, 1, 3) = 0x56341278}
+
+\phantom{例：}\texttt{byteSwap(0xDEADBEEF, 0, 2) = 0xDEEFBEAD}
+
+仅使用 !、 \textasciitilde{}、 \&、 \^{}、 |、 +、 <<、 >>， 运算次数不超过 25次
+
+  \item \texttt{int bang(int x)}    当 x =0 时，返回 1; 其他情况返回 0。实现逻辑非(!)
+
+例：\texttt{bang(3) = 0；  bang(0) =1;}
+
+仅使用 \textasciitilde{}、 \&、 \^{}、 | 、+、 <<、 >>，运算次数不超过 12次
+
+提示：只有当 x=0时，x与 -x的最高二进制位会同时为0。
+
+  \item \texttt{int bitParity(int x)}    当 x有奇数个二进制位0，返回1；否则返回0
+
+例：\texttt{bitParity (5) = 0；  bitParity (7) = 1;}
+
+仅使用 ! 、\textasciitilde{}、 \&、 \^{}、 | 、+ 、<< 、>>  ，运算次数不超过 20次。
+
+提示：只有当 x的高字与低字的对应位（第0位对应第16位，第1位对应第17位，依次类推）同时为1，则出现了成对的二进制位1，此时，可以将对应的二进制位置为0，不会影响二进制位1的个数的奇偶性判断。
+\end{enumerate}
+
+\subsection{实验设计}
+
+本实验设计分为两个部分。
+
+对于任务1，采用顺序存储的思想，将结构体中的字符串字段按字符序列加结束符存入缓冲区，将 short 和 float 字段按其字节表示写入缓冲区，从而实现去除结构体对齐空隙后的紧凑存储；解压时按照相同顺序解析缓冲区，恢复各字段内容。该设计重点体现了字符串存储方式、数值类型内存表示和结构体内存布局的理解。
+
+对于任务2，采用补码运算和布尔代数等效变换的方法，将绝对值、按位逻辑、溢出判断、位计数、字节交换等功能转化为移位、掩码和按位逻辑运算实现，并通过与标准函数对比的方式验证结果正确性。整体设计体现了从底层数据表示出发分析问题和构造算法的思路。
+
+\begin{algorithm}[H]
+  \caption{算法示例}
+  \label{alg:template}
+  \begin{algorithmic}[1]
+    \Input 输入数据或系统状态
+    \Output 程序输出或分析结果
+    \State \templatehint{在此填写算法步骤或删除本示例}
+  \end{algorithmic}
+\end{algorithm}
+
+\subsection{实验过程}
+
+\subsubsection{环境准备}
+\begin{itemize}
+  \item 操作系统：\templatehint{例如 Windows 11 / Ubuntu 22.04}
+  \item 编译器或解释器：\templatehint{例如 GCC 13 / Clang 17 / Python 3.12}
+  \item 开发工具：\templatehint{例如 VS Code / Visual Studio / GDB / Readelf / Objdump}
+  \item 其他依赖：\templatehint{例如 Make / CMake / LaTeX / Docker}
+\end{itemize}
+
+\subsubsection{具体实施步骤}
+\begin{enumerate}
+  \item \templatehint{步骤1：准备实验文件、配置运行环境，并明确实验输入与目标。}
+  \item \templatehint{步骤2：根据设计思路编写、修改或分析程序，记录关键操作。}
+  \item \templatehint{步骤3：编译、运行、调试程序，并保存中间结果、截图或日志。}
+  \item \templatehint{步骤4：根据实验现象继续修正、优化和验证，直至满足实验要求。}
+\end{enumerate}
+
+\begin{lstlisting}[language=Shell, caption={命令行操作示例}, label={lst:template-shell}]
+# 在此填写实验中使用的命令行操作
+gcc -Wall -Wextra -O0 -g main.c -o main
+./main
+\end{lstlisting}
+
+\begin{lstlisting}[language=C, caption={核心代码示例}, label={lst:template-code}]
+/* 在此填写核心代码片段，保留最能体现思路的部分 */
+int main(void) {
+    return 0;
+}
+\end{lstlisting}
+
+\subsection{实验结果}
+
+\subsubsection{结果展示}
+\begin{table}[H]
+  \centering
+  \caption{测试结果记录表}
+  \label{tbl:test-result}
+  \begin{tabular}{p{0.16\textwidth}p{0.24\textwidth}p{0.24\textwidth}p{0.2\textwidth}}
+    \toprule
+    测试编号 & 输入或场景 & 预期结果 & 实际结果 \\
+    \midrule
+    Test 1 & \templatehint{填写测试输入} & \templatehint{填写预期结果} & \templatehint{填写实际结果} \\
+    Test 2 & \templatehint{填写测试输入} & \templatehint{填写预期结果} & \templatehint{填写实际结果} \\
+    Test 3 & \templatehint{填写测试输入} & \templatehint{填写预期结果} & \templatehint{填写实际结果} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \fbox{\rule{0pt}{0.24\textheight}\rule{0.78\textwidth}{0pt}}
+  \caption{实验截图占位图}
+  \label{fig:template-screenshot}
+\end{figure}
+
+\subsubsection{结果分析}
+\templatehint{结合实验结果进行必要分析，说明实验是否达到预期，并分析错误原因、边界情况、性能表现或与理论值的偏差。}
+
+\subsection{实验小结}
+\subsubsection{理论与方法总结}
+\templatehint{对本次实验使用到的理论、技术、方法和关键实现思路进行总结。}
+
+\subsubsection{结果与收获总结}
+\templatehint{总结本次实验的结果、收获、存在的问题，以及后续可改进的方向。}
+
+\experimentsection{实验2：汇编和C的混合编程及优化}
+\subsection{实验概述}
+\begin{enumerate}
+  \item 熟练掌握程序开发平台(VS2019/VS2022/VS2023) 下C和汇编语言的混合编程方法；
+  \item 熟悉掌握常用机器指令的使用方法；
+  \item 掌握代码优化的基本方法，提高程序运行速度。
+\end{enumerate}
+
+\subsection{实验内容}
+任务1\quad 用C语言编写一个学生成绩管理程序，具有平均成绩计算、按平均成绩从高到低排序、显示学生成绩的功能
+
+定义了结构 student，设有 N 个学生
+
+\begin{lstlisting}[language=C]
+struct student {
+    char name[8];
+    char sid[11];  // 如U202315123
+    short scores[8];  // 8门课的分数
+    short average;  // 平均分
+};
+\end{lstlisting}
+
+要求：
+\begin{enumerate}
+  \item 第0个人姓名(name)为自己的名字，sid为自己的学号；
+  \item 对于函数“计算平均成绩”、“按平均成绩从高到低排序”分别计时，显示两个函数的时间开销；
+  \item 显示排序前、排序后的学生信息（姓名、学号、8门课的分数、平均分），一个学生一行。
+  \item 对“计算平均成绩”、“按平均成绩排序”函数的Debug版、Release版的运行效率进行对比，比较两个版本下的反汇编代码的差异，分析程序执行速度提高的原因。
+\end{enumerate}
+
+任务2\quad 用汇编语言编写函数“计算平均成绩”，代替原来用C语言编写的函数
+
+任务3\quad 对用汇编语言编写的“计算平均成绩”函数进行优化
+
+任务4\quad 对排序函数进行算法优化
+
+\subsection{实验设计}
+\subsubsection{解题思路分析}
+\templatehint{给出问题分析、总体求解思路，以及为什么采用当前方案来完成实验任务。}
+
+\subsubsection{技术与方法}
+\templatehint{说明拟采用的技术、方法、数据结构、关键算法、模块划分或实现策略。}
+
+\subsection{实验过程}
+\subsubsection{环境准备}
+\templatehint{说明本实验使用的软硬件环境、工具链和依赖配置。}
+
+\subsubsection{具体实施步骤}
+\templatehint{按步骤详细描述实验的具体操作过程，可结合命令、代码修改、调试记录和关键截图展开说明。}
+
+\subsection{实验结果}
+\subsubsection{结果展示}
+\templatehint{展示实验输出、测试结果、运行截图或关键现象。}
+
+\subsubsection{结果分析}
+\templatehint{对实验结果进行必要分析，说明实验是否达到预期，并分析原因。}
+
+\subsection{实验小结}
+\subsubsection{理论与方法总结}
+\templatehint{对本次实验使用到的理论、技术、方法和关键实现思路进行总结。}
+
+\subsubsection{结果与收获总结}
+\templatehint{总结本次实验的结果、收获、存在的问题，以及后续可改进的方向。}
+
+\experimentsection{实验3：机器级语言理解(二进制炸弹拆除)}
+\subsection{实验概述}
+\begin{enumerate}
+  \item 熟练掌握程序开发平台(VS2019/VS2022/VS2023) 下 C 和汇编语言的混合编程方法；
+  \item 熟悉掌握常用机器指令的使用方法；
+  \item 掌握代码优化的基本方法，提高程序运行速度。
+\end{enumerate}
+
+\subsection{实验内容}
+操作说明
+
+整个程序包含有：bomb.c support.c phases.c support.h。在老师手上有 phases.c，但同学们没有该源程序，而只有 phases.o。
+
+提供给学生的包：bomb.c support.c phases.o support.h
+
+由学生生成执行程序：
+
+\begin{lstlisting}[language=Shell]
+gcc -g -o bomb -D U* bomb.c support.c phases.o
+\end{lstlisting}
+
+其中 *为学号的最后一位。例如：学号为 U202415001，则使用命令
+
+\begin{lstlisting}[language=Shell]
+gcc -g -o bomb -D U1 bomb.c support.c phases.o
+\end{lstlisting}
+
+运行程序：
+
+\begin{lstlisting}[language=Shell]
+./bomb
+\end{lstlisting}
+
+下面给出了三关通过的效果。
+
+\begin{lstlisting}[language={}]
+root@LAPTOP-CJLSTBTI:/home/binary_bomb#
+root@LAPTOP-CJLSTBTI:/home/binary_bomb# gcc -c -D PROBLEM phases.c -o phases.o
+root@LAPTOP-CJLSTBTI:/home/binary_bomb# gcc -g -o bomb -D U3 bomb.c support.c phases.o
+root@LAPTOP-CJLSTBTI:/home/binary_bomb# ./bomb
+Input your Student ID :
+U202215123
+welcome U202215123
+You have 6 bombs to defuse!
+Gate 1 : input a string that meets the requirements.
+Computer System Foundation.
+Phase 1 passed!
+Gate 2 : input six intergers that meets the requirements.
+3 2 5 7 12 19
+Phase 2 passed!
+Gate 3 :
+input 2 intergers.
+1 304
+\end{lstlisting}
+
+提醒：
+\begin{enumerate}
+  \item 一定要输入自己的学号，运行结果中会显示学号的。
+  \item 在生成程序时，一定要带编译开关 \texttt{-D U*}；*为学号的最后一位数字。
+\end{enumerate}
+
+\subsection{实验设计}
+\subsubsection{解题思路分析}
+\templatehint{给出问题分析、总体求解思路，以及为什么采用当前方案来完成实验任务。}
+
+\subsubsection{技术与方法}
+\templatehint{说明拟采用的技术、方法、数据结构、关键算法、模块划分或实现策略。}
+
+\subsection{实验过程}
+\subsubsection{环境准备}
+\templatehint{说明本实验使用的软硬件环境、工具链和依赖配置。}
+
+\subsubsection{具体实施步骤}
+\templatehint{按步骤详细描述实验的具体操作过程，可结合命令、代码修改、调试记录和关键截图展开说明。}
+
+\subsection{实验结果}
+\subsubsection{结果展示}
+\templatehint{展示实验输出、测试结果、运行截图或关键现象。}
+
+\subsubsection{结果分析}
+\templatehint{对实验结果进行必要分析，说明实验是否达到预期，并分析原因。}
+
+\subsection{实验小结}
+\subsubsection{理论与方法总结}
+\templatehint{对本次实验使用到的理论、技术、方法和关键实现思路进行总结。}
+
+\subsubsection{结果与收获总结}
+\templatehint{总结本次实验的结果、收获、存在的问题，以及后续可改进的方向。}
+
+\experimentsection{实验4：缓冲区溢出攻击}
+\subsection{实验概述}
+通过分析一个程序（称为“缓冲区炸弹”）的构成和运行逻辑，加深对理论课中关于程序的机器级表示、函数调用规则、栈结构等方面知识点的理解，增强反汇编、跟踪、分析、调试等能力，加深对缓冲区溢出攻击原理、方法与防范等方面知识的理解和掌握；
+
+实验环境：Ubuntu，GCC，GDB 等
+
+\subsection{实验内容}
+任务 缓冲区溢出攻击
+
+程序运行过程中，需要输入特定的字符串，使得程序达到期望的运行效果。
+
+对一个可执行程序“bufbomb” 实施一系列缓冲区溢出攻击(buffer overflow attacks)，也就是设法通过造成缓冲区溢出来改变该程序的运行内存映像(例如将专门设计的字节序列插入到栈中特定内存位置)和行为，以实现实验预定的目标。bufbomb 目标程序在运行时使用函数 getbuf 读入一个字符串。根据不同的任务，学生生成相应的攻击字符串。
+
+实验中需要针对目标可执行程序 bufbomb,分别完成多个难度递增的缓冲区溢出攻击(完成的顺序没有固定要求)。按从易到难的顺序，这些难度级分别命名为 smoke (level 1)、fizz (level 2)。
+
+1、第 1 级 smoke
+
+正常情况下，getbuf 函数运行结束，执行最后的 ret 指令时，将取出保存于栈帧中的返回（断点）地址并跳转至它继续执行（test 函数中调用 getbuf 处）。要求将返回地址的值改为本级别实验的目标 smoke 函数的首条指令的地址， getbuf 函数返回时，跳转到 smoke 函数执行，即达到了实验的目标。
+
+2、第 2 级 fizz
+
+要求 getbuf 函数运行结束后，转到 fizz 函数处执行。与 smoke 的差别是，fizz 函数有一个参数。fizz 函数中比较了参数 val 与 全局变量 cookie 的值，只有两者相同（要正确打印 val）才能达到目标。
+
+\subsection{实验设计}
+\subsubsection{解题思路分析}
+\templatehint{给出问题分析、总体求解思路，以及为什么采用当前方案来完成实验任务。}
+
+\subsubsection{技术与方法}
+\templatehint{说明拟采用的技术、方法、数据结构、关键算法、模块划分或实现策略。}
+
+\subsection{实验过程}
+\subsubsection{环境准备}
+\templatehint{说明本实验使用的软硬件环境、工具链和依赖配置。}
+
+\subsubsection{具体实施步骤}
+\templatehint{按步骤详细描述实验的具体操作过程，可结合命令、代码修改、调试记录和关键截图展开说明。}
+
+\subsection{实验结果}
+\subsubsection{结果展示}
+\templatehint{展示实验输出、测试结果、运行截图或关键现象。}
+
+\subsubsection{结果分析}
+\templatehint{对实验结果进行必要分析，说明实验是否达到预期，并分析原因。}
+
+\subsection{实验小结}
+\subsubsection{理论与方法总结}
+\templatehint{对本次实验使用到的理论、技术、方法和关键实现思路进行总结。}
+
+\subsubsection{结果与收获总结}
+\templatehint{总结本次实验的结果、收获、存在的问题，以及后续可改进的方向。}
+
+\experimentsection{实验5：ELF 文件与程序链接}
+\subsection{实验概述}
+通过对给定的源程序进行编译，阅读和分析编译生成的汇编语言程序、可重定位的目标文件、可执行目标文件，加深对编译过程、目标文件主要节（节中的内容、节与节的关系）、目标文件的生成、以及链接的理论知识的理解。
+
+\begin{enumerate}
+  \item 区分.c 源文件、.i 预处理文件、.s 汇编文件、.o 目标文件、可执行 ELF 文件差异；
+  \item 掌握可重定位目标文件中，文件头、节头表、 .text、 .data、 .bss、.rodata、.symtab、 .rel.text、 .rel.data、 .strtab 等节中的核心组成成份；
+  \item 掌握一个程序中哪些标识符是符号，掌握符号表中各符号所包含的信息，包括符号的类型、符号定义的位置（节）、符号的值、符号的大小、绑定属性，以及与 strtab 的关系；
+  \item 掌握重定位节 .rel.text、 .rel.data 的各条目的信息组成；对于汇编程序，能否确定哪些地方需要重定位；
+  \item 对比可重定位目标文件与可执行目标文件的差异；
+  \item 掌握符号重定位原理、未定义符号地址填充过程；
+  \item 能够找出静态链接、动态链接生成可执行程序的差异；
+  \item 理解地址无关代码 PIC、动态库共享内存机制。
+\end{enumerate}
+
+实验环境：Ubuntu
+
+工具：GCC、GDB、readelf、hexdump、objdump 等。
+
+\subsection{实验内容}
+给定了源程序 main.c、sub.c。学生要按要求对 main.c 中的两处进行修改： char init\_gstr1[12]="U202415001" // 请换成自己的学号
+
+\begin{lstlisting}[language=C]
+__asm__ __volatile__(".rept # \n nop \n .endr \n");
+\end{lstlisting}
+
+// 将 \# 换成学号的最后 1 位
+
+在编译时，注意带上 编译开关 -D U* ， * 为学号的最后一位
+
+任务 1 从 C 程序到汇编语言程序的实践
+
+使用
+
+\begin{lstlisting}[language=Shell]
+gcc -S -fverbose-asm -D U* main.c -o main.s
+\end{lstlisting}
+
+\begin{enumerate}
+  \item 以具体的示例（如 init\_gstr1，uninit\_gstr2），介绍全局变量汇编程序中的表示方式，以及在什么情况下会放在 .data 段，何时又会放在 .bss 段。
+  \item 以函数调用语句为例，给出 C 语句与汇编语句的对应关系。
+  \item 以具体的 C 语句及对应的汇编语句为例，说明全局变量与局部变量在汇编程序中的表达形式的差异。
+\end{enumerate}
+
+任务 2 可重定位目标文件解析
+
+\begin{lstlisting}[language=Shell]
+gcc -c -g -D U* main.c -o main.o
+\end{lstlisting}
+
+1、节头表
+
+\begin{lstlisting}[language=Shell]
+readelf -S -W main.o
+\end{lstlisting}
+
+描述 main.o 中主要有哪些节，各节包含哪些信息（各列的含义）;
+
+2、与全局变量及静态局部变量相关的节
+
+（1）
+
+\begin{lstlisting}[language=Shell]
+readelf -x .data main.o
+\end{lstlisting}
+
+或
+
+\begin{lstlisting}[language=Shell]
+objcopy -O binary --only-section=.data main.o /dev/stdout | hexdump -C
+\end{lstlisting}
+
+显示数据节(.data) 的内容，指出显示的内容与定义变量时的初始化值的对应关系；
+
+（2）
+
+\begin{lstlisting}[language=Shell]
+readelf -s main.o | awk ‘$7==3 || NR==3’
+\end{lstlisting}
+
+显示符号表中在.data 节定义了哪些符号；指出符号的位置（value）与 .data 中的位置关系；
+
+（3） 使用 readelf 显示未初始化数据节(.bss) 中包含的符号， 研究为什么这些符号会放在 .bss 节；
+
+（4） 展示 .data.rel.local、 .rela.data.rel.local 、.data.rel .rela.data.rel 中包含的内容， 说明什么样的全局变量会出现在相应的节中；
+
+（5） 显示.strtab 节，说明在 .strtab 中出现了哪些种类的变量的名称。
+
+（6） 描述一个全局变量定义语句，在可重定位目标文件的哪些节各会生成哪些信息。
+
+3、代码节及代码节的重定位节
+
+\begin{enumerate}
+  \item 显示 .text 节 以及 .rela.text 节的内容，描述其对应关系（重定位节包含的核心信息内容）；
+  \item 显示符号表中在.text 节定义了哪些符号。
+\end{enumerate}
+
+4、符号表节
+
+\begin{enumerate}
+  \item 显示符号表，指出符号表中各列的含义；
+  \item 指出有哪些符号是未定义的，说明为什么这些符号未定义。
+\end{enumerate}
+
+5、只读节
+
+\begin{enumerate}
+  \item 显示 .rodata 中的内容，描述程序中有哪些内容会放到 .rodata 节中；
+  \item 以 printf 的函数调用示例（例如：
+\end{enumerate}
+
+\begin{lstlisting}[language=C]
+printf("display init_gstr1 : %s \n", init_gstr1);
+\end{lstlisting}
+
+说明格式串的首地址是如何定位的。
+
+任务 3 可执行目标文件解析
+
+\begin{lstlisting}[language=Shell]
+gcc -g -D U* main.c sub.c -o main_sub
+gcc -g -D U* sub.c main.c -o sub_main
+\end{lstlisting}
+
+\begin{enumerate}
+  \item 比较两个文件（main\_sub、 sub\_main）中，全局变量的排列顺序，函数的排列顺序，探讨链接时符号地址确定规律；
+  \item 显示可执行文件的符号表，指出符号表中各符号的地址与可重定位目标文件中各符号地址的差异；
+  \item 以 main 函数的汇编语言代码为例，说明可执行文件中机器语言语句与可重定位目标文件中的机器语言语句（包括机器码，反汇编语句）有什么差别。
+  \item 解释符号定义、符号绑定、符号引用、重定位的基本概念。
+  \item 描述生成可执行程序的基本过程。
+\end{enumerate}
+
+任务 4 静态链接生成执行程序
+
+比较静态链接与动态链接生成的可执行程序的差异。
+
+任务 5 研究动态链接库中的函数(如 printf)的定位方法
+
+\subsection{实验设计}
+\subsubsection{解题思路分析}
+\templatehint{给出问题分析、总体求解思路，以及为什么采用当前方案来完成实验任务。}
+
+\subsubsection{技术与方法}
+\templatehint{说明拟采用的技术、方法、数据结构、关键算法、模块划分或实现策略。}
+
+\subsection{实验过程}
+\subsubsection{环境准备}
+\templatehint{说明本实验使用的软硬件环境、工具链和依赖配置。}
+
+\subsubsection{具体实施步骤}
+\templatehint{按步骤详细描述实验的具体操作过程，可结合命令、代码修改、调试记录和关键截图展开说明。}
+
+\subsection{实验结果}
+\subsubsection{结果展示}
+\templatehint{展示实验输出、测试结果、运行截图或关键现象。}
+
+\subsubsection{结果分析}
+\templatehint{对实验结果进行必要分析，说明实验是否达到预期，并分析原因。}
+
+\subsection{实验小结}
+\subsubsection{理论与方法总结}
+\templatehint{对本次实验使用到的理论、技术、方法和关键实现思路进行总结。}
+
+\subsubsection{结果与收获总结}
+\templatehint{总结本次实验的结果、收获、存在的问题，以及后续可改进的方向。}
+
+\section{实验总结}
+\templatehint{全面总结本次实验的整体成果，归纳实验中使用到的理论、技术、方法与最终结果，并结合实际过程描述通过实验获得的能力提升、问题认识和经验收获。建议本节正文不少于400字。}
+
+\appendix
+
+\section{附录：实验源代码}
+
+\subsection{实验目录结构}
+\begin{lstlisting}[language={}, caption={实验目录结构示例}, label={lst:template-tree}]
+LAB_1/
+  main.c
+  helper.c
+  helper.h
+  Makefile
+  README.md
+\end{lstlisting}
+
+\subsection{核心程序源代码}
+\begin{lstlisting}[language=C, caption={附录代码示例}, label={lst:appendix-code}]
+/* 在附录中放置完整源码或关键源码 */
+int add(int left, int right) {
+    return left + right;
+}
+\end{lstlisting}
+
+% 正文引用示例：\cite{csapp}
+\bibliography{Experimental_Report}
+
+\end{document}
