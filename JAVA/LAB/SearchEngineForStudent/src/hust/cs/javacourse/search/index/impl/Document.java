@@ -9,6 +9,18 @@ import java.util.List;
  * AbstractDocument的具体实现类
  */
 public class Document extends AbstractDocument {
+    public Document() {
+        super();
+    }
+
+    public Document(int docId, java.lang.String docPath) {
+        super(docId, docPath);
+    }
+
+    public Document(int docId, java.lang.String docPath, java.util.List<AbstractTermTuple> tuples) {
+        super(docId, docPath, tuples);
+    }
+
     @Override
     public int getDocId() {
         return this.docId;

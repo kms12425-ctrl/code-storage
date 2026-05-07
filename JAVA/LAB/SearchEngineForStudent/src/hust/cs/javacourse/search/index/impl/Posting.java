@@ -3,11 +3,12 @@ package hust.cs.javacourse.search.index.impl;
 import hust.cs.javacourse.search.index.AbstractPosting;
 import hust.cs.javacourse.search.index.AbstractTerm;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * AbstractPosting的具体实现类
@@ -28,8 +29,23 @@ public class Posting extends AbstractPosting {
         if (!(obj instanceof AbstractPosting))
             return false;
         AbstractPosting tmp = (AbstractPosting) obj;
-        return (tmp.getDocId() == this.docId && tmp.getFreq() == this.freq
-                && Objects.equals(tmp.getPositions(), this.positions));
+        if (tmp.getDocId() != this.docId || tmp.getFreq() != this.freq) {
+            return false;
+        }
+
+        if (tmp.getPositions() == null || this.positions == null) {
+            return tmp.getPositions() == this.positions;
+        }
+
+        if (tmp.getPositions().size() != this.positions.size()) {
+            return false;
+        }
+
+        List<Integer> otherPositions = new ArrayList<Integer>(tmp.getPositions());
+        List<Integer> currentPositions = new ArrayList<Integer>(this.positions);
+        Collections.sort(otherPositions);
+        Collections.sort(currentPositions);
+        return currentPositions.equals(otherPositions);
     }
 
     @Override
@@ -79,11 +95,23 @@ public class Posting extends AbstractPosting {
 
     @Override
     public void writeObject(ObjectOutputStream out) {
-        // TODO: implement this method
+        try {
+            out.writeObject(this.docId);
+            out.writeObject(this.freq);
+            out.writeObject(this.positions);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void readObject(ObjectInputStream in) {
-        // TODO: implement this method
+        try {
+            this.docId = (Integer) (in.readObject());
+            this.freq = (Integer) (in.readObject());
+            this.positions = (List<Integer>) (in.readObject());
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

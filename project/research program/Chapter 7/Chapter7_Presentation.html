@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Going Deeper with Convolutions - Presentation</title>
+    <style>
+        :root {
+            --bg: #f4efe6;
+            --bg-alt: #efe4d2;
+            --paper: rgba(255, 252, 246, 0.88);
+            --ink: #1d2a2f;
+            --muted: #54656b;
+            --accent: #0b7a75;
+            --accent-soft: #d5efed;
+            --accent-2: #d96c3f;
+            --accent-2-soft: #f8e2d7;
+            --line: rgba(29, 42, 47, 0.14);
+            --shadow: 0 24px 60px rgba(43, 53, 58, 0.14);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            min-height: 100%;
+            background:
+                radial-gradient(circle at top left, rgba(11, 122, 117, 0.18), transparent 28%),
+                radial-gradient(circle at bottom right, rgba(217, 108, 63, 0.18), transparent 24%),
+                linear-gradient(135deg, var(--bg) 0%, #f8f4ec 45%, var(--bg-alt) 100%);
+            color: var(--ink);
+            font-family: "Avenir Next", "Trebuchet MS", "Segoe UI Variable", sans-serif;
+            overflow: hidden;
+        }
+
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            z-index: 0;
+            pointer-events: none;
+            border-radius: 999px;
+            filter: blur(12px);
+            opacity: 0.55;
+        }
+
+        body::before {
+            width: 26rem;
+            height: 26rem;
+            top: -6rem;
+            right: -8rem;
+            background: rgba(11, 122, 117, 0.12);
+        }
+
+        body::after {
+            width: 20rem;
+            height: 20rem;
+            left: -6rem;
+            bottom: -6rem;
+            background: rgba(217, 108, 63, 0.12);
+        }
+
+        .deck {
+            position: relative;
+            z-index: 1;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .slides {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            gap: 1.3rem;
+            padding: 2.4rem 3rem 2rem;
+            opacity: 0;
+            transform: translateX(4%) scale(0.985);
+            transition: opacity 260ms ease, transform 260ms ease;
+            pointer-events: none;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+            pointer-events: auto;
+        }
+
+        .shell {
+            display: grid;
+            grid-template-columns: minmax(0, 1.4fr) minmax(19rem, 0.9fr);
+            gap: 1.4rem;
+            min-height: 0;
+        }
+
+        .shell.single {
+            grid-template-columns: 1fr;
+        }
+
+        .card,
+        .hero,
+        .panel,
+        .note,
+        table {
+            background: var(--paper);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .hero,
+        .card,
+        .panel,
+        .note {
+            border-radius: 28px;
+        }
+
+        .hero {
+            padding: 2rem 2.2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            inset: auto -3rem -3rem auto;
+            width: 12rem;
+            height: 12rem;
+            background: radial-gradient(circle, rgba(217, 108, 63, 0.16), transparent 70%);
+            border-radius: 999px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.35rem 0.75rem;
+            border-radius: 999px;
+            background: rgba(11, 122, 117, 0.12);
+            color: var(--accent);
+            font-size: 0.78rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        h1,
+        h2,
+        h3 {
+            margin: 0;
+            line-height: 1.03;
+            font-weight: 800;
+        }
+
+        h1 {
+            font-size: clamp(2.7rem, 4.8vw, 4.5rem);
+            max-width: 12ch;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 3vw, 2.9rem);
+            margin-bottom: 0.7rem;
+        }
+
+        h3 {
+            font-size: 1.12rem;
+            color: var(--accent);
+            margin-bottom: 0.55rem;
+        }
+
+        p,
+        li,
+        td,
+        th {
+            font-family: "Iowan Old Style", "Georgia", serif;
+            line-height: 1.5;
+        }
+
+        p {
+            margin: 0;
+            font-size: 1.02rem;
+            color: var(--ink);
+        }
+
+        .lede {
+            font-size: 1.16rem;
+            max-width: 60ch;
+        }
+
+        .muted {
+            color: var(--muted);
+        }
+
+        .grid2,
+        .grid3,
+        .stats,
+        .chips,
+        .timeline,
+        .criteria {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .grid2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .grid3 {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .stats {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .card,
+        .panel,
+        .note {
+            padding: 1.15rem 1.2rem;
+        }
+
+        .card strong,
+        .note strong,
+        .metric strong {
+            color: var(--ink);
+        }
+
+        ul {
+            margin: 0;
+            padding-left: 1.1rem;
+            display: grid;
+            gap: 0.48rem;
+        }
+
+        .chips {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .chip {
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 0.85rem 0.95rem;
+            background: rgba(255, 255, 255, 0.55);
+        }
+
+        .chip small,
+        .metric span,
+        .step span,
+        .footer-hint,
+        .slide-counter {
+            color: var(--muted);
+            font-family: "Avenir Next", "Trebuchet MS", sans-serif;
+        }
+
+        .metric {
+            display: grid;
+            gap: 0.2rem;
+            padding: 0.95rem 1rem;
+            border-radius: 20px;
+            background: linear-gradient(180deg, rgba(11, 122, 117, 0.1), rgba(255, 255, 255, 0.55));
+            border: 1px solid rgba(11, 122, 117, 0.16);
+        }
+
+        .metric strong {
+            font-size: 1.55rem;
+            line-height: 1;
+            font-family: "Avenir Next", "Trebuchet MS", sans-serif;
+        }
+
+        .kicker {
+            display: inline-block;
+            margin-top: 0.8rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: 999px;
+            background: var(--accent-2-soft);
+            color: #924521;
+            font-size: 0.86rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        .mermaid-wrap {
+            min-height: 19rem;
+            display: grid;
+            align-items: center;
+            justify-items: center;
+            padding: 1rem;
+            background: linear-gradient(180deg, rgba(11, 122, 117, 0.08), rgba(255, 255, 255, 0.56));
+            border-radius: 24px;
+            border: 1px solid rgba(11, 122, 117, 0.12);
+        }
+
+        .mermaid {
+            width: 100%;
+            overflow: visible;
+        }
+
+        .sequence {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 0.8rem;
+            align-items: center;
+            margin-top: 0.8rem;
+        }
+
+        .step {
+            position: relative;
+            padding: 1rem 0.9rem;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid var(--line);
+            min-height: 7rem;
+            display: grid;
+            align-content: start;
+            gap: 0.45rem;
+        }
+
+        .step::after {
+            content: "→";
+            position: absolute;
+            right: -0.72rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.4rem;
+            color: var(--accent);
+        }
+
+        .step:last-child::after {
+            display: none;
+        }
+
+        .pipeline {
+            display: grid;
+            gap: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .pipeline-row {
+            display: grid;
+            grid-template-columns: 1.1fr 1.8fr 0.8fr 0.8fr;
+            gap: 0.75rem;
+            align-items: stretch;
+        }
+
+        .pipeline-row>div {
+            border-radius: 18px;
+            padding: 0.9rem 0.95rem;
+            background: rgba(255, 255, 255, 0.66);
+            border: 1px solid var(--line);
+            min-height: 5.4rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        th,
+        td {
+            padding: 0.9rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--line);
+            font-size: 0.98rem;
+        }
+
+        th {
+            background: rgba(11, 122, 117, 0.1);
+            color: var(--accent);
+            font-family: "Avenir Next", "Trebuchet MS", sans-serif;
+            font-size: 0.84rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .highlight-row td {
+            background: rgba(217, 108, 63, 0.09);
+            font-weight: 700;
+        }
+
+        .quote {
+            padding: 1.1rem 1.2rem;
+            border-left: 4px solid var(--accent-2);
+            background: rgba(255, 255, 255, 0.62);
+            border-radius: 0 22px 22px 0;
+            font-style: italic;
+        }
+
+        .footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .progress {
+            flex: 1;
+            height: 6px;
+            border-radius: 999px;
+            background: rgba(29, 42, 47, 0.08);
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 14.2857%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            transition: width 220ms ease;
+        }
+
+        .controls {
+            position: fixed;
+            right: 1.2rem;
+            bottom: 1.2rem;
+            z-index: 3;
+            display: flex;
+            gap: 0.7rem;
+        }
+
+        .controls button {
+            width: 3rem;
+            height: 3rem;
+            border: none;
+            border-radius: 999px;
+            background: rgba(255, 252, 246, 0.85);
+            color: var(--ink);
+            box-shadow: 0 12px 28px rgba(29, 42, 47, 0.14);
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: transform 180ms ease, background 180ms ease;
+        }
+
+        .controls button:hover {
+            transform: translateY(-1px);
+            background: #ffffff;
+        }
+
+        .controls button:disabled {
+            opacity: 0.4;
+            cursor: default;
+            transform: none;
+        }
+
+        .footer-hint {
+            font-size: 0.9rem;
+        }
+
+        .slide-counter {
+            min-width: 4rem;
+            text-align: right;
+            font-size: 0.94rem;
+            font-weight: 700;
+        }
+
+        .accent {
+            color: var(--accent);
+        }
+
+        .accent-2 {
+            color: var(--accent-2);
+        }
+
+        @media (max-width: 1100px) {
+            .slide {
+                padding: 1.6rem 1.35rem 1.2rem;
+            }
+
+            .shell,
+            .grid2,
+            .grid3,
+            .stats,
+            .chips,
+            .sequence,
+            .pipeline-row {
+                grid-template-columns: 1fr;
+            }
+
+            .slides {
+                overflow: auto;
+            }
+
+            .slide {
+                min-height: 100vh;
+                height: auto;
+                overflow: auto;
+            }
+
+            .controls {
+                right: 0.85rem;
+                bottom: 0.85rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="deck">
+        <div class="slides">
+            <section class="slide active" data-title="Title">
+                <div class="hero">
+                    <div class="eyebrow">Paper Presentation</div>
+                    <h1>Going Deeper with Convolutions</h1>
+                    <!-- <p class="lede muted">A 7-10 minute English presentation focused only on the paper, not on the
+                        Chapter 7 notebook.</p> -->
+                    <span class="kicker">Inception architecture under a fixed computational budget</span>
+                </div>
+                <div class="shell">
+                    <div class="panel">
+                        <h2>Roadmap</h2>
+                        <div class="grid3">
+                            <div class="card">
+                                <h3>1. Problem</h3>
+                                <p>Why bigger CNNs were not a satisfying long-term answer.</p>
+                            </div>
+                            <div class="card">
+                                <h3>2. Method</h3>
+                                <p>How the Inception module combines multi-scale processing with efficiency.</p>
+                            </div>
+                            <div class="card">
+                                <h3>3. Evaluation</h3>
+                                <p>What results the model achieved and what limitations remained.</p>
+                            </div>
+                        </div>
+                        <div class="quote" style="margin-top: 1rem;">
+                            “Today I will explain what problem the paper addresses, how the authors solve it, and why
+                            the paper remained influential even with clear limitations.”
+                        </div>
+                    </div>
+                    <div class="note">
+                        <h3>Context</h3>
+                        <ul>
+                            <li>Authors: Christian Szegedy et al.</li>
+                            <li>Year: 2014</li>
+                            <li>Outcome: foundation of GoogLeNet and a major CNN design milestone</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer">
+                    <!-- <span class="footer-hint">Use arrow keys or the buttons at the bottom-right.</span> -->
+                    <div class="progress">
+                        <div class="progress-bar"></div>
+                    </div>
+                    <span class="slide-counter">1 / 7</span>
+                </div>
+            </section>
+
+            <section class="slide" data-title="Problem">
+                <div class="hero">
+                    <div class="eyebrow">Slide 2</div>
+                    <h2>What Problem Does the Paper Solve?</h2>
+                    <p class="lede">The paper aims to improve image recognition accuracy without letting computation and
+                        parameter count grow uncontrollably.</p>
+                </div>
+                <div class="shell">
+                    <div class="panel">
+                        <div class="grid2">
+                            <div class="card">
+                                <h3>Earlier Trend</h3>
+                                <ul>
+                                    <li>Increase depth</li>
+                                    <li>Increase width</li>
+                                    <li>Use larger models for higher accuracy</li>
+                                </ul>
+                            </div>
+                            <div class="card">
+                                <h3>Practical Cost</h3>
+                                <ul>
+                                    <li>More parameters</li>
+                                    <li>Higher overfitting risk</li>
+                                    <li>More memory and more computation</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="quote" style="margin-top: 1rem;">
+                            “The real question is not how to make CNNs larger, but how to make them stronger under a
+                            realistic computational budget.”
+                        </div>
+                    </div>
+                    <div class="note">
+                        <h3>Main framing</h3>
+                        <p><strong>Target:</strong> better accuracy with controlled cost.</p>
+                        <p style="margin-top: 0.7rem;"><strong>Why it matters:</strong> a strong model is not useful if
+                            it becomes impractical to train or deploy.</p>
+                    </div>
+                </div>
+                <div class="footer">
+                    <span class="footer-hint">Suggested time: about 1 minute.</span>
+                    <div class="progress">
+                        <div class="progress-bar"></div>
+                    </div>
+                    <span class="slide-counter">2 / 7</span>
+                </div>
+            </section>
+
+            <section class="slide" data-title="Inception">
+                <div class="hero">
+                    <div class="eyebrow">Slide 3</div>
+                    <h2>The Core Idea: Multi-Scale Processing</h2>
+                    <p class="lede">The Inception module applies several operations to the same input in parallel, then
+                        concatenates the results.</p>
+                </div>
+                <div class="shell">
+                    <div class="panel">
+                        <div class="mermaid-wrap">
+                            <div class="mermaid">
+                                flowchart LR
+                                A[Input Feature Map]
+
+                                A --> B1[1x1 Conv]
+                                A --> B2[1x1 Conv → 3x3 Conv]
+                                A --> B3[1x1 Conv → 5x5 Conv]
+                                A --> B4[3x3 Max Pool → 1x1 Conv]
+
+                                B1 --> C[Concatenate]
+                                B2 --> C
+                                B3 --> C
+                                B4 --> C
+
+                                C --> D[Output Feature Map]
+                            </div>
+                        </div>
+                    </div>
+                    <div class="note">
+                        <h3>Why parallel branches?</h3>
+                        <ul>
+                            <li>1x1 captures local channel interactions</li>
+                            <li>3x3 captures medium-range patterns</li>
+                            <li>5x5 captures broader context</li>
+                            <li>Pooling adds robust summary features</li>
+                        </ul>
+                        <p style="margin-top: 0.8rem;"><strong>Key intuition:</strong> the next layer receives
+                            multi-scale information at once.</p>
+                    </div>
+                </div>
+                <div class="footer">
+                    <span class="footer-hint">Suggested time: 1.25 to 1.5 minutes.</span>
+                    <div class="progress">
+                        <div class="progress-bar"></div>
+                    </div>
+                    <span class="slide-counter">3 / 7</span>
+                </div>
+            </section>
+
+            <section class="slide" data-title="Efficiency">
+                <div class="hero">
+                    <div class="eyebrow">Slide 4</div>
+                    <h2>Why Is It Efficient?</h2>
+                    <p class="lede">The crucial engineering trick is to use 1x1 convolutions for dimension reduction
+                        before expensive filters.</p>
+                </div>
+                <div class="shell single">
+                    <div class="panel">
+                        <div class="sequence">
+                            <div class="step">
+                                <strong>Input Feature Map</strong>
+                                <span>Many channels make direct large-kernel convolutions expensive.</span>
+                            </div>
+                            <div class="step">
+                                <strong>1x1 Reduction</strong>
+                                <span>Compress channel dimension before expensive operations.</span>
+                            </div>
+                            <div class="step">
+                                <strong>3x3 / 5x5 Conv</strong>
+                                <span>Run larger filters on a cheaper representation.</span>
+                            </div>
+                            <div class="step">
+                                <strong>Concatenate</strong>
+                                <span>Keep rich features without exploding cost.</span>
+                            </div>
+                        </div>
+                        <div class="grid2" style="margin-top: 1rem;">
+                            <div class="card">
+                                <h3>Without 1x1 Reduction</h3>
+                                <p>Naive multi-branch design becomes too expensive very quickly.</p>
+                            </div>
+                            <div class="card">
+                                <h3>With 1x1 Reduction</h3>
+                                <p>The model can become deeper and wider while remaining computationally manageable.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer">
+                    <span class="footer-hint">Suggested time: about 1 minute.</span>
+                    <div class="progress">
+                        <div class="progress-bar"></div>
+                    </div>
+                    <span class="slide-counter">4 / 7</span>
+                </div>
+            </section>
+
+            <section class="slide" data-title="GoogLeNet">
+                <div class="hero">
+                    <div class="eyebrow">Slide 5</div>
+                    <h2>GoogLeNet: A Deep Inception Network</h2>
+                    <p class="lede">GoogLeNet is the full competition model built by stacking Inception modules into a
+                        22-layer architecture.</p>
+                </div>
+                <div class="shell">
+                    <div class="panel">
+                        <div class="pipeline">
+                            <div class="pipeline-row">
+                                <div><strong>Stem layers</strong><br><span>Initial convolution and pooling layers</span>
+                                </div>
+                                <div><strong>Stacked Inception modules</strong><br><span>Repeated multi-branch blocks
+                                        for efficient feature extraction</span></div>
+                                <div><strong>Average pooling</strong><br><span>Reduces reliance on large fully connected
+                                        layers</span></div>
+                                <div><strong>Classifier</strong><br><span>Final prediction layer</span></div>
+                            </div>
+                        </div>
+                        <div class="chips" style="margin-top: 1rem;">
+                            <div class="chip">
+                                <strong>22 layers</strong><br>
+                                <small>Deep enough to learn hierarchical visual features</small>
+                            </div>
+                            <div class="chip">
+                                <strong>Auxiliary classifiers</strong><br>
+                                <small>Help gradient flow and regularize training</small>
+                            </div>
+                            <div class="chip">
+                                <strong>Global average pooling</strong><br>
+                                <small>Reduces parameter count near the end of the network</small>
+                            </div>
+                            <div class="chip">
+                                <strong>Dropout</strong><br>
+                                <small>Still used even after reducing the fully connected burden</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="note">
+                        <h3>Main takeaway</h3>
+                        <p>GoogLeNet turns the Inception idea into a deep network that is both competitive and
+                            comparatively efficient.</p>
+                    </div>
+                </div>
+                <div class="footer">
+                    <span class="footer-hint">Suggested time: 1 to 1.25 minutes.</span>
+                    <div class="progress">
+                        <div class="progress-bar"></div>
+                    </div>
+                    <span class="slide-counter">5 / 7</span>
+                </div>
+            </section>
+
+            <section class="slide" data-title="Results">
+                <div class="hero">
+                    <div class="eyebrow">Slide 6</div>
+                    <h2>Results and Impact</h2>
+                    <p class="lede">The paper demonstrated that better architecture design can outperform brute-force
+                        scaling.</p>
+                </div>
+                <div class="shell">
+                    <div class="panel">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Model</th>
+                                    <th>Year</th>
+                                    <th>Top-5 Error</th>
+                                    <th>External Data</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>SuperVision</td>
+                                    <td>2012</td>
+                                    <td>16.4%</td>
+                                    <td>No</td>
+                                </tr>
+                                <tr>
+                                    <td>Clarifai</td>
+                                    <td>2013</td>
+                                    <td>11.7%</td>
+                                    <td>No</td>
+                                </tr>
+                                <tr>
+                                    <td>VGG</td>
+                                    <td>2014</td>
+                                    <td>7.32%</td>
+                                    <td>No</td>
+                                </tr>
+                                <tr class="highlight-row">
+                                    <td>GoogLeNet</td>
+                                    <td>2014</td>
+                                    <td>6.67%</td>
+                                    <td>No</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="stats" style="margin-top: 1rem;">
+                            <div class="metric">
+                                <span>Classification</span>
+                                <strong>1st place</strong>
+                                <span>ILSVRC 2014</span>
+                            </div>
+                            <div class="metric">
+                                <span>Detection</span>
+                                <strong>1st place</strong>
+                                <span>Also strong in the detection challenge</span>
+                            </div>
+                            <div class="metric">
+                                <span>Design lesson</span>
+                                <strong>Efficiency matters</strong>
+                                <span>Architecture can beat brute-force scaling</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="note">
+                        <h3>Important nuance</h3>
+                        <p>The best reported classification number also relied on ensemble prediction and aggressive
+                            multi-crop testing.</p>
+                    </div>
+                </div>
+                <div class="footer">
+                    <span class="footer-hint">Suggested time: 1 to 1.25 minutes.</span>
+                    <div class="progress">
+                        <div class="progress-bar"></div>
+                    </div>
+                    <span class="slide-counter">6 / 7</span>
+                </div>
+            </section>
+
+            <section class="slide" data-title="Limitations">
+                <div class="hero">
+                    <div class="eyebrow">Slide 7</div>
+                    <h2>Limitations and Final Takeaway</h2>
+                    <p class="lede">The paper is highly influential, but its strongest results depend on several design
+                        and evaluation choices beyond the core idea itself.</p>
+                </div>
+                <div class="shell">
+                    <div class="panel">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Limitation</th>
+                                    <th>Why It Matters</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Hand-crafted architecture</td>
+                                    <td>The design depends heavily on expert intuition instead of an automatic discovery
+                                        process.</td>
+                                </tr>
+                                <tr>
+                                    <td>Ensemble and multi-crop testing</td>
+                                    <td>The strongest benchmark number is not from a single plain model evaluation.</td>
+                                </tr>
+                                <tr>
+                                    <td>Limited reproducibility</td>
+                                    <td>The training setup changed over time, so the paper is not perfectly easy to
+                                        reproduce.</td>
+                                </tr>
+                                <tr>
+                                    <td>Dense approximation of sparse ideas</td>
+                                    <td>The theory motivates sparse structure, but the implementation still relies on
+                                        dense operations.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="note">
+                        <h3>Final evaluation</h3>
+                        <p><strong>What it solved:</strong> how to improve CNN performance under a constrained
+                            computational budget.</p>
+                        <p style="margin-top: 0.8rem;"><strong>Why it lasted:</strong> it changed the conversation from
+                            “bigger is better” to “better architecture is better.”</p>
+                        <p style="margin-top: 0.8rem;" class="accent-2"><strong>Closing line:</strong> This paper
+                            remains historically important because it improved both efficiency and accuracy at the same
+                            time.</p>
+                    </div>
+                </div>
+                <div class="footer">
+                    <span class="footer-hint">Suggested time: 1 to 1.25 minutes.</span>
+                    <div class="progress">
+                        <div class="progress-bar"></div>
+                    </div>
+                    <span class="slide-counter">7 / 7</span>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <div class="controls" aria-label="Slide navigation">
+        <button id="prev" type="button" aria-label="Previous slide">←</button>
+        <button id="next" type="button" aria-label="Next slide">→</button>
+    </div>
+
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            securityLevel: 'loose',
+            themeVariables: {
+                primaryColor: '#d5efed',
+                primaryTextColor: '#1d2a2f',
+                primaryBorderColor: '#0b7a75',
+                lineColor: '#0b7a75',
+                secondaryColor: '#f8e2d7',
+                tertiaryColor: '#fffaf3',
+                fontFamily: 'Trebuchet MS'
+            },
+            flowchart: {
+                htmlLabels: true,
+                curve: 'basis'
+            }
+        });
+
+        const slides = Array.from(document.querySelectorAll('.slide'));
+        const prevButton = document.getElementById('prev');
+        const nextButton = document.getElementById('next');
+        let current = 0;
+
+        const update = () => {
+            slides.forEach((slide, index) => {
+                slide.classList.toggle('active', index === current);
+            });
+
+            document.querySelectorAll('.progress-bar').forEach((bar) => {
+                bar.style.width = `${((current + 1) / slides.length) * 100}%`;
+            });
+
+            document.querySelectorAll('.slide-counter').forEach((counter) => {
+                counter.textContent = `${current + 1} / ${slides.length}`;
+            });
+
+            prevButton.disabled = current === 0;
+            nextButton.disabled = current === slides.length - 1;
+            document.title = `${slides[current].dataset.title} - Going Deeper with Convolutions`;
+        };
+
+        const goTo = (index) => {
+            if (index < 0 || index >= slides.length)
+            {
+                return;
+            }
+            current = index;
+            update();
+        };
+
+        prevButton.addEventListener('click', () => goTo(current - 1));
+        nextButton.addEventListener('click', () => goTo(current + 1));
+
+        window.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowRight' || event.key === 'PageDown' || event.key === ' ')
+            {
+                event.preventDefault();
+                goTo(current + 1);
+            }
+
+            if (event.key === 'ArrowLeft' || event.key === 'PageUp')
+            {
+                event.preventDefault();
+                goTo(current - 1);
+            }
+
+            if (event.key === 'Home')
+            {
+                event.preventDefault();
+                goTo(0);
+            }
+
+            if (event.key === 'End')
+            {
+                event.preventDefault();
+                goTo(slides.length - 1);
+            }
+        });
+
+        update();
+    </script>
+</body>
+
+</html>

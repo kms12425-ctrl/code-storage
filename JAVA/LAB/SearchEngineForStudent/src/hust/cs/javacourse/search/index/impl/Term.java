@@ -2,6 +2,7 @@ package hust.cs.javacourse.search.index.impl;
 
 import hust.cs.javacourse.search.index.AbstractTerm;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Objects;
@@ -10,6 +11,14 @@ import java.util.Objects;
  * AbstractTerm的具体实现类
  */
 public class Term extends AbstractTerm {
+    public Term() {
+        super();
+    }
+
+    public Term(String content) {
+        super(content);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -42,11 +51,19 @@ public class Term extends AbstractTerm {
 
     @Override
     public void writeObject(ObjectOutputStream out) {
-        // TODO: implement this method
+        try {
+            out.writeObject(this.content);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void readObject(ObjectInputStream in) {
-        // TODO: implement this method
+        try {
+            this.content = (String) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

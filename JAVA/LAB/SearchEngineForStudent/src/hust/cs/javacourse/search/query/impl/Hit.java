@@ -10,55 +10,72 @@ import java.util.Map;
  * AbstractHit的具体实现类
  */
 public class Hit extends AbstractHit {
+
+    public Hit() {
+        super();
+    }
+
+    public Hit(int docId, String docPath) {
+        super(docId, docPath);
+    }
+
+    public Hit(int docId, String docPath, Map<AbstractTerm, AbstractPosting> termPostingMapping) {
+        super(docId, docPath, termPostingMapping);
+    }
+
     @Override
     public int getDocId() {
-        // TODO: implement this method
-        return 0;
+        return this.docId;
     }
 
     @Override
     public String getDocPath() {
-        // TODO: implement this method
-        return null;
+        return this.docPath;
     }
 
     @Override
     public String getContent() {
-        // TODO: implement this method
-        return null;
+        return this.content;
     }
 
     @Override
     public void setContent(String content) {
-        // TODO: implement this method
+        this.content = content;
     }
 
     @Override
     public double getScore() {
-        // TODO: implement this method
-        return 0;
+        return this.score;
     }
 
     @Override
     public void setScore(double score) {
-        // TODO: implement this method
+        this.score = score;
     }
 
     @Override
     public Map<AbstractTerm, AbstractPosting> getTermPostingMapping() {
-        // TODO: implement this method
-        return null;
+        return this.termPostingMapping;
     }
 
     @Override
     public String toString() {
-        // TODO: implement this method
-        return null;
+        StringBuffer sb = new StringBuffer();
+        sb.append("docId: ").append(this.docId).append("\n");
+        sb.append("docPath: ").append(this.docPath).append("\n");
+        sb.append("score: ").append(this.score).append("\n");
+        sb.append("content: ").append(this.content).append("\n");
+        sb.append("termPostingMapping: \n");
+        for (AbstractTerm term : this.termPostingMapping.keySet()) {
+            sb.append(term.toString())
+                    .append("->")
+                    .append(this.termPostingMapping.get(term).toString());
+        }
+        return sb.toString();
     }
 
     @Override
     public int compareTo(AbstractHit o) {
-        // TODO: implement this method
-        return 0;
+        return (int) (this.score - o.getScore());
     }
 }

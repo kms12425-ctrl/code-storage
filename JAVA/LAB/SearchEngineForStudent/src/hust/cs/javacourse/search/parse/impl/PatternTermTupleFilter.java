@@ -17,7 +17,14 @@ public class PatternTermTupleFilter extends AbstractTermTupleFilter {
 
     @Override
     public AbstractTermTuple next() {
-        // TODO: implement this method
-        return null;
+        while (true) {
+            AbstractTermTuple tuple = input.next();
+            if (tuple == null) {
+                return null;
+            }
+            if (tuple.term.getContent().matches(this.pattern)) {
+                return tuple;
+            }
+        }
     }
 }

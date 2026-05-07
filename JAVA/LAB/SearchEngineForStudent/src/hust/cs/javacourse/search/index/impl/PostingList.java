@@ -3,6 +3,7 @@ package hust.cs.javacourse.search.index.impl;
 import hust.cs.javacourse.search.index.AbstractPosting;
 import hust.cs.javacourse.search.index.AbstractPostingList;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Collections;
@@ -14,7 +15,7 @@ import java.util.List;
 public class PostingList extends AbstractPostingList {
     @Override
     public void add(AbstractPosting posting) {
-        if (!this.contains(posting))
+        if (this.indexOf(posting.getDocId()) == -1)
             this.list.add(posting);
     }
 
@@ -30,8 +31,7 @@ public class PostingList extends AbstractPostingList {
     @Override
     public void add(List<AbstractPosting> postings) {
         for (AbstractPosting tmp : postings) {
-            if (!this.contains(tmp))
-                this.add(tmp);
+            this.add(tmp);
         }
     }
 
@@ -42,7 +42,10 @@ public class PostingList extends AbstractPostingList {
 
     @Override
     public int indexOf(AbstractPosting posting) {
-        return this.list.indexOf(posting);
+        if (posting == null) {
+            return -1;
+        }
+        return this.indexOf(posting.getDocId());
     }
 
     @Override
@@ -56,7 +59,7 @@ public class PostingList extends AbstractPostingList {
 
     @Override
     public boolean contains(AbstractPosting posting) {
-        return this.list.contains(posting);
+        return this.indexOf(posting) != -1;
     }
 
     @Override
@@ -66,7 +69,10 @@ public class PostingList extends AbstractPostingList {
 
     @Override
     public void remove(AbstractPosting posting) {
-        this.list.remove(posting);
+        int index = this.indexOf(posting);
+        if (index != -1) {
+            this.list.remove(index);
+        }
     }
 
     @Override
@@ -94,11 +100,27 @@ public class PostingList extends AbstractPostingList {
 
     @Override
     public void writeObject(ObjectOutputStream out) {
-        // TODO: implement this method
+        try {
+            out.writeInt(this.list.size());
+            for (AbstractPosting posting : this.list) {
+                posting.writeObject(out);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void readObject(ObjectInputStream in) {
-        // TODO: implement this method
+        try {
+            int size = in.readInt();
+            for (int i = 0; i < size; i++) {
+                Posting posting = new Posting();
+                posting.readObject(in);
+                this.list.add(posting);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

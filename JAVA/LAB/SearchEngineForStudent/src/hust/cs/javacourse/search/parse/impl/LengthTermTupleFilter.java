@@ -18,7 +18,16 @@ public class LengthTermTupleFilter extends AbstractTermTupleFilter {
 
     @Override
     public AbstractTermTuple next() {
-        // TODO: implement this method
-        return null;
+        while (true) {
+            AbstractTermTuple tuple = input.next();
+            if (tuple == null) {
+                return null;
+            }
+
+            int length = tuple.term.getContent().length();
+            if (length >= this.minLength && length <= this.maxLength) {
+                return tuple;
+            }
+        }
     }
 }

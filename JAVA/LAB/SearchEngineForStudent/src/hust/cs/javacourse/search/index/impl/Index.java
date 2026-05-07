@@ -7,6 +7,10 @@ import hust.cs.javacourse.search.index.AbstractPosting;
 import hust.cs.javacourse.search.index.AbstractPostingList;
 import hust.cs.javacourse.search.index.AbstractTerm;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -75,7 +79,11 @@ public class Index extends AbstractIndex {
      */
     @Override
     public void load(File file) {
-        // TODO: implement this method
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
+            this.readObject(in);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -86,7 +94,17 @@ public class Index extends AbstractIndex {
      */
     @Override
     public void save(File file) {
-        // TODO: implement this method
+        try {
+            File parent = file.getParentFile();
+            if (parent != null && !parent.exists()) {
+                parent.mkdirs();
+            }
+            try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file))) {
+                this.writeObject(out);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -120,7 +138,9 @@ public class Index extends AbstractIndex {
      */
     @Override
     public void optimize() {
-        // TODO: implement this method
+        for (AbstractPostingList postingList : this.termToPostingListMapping.values()) {
+            postingList.sort();
+        }
     }
 
     /**
@@ -141,7 +161,20 @@ public class Index extends AbstractIndex {
      */
     @Override
     public void writeObject(ObjectOutputStream out) {
-        // TODO: implement this method
+        try {
+            out.writeInt(this.docIdToDocPathMapping.size());
+            for (Integer docid : this.docIdToDocPathMapping.keySet()) {
+                out.writeInt(docid);
+                out.writeObject(this.docIdToDocPathMapping.get(docid));
+            }
+            out.writeInt(this.termToPostingListMapping.size());
+            for (AbstractTerm abstractTerm : this.termToPostingListMapping.keySet()) {
+                abstractTerm.writeObject(out);
+                this.termToPostingListMapping.get(abstractTerm).writeObject(out);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -151,6 +184,35 @@ public class Index extends AbstractIndex {
      */
     @Override
     public void readObject(ObjectInputStream in) {
-        // TODO: implement this method
+        try {
+            this.docIdToDocPathMapping.clear();
+            this.termToPostingListMapping.clear();
+            int size = in.readInt();
+            for (int i = 0; i < size; i++) {
+                int docid = in.readInt();
+                String docpath = (String) in.readObject();
+                this.docIdToDocPathMapping.put(docid, docpath);
+            }
+            size = in.readInt();
+            for (int i = 0; i < size; i++) {
+                Term term = new Term();
+                term.readObject(in);
+                PostingList postingList = new PostingList();
+                postingList.readObject(in);
+                this.termToPostingListMapping.put(term, postingList);
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void writePlainText(File file) {
+        try {
+            FileWriter writer = new FileWriter(file);
+            writer.write(this.toString());
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

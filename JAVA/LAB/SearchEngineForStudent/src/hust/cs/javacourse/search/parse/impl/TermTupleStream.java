@@ -7,14 +7,19 @@ import hust.cs.javacourse.search.parse.AbstractTermTupleStream;
  * AbstractTermTupleStream的具体实现类
  */
 public class TermTupleStream extends AbstractTermTupleStream {
+    private final AbstractTermTupleStream input;
+
+    public TermTupleStream(AbstractTermTupleStream input) {
+        this.input = input;
+    }
+
     @Override
     public AbstractTermTuple next() {
-        // TODO: implement this method
-        return null;
+        return input.next();
     }
 
     @Override
     public void close() {
-        // TODO: implement this method
+        input.close();
     }
 }
