@@ -1,0 +1,29 @@
+连接数据库：mysql -h127.0.0.1 -uroot -p123123
+
+建议同学们遵守约定俗成的约束命名规则：
+
+主码约束以“PK_”打头，后跟表名，一个表只会有一个主码约束；
+外码约束以“FK_”打头，后跟表名及列名；
+CHECK约束以“CK_”打头，后跟表名及列名。
+
+create database MyDb;
+use MyDb;
+
+
+create table s(
+sno char(10) primary key,
+name varchar(32) not null,
+ID char(18) unique
+);
+
+
+需要说明的是：
+
+1.注意RENAME,MODIFY和CHANGE的区别：仅改列名，用RENAME; 只改数据类型不改名，用MODIFY; 既改名又改数据类型，用CHANGE。
+2.在用MODIFY,CHANGE更改列的数据类型和约束时，修改后的CHECK约束并不会生效(MySQL只作语法检查，并未实现代码--至少MySQL 8.0.22还未实现)。但用ADD新增列的CHECK约束，是有效的。另外，用ADD新增的CHECK约束，也会生效。
+3.删除主码约束只能用Drop Primary Key短语,不能使用drop constraint短语，即便在创建主码约束时显式命名了该主码约束。试图使用“drop constraint 主码约束名”短语删除主码，会给出错误提示，显示该约束并不存在。因为MySQL并没有完全实现“constraint 约束名 primary key(...)”短语的功能，仅作了语法检查，然后直接忽略了主码约束的命名。
+4.给已有列增加Default约束，可用“alter 列 set default ...”短语；删除列的default约束，可用“alter 列 drop default”短语。当然，也可以用“Modify 列名 数据类型 ...”短语。如果该短语没有default约束，就相当于删除了原来的default约束，如果该短语带有default约束，就相当于添加了default约束，如果之前已有default约束，则新的Default约束将代替原有的Default约束;
+5.删除unique约束，既可用“drop constraint 约束名”短语，也可以用“drop key 索引名”短语来实现,唯一性(unique)约束实际是用Unique索引来实现的，Unique索引的名字总是与Unique约束名完全一样，它们本就是同一套机制。如果没有显式命名的话，Unqiue索引名或者说Unique约束名一般与列同名(组合属性作索引，则与组合属性中的第1列同名)。但要注意是的，在更改列名后，Unique索引名并不会随之更改。在创建Unqiue约束时，用“constriant”短语给约束取一个有意义的名字，是一个值得推荐的习惯。
+
+insert into client (c_id,c_name,c_id_card,c_phone,c_password)
+values(33,'蔡依婷','350972199204227621','18820762130','MKwEuc1sc6');

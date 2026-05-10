@@ -1,0 +1,24 @@
+\begin{tikzpicture}[
+  box/.style={draw, rectangle, minimum height=0.8cm, minimum width=3cm, align=center, rounded corners},
+  arrow/.style={->, thick, >=stealth}
+]
+
+  \node[box, fill=blue!10] (caller) at (0, 0) {用户代码\\ \texttt{call printf@plt}};
+  
+  \node[box, fill=orange!10] (plt) at (5, 2.5) {PLT 表项\\ \texttt{printf@plt}\\ \texttt{jmp *GOT[printf]}};
+  
+  \node[box, fill=green!10] (got) at (10.5, 0) {GOT 槽位\\ \texttt{GOT[printf]}};
+  
+  \node[box, fill=purple!10] (resolver) at (5, -2.8) {动态链接器\\ \texttt{\_dl\_runtime\_resolve}};
+  
+  \node[box, fill=red!10] (libc) at (16, 2.5) {共享对象库\\ (\texttt{libc.so.6})\\ \texttt{printf} 本地实现};
+  
+  \draw[arrow] (caller) -- (plt) node[midway, above, sloped] {(1) 调用};
+  \draw[arrow] (plt) -- (got) node[midway, above, sloped] {(2) 间接跳转查表};
+  
+  \draw[arrow, dashed] (got.south west) to[bend right=15] node[midway, above left, align=center] {(3) (首次)默认跳回 PLT\\并转交加载器} (resolver.north east);
+  \draw[arrow, dashed] (resolver.east) to[bend right=20] node[midway, below right, align=center] {(4) 解析并写入真实地址} (got.south);
+  
+  \draw[arrow] (got) -- (libc) node[midway, above, sloped] {(5) (后续)直接跳转};
+
+\end{tikzpicture}

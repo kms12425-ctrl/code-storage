@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.4.27)  28 APR 2026 21:57
+This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.4.27)  9 MAY 2026 17:21
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1572,26 +1572,26 @@ File: lstmisc.sty 2025/11/14 1.11b (Carsten Heinz)
 (Experimental_Report.aux)
 \openout1 = `Experimental_Report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 116.
-LaTeX Font Info:    ... okay on input line 116.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 116.
-LaTeX Font Info:    ... okay on input line 116.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 116.
-LaTeX Font Info:    ... okay on input line 116.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 116.
-LaTeX Font Info:    ... okay on input line 116.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 116.
-LaTeX Font Info:    ... okay on input line 116.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 116.
-LaTeX Font Info:    ... okay on input line 116.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 116.
-LaTeX Font Info:    ... okay on input line 116.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 116.
-LaTeX Font Info:    ... okay on input line 116.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 116.
-LaTeX Font Info:    ... okay on input line 116.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 116.
-LaTeX Font Info:    ... okay on input line 116.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 128.
+LaTeX Font Info:    ... okay on input line 128.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 128.
+LaTeX Font Info:    ... okay on input line 128.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 128.
+LaTeX Font Info:    ... okay on input line 128.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 128.
+LaTeX Font Info:    ... okay on input line 128.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 128.
+LaTeX Font Info:    ... okay on input line 128.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 128.
+LaTeX Font Info:    ... okay on input line 128.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 128.
+LaTeX Font Info:    ... okay on input line 128.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 128.
+LaTeX Font Info:    ... okay on input line 128.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 128.
+LaTeX Font Info:    ... okay on input line 128.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 128.
+LaTeX Font Info:    ... okay on input line 128.
 
 Package fontspec Info: 
 (fontspec)             Adjusting the maths setup (use [no-math] to avoid
@@ -1599,64 +1599,64 @@ Package fontspec Info:
 
 \symlegacymaths=\mathgroup7
 LaTeX Font Info:    Overwriting symbol font `legacymaths' in version `bold'
-(Font)                  OT1/cmr/m/n --> OT1/cmr/bx/n on input line 116.
-LaTeX Font Info:    Redeclaring math accent \acute on input line 116.
-LaTeX Font Info:    Redeclaring math accent \grave on input line 116.
-LaTeX Font Info:    Redeclaring math accent \ddot on input line 116.
-LaTeX Font Info:    Redeclaring math accent \tilde on input line 116.
-LaTeX Font Info:    Redeclaring math accent \bar on input line 116.
-LaTeX Font Info:    Redeclaring math accent \breve on input line 116.
-LaTeX Font Info:    Redeclaring math accent \check on input line 116.
-LaTeX Font Info:    Redeclaring math accent \hat on input line 116.
-LaTeX Font Info:    Redeclaring math accent \dot on input line 116.
-LaTeX Font Info:    Redeclaring math accent \mathring on input line 116.
-LaTeX Font Info:    Redeclaring math symbol \Gamma on input line 116.
-LaTeX Font Info:    Redeclaring math symbol \Delta on input line 116.
-LaTeX Font Info:    Redeclaring math symbol \Theta on input line 116.
-LaTeX Font Info:    Redeclaring math symbol \Lambda on input line 116.
-LaTeX Font Info:    Redeclaring math symbol \Xi on input line 116.
-LaTeX Font Info:    Redeclaring math symbol \Pi on input line 116.
-LaTeX Font Info:    Redeclaring math symbol \Sigma on input line 116.
-LaTeX Font Info:    Redeclaring math symbol \Upsilon on input line 116.
-LaTeX Font Info:    Redeclaring math symbol \Phi on input line 116.
-LaTeX Font Info:    Redeclaring math symbol \Psi on input line 116.
-LaTeX Font Info:    Redeclaring math symbol \Omega on input line 116.
-LaTeX Font Info:    Redeclaring math symbol \mathdollar on input line 116.
-LaTeX Font Info:    Redeclaring symbol font `operators' on input line 116.
+(Font)                  OT1/cmr/m/n --> OT1/cmr/bx/n on input line 128.
+LaTeX Font Info:    Redeclaring math accent \acute on input line 128.
+LaTeX Font Info:    Redeclaring math accent \grave on input line 128.
+LaTeX Font Info:    Redeclaring math accent \ddot on input line 128.
+LaTeX Font Info:    Redeclaring math accent \tilde on input line 128.
+LaTeX Font Info:    Redeclaring math accent \bar on input line 128.
+LaTeX Font Info:    Redeclaring math accent \breve on input line 128.
+LaTeX Font Info:    Redeclaring math accent \check on input line 128.
+LaTeX Font Info:    Redeclaring math accent \hat on input line 128.
+LaTeX Font Info:    Redeclaring math accent \dot on input line 128.
+LaTeX Font Info:    Redeclaring math accent \mathring on input line 128.
+LaTeX Font Info:    Redeclaring math symbol \Gamma on input line 128.
+LaTeX Font Info:    Redeclaring math symbol \Delta on input line 128.
+LaTeX Font Info:    Redeclaring math symbol \Theta on input line 128.
+LaTeX Font Info:    Redeclaring math symbol \Lambda on input line 128.
+LaTeX Font Info:    Redeclaring math symbol \Xi on input line 128.
+LaTeX Font Info:    Redeclaring math symbol \Pi on input line 128.
+LaTeX Font Info:    Redeclaring math symbol \Sigma on input line 128.
+LaTeX Font Info:    Redeclaring math symbol \Upsilon on input line 128.
+LaTeX Font Info:    Redeclaring math symbol \Phi on input line 128.
+LaTeX Font Info:    Redeclaring math symbol \Psi on input line 128.
+LaTeX Font Info:    Redeclaring math symbol \Omega on input line 128.
+LaTeX Font Info:    Redeclaring math symbol \mathdollar on input line 128.
+LaTeX Font Info:    Redeclaring symbol font `operators' on input line 128.
 LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
-(Font)              `operators' in the math version `normal' on input line 116.
+(Font)              `operators' in the math version `normal' on input line 128.
 
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
 (Font)                  OT1/cmr/m/n --> TU/TimesNewRoman(0)/m/n on input line 1
-16.
+28.
 LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
-(Font)              `operators' in the math version `bold' on input line 116.
+(Font)              `operators' in the math version `bold' on input line 128.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
 (Font)                  OT1/cmr/bx/n --> TU/TimesNewRoman(0)/m/n on input line 
-116.
+128.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
 (Font)                  TU/TimesNewRoman(0)/m/n --> TU/TimesNewRoman(0)/m/n on 
-input line 116.
+input line 128.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
 (Font)                  OT1/cmr/m/it --> TU/TimesNewRoman(0)/m/it on input line
- 116.
+ 128.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
 (Font)                  OT1/cmr/bx/n --> TU/TimesNewRoman(0)/b/n on input line 
-116.
+128.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
-(Font)                  OT1/cmss/m/n --> TU/lmss/m/n on input line 116.
+(Font)                  OT1/cmss/m/n --> TU/lmss/m/n on input line 128.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
-(Font)                  OT1/cmtt/m/n --> TU/lmtt/m/n on input line 116.
+(Font)                  OT1/cmtt/m/n --> TU/lmtt/m/n on input line 128.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
 (Font)                  TU/TimesNewRoman(0)/m/n --> TU/TimesNewRoman(0)/b/n on 
-input line 116.
+input line 128.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
 (Font)                  OT1/cmr/bx/it --> TU/TimesNewRoman(0)/b/it on input lin
-e 116.
+e 128.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
-(Font)                  OT1/cmss/bx/n --> TU/lmss/b/n on input line 116.
+(Font)                  OT1/cmss/bx/n --> TU/lmss/b/n on input line 128.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
-(Font)                  OT1/cmtt/m/n --> TU/lmtt/b/n on input line 116.
+(Font)                  OT1/cmtt/m/n --> TU/lmtt/b/n on input line 128.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: xetex
@@ -1692,7 +1692,7 @@ LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-Package hyperref Info: Link coloring OFF on input line 116.
+Package hyperref Info: Link coloring OFF on input line 128.
 (Experimental_Report.out) (Experimental_Report.out)
 \@outlinefile=\write4
 \openout4 = `Experimental_Report.out'.
@@ -1746,11 +1746,11 @@ nt=0.167;"
 
 
 LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <22.08249> not available
-(Font)              size <20.74> substituted on input line 122.
+(Font)              size <20.74> substituted on input line 134.
 
 
 LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <16.06> not available
-(Font)              size <17.28> substituted on input line 122.
+(Font)              size <17.28> substituted on input line 134.
 
 
 Package fontspec Info: 
@@ -1773,11 +1773,14 @@ Package fontspec Info:
 
 
 LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <10.53937> not available
-(Font)              size <10.95> substituted on input line 122.
+(Font)              size <10.95> substituted on input line 134.
 
 [1
 
-] (Experimental_Report.toc
+] (Experimental_Report.toc)
+\tf@toc=\write5
+\openout5 = `Experimental_Report.toc'.
+
 
 Package fontspec Info: 
 (fontspec)             Font family 'KaiTi(0)' created for font 'KaiTi' with
@@ -1800,37 +1803,82 @@ Package fontspec Info:
  [1
 
 
-] [2])
-\tf@toc=\write5
-\openout5 = `Experimental_Report.toc'.
-
- [3]
+]
 LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <9.03374> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 154.
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 167.
  [1
 
 
 
-] [2] [3]
-Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
-put line 277.
+] [2] [3] [4] [5]
 Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
-nput line 304.
- [4] [5] [6] [7
+nput line 325.
+ [6]
+File: ../LAB_1/img/实验1 task1输出1.png Graphic file (type bmp)
+<../LAB_1/img/实验1 task1输出1.png>
+File: ../LAB_1/img/实验1 task1输出2.png Graphic file (type bmp)
+<../LAB_1/img/实验1 task1输出2.png>
+ [7]
+File: ../LAB_1/img/message十六进制内存数据.png Graphic file (type bmp)
+<../LAB_1/img/message十六进制内存数据.png>
+ [8]
+File: ../LAB_1/img/实验1 task2输出.png Graphic file (type bmp)
+<../LAB_1/img/实验1 task2输出.png>
+ [9] [10]
+[11] [12] [13
 
-] [8]
-[9] [10
-
-] [11] [12] [13
-
-] [14] [15] [16
-
-] [17] [18] [19] [20] [21
-
-] [22
 
 ]
-(Experimental_Report.bbl) [23
+Underfull \hbox (badness 10000) in paragraph at lines 509--510
+[]\TU/SimSun(0)/m/n/12.045 在 计 时 方 法 上，|  程 序 同 时 给 出 了 \TU/lmtt/m/n/12.045 Que
+ryPerformanceCounter \TU/SimSun(0)/m/n/12.045 和
+ []
+
+[14] [15]
+(C:\Users\Owner\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
+File: lstlang1.sty 2025/11/14 1.11b listings language file
+)
+(C:\Users\Owner\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang2.sty
+File: lstlang2.sty 2025/11/14 1.11b listings language file
+)
+(C:\Users\Owner\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang3.sty
+File: lstlang3.sty 2025/11/14 1.11b listings language file
+)
+[16]
+File: ../LAB_2/实验2输出.png Graphic file (type bmp)
+<../LAB_2/实验2输出.png>
+ [17] [18] [19] [20] (images/lab3-phases.tikz) [21
+
+
+] [22] [23]
+Underfull \hbox (badness 10000) in paragraph at lines 717--718
+[]\TU/SimSun(0)/m/n/12.045 根 据 任 务 书 要 求，|  使 用 \TU/lmtt/m/n/12.045 gcc -g -o b
+omb -D U2 bomb.c support.c
+ []
+
+[24] [25]
+Underfull \hbox (badness 10000) in paragraph at lines 772--772
+[]|\TU/lmtt/m/n/12.045 ABI Application
+ []
+
+[26]
+File: ../LAB_3/实验3输出.png Graphic file (type bmp)
+<../LAB_3/实验3输出.png>
+ [27] [28] [29] (images/lab4-stack.tikz) [30
+
+
+] [31] [32] [33] [34]
+Underfull \hbox (badness 10000) in paragraph at lines 922--923
+[]|\TU/lmtt/m/n/12.045 printf \TU/SimSun(0)/m/n/12.045 从 未 定 义 符 号 到
+ []
+
+[35
+
+
+] [36] [37] [38] [39] (images/lab5-pltgot.tikz) [40] [41] [42] [43
+
+]
+(Experimental_Report.bbl) [44
 
 
 ] (Experimental_Report.aux)
@@ -1844,15 +1892,15 @@ LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.34248pt have occurred.
 
 Package rerunfilecheck Info: File `Experimental_Report.out' has not changed.
-(rerunfilecheck)             Checksum: E10C6E83FB1ABD8C2B8CC252E5AA094A;8184.
+(rerunfilecheck)             Checksum: D286555BFFE7EEBBA6A3CC0B4FA8AF52;1801.
  ) 
 Here is how much of TeX's memory you used:
- 43398 strings out of 402987
- 1031526 string characters out of 5448524
- 1832290 words of memory out of 5000000
- 71433 multiletter control sequences out of 15000+600000
- 645288 words of font info for 169 fonts, out of 8000000 for 9000
+ 44456 strings out of 402987
+ 1046280 string characters out of 5448524
+ 1870286 words of memory out of 5000000
+ 72460 multiletter control sequences out of 15000+600000
+ 645296 words of font info for 170 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 88i,12n,129p,1211b,1897s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 88i,12n,125p,1211b,1906s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on Experimental_Report.pdf (27 pages).
+Output written on Experimental_Report.pdf (46 pages).

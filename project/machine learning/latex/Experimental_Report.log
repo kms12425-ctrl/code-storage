@@ -1,13 +1,9 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.4.27)  27 APR 2026 20:44
+This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.4.27)  9 MAY 2026 18:07
 entering extended mode
  restricted \write18 enabled.
- file:line:error style messages enabled.
  %&-line parsing enabled.
-**"c:/Users/Owner/code/project/Foundations of Computer Systems/Experiment Repor
-t/Experimental_Report.tex"
-
-(c:/Users/Owner/code/project/Foundations of Computer Systems/Experiment Report/
-Experimental_Report.tex
+**./Experimental_Report.tex
+(Experimental_Report.tex
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-12-24>
 (Experimental_Report.cls
@@ -1696,19 +1692,41 @@ LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 Package hyperref Info: Link coloring OFF on input line 111.
-(Experimental_Report.out) (Experimental_Report.out)
 \@outlinefile=\write4
 \openout4 = `Experimental_Report.out'.
+
+
+Package hyperref Warning: Rerun to get /PageLabels entry.
 
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: float package is loaded.
 Package caption Info: listings package is loaded.
 Package caption Info: End \AtBeginDocument code.
-
 Package pgfplots notification 'compat/show suggested version=true': you might b
 enefit from \pgfplotsset{compat=1.18} (current compat level: 1.16).
 
 \c@lstlisting=\count417
+
+(C:\Users\Owner\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
+z/libraries\tikzlibraryshapes.geometric.code.tex
+File: tikzlibraryshapes.geometric.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+
+(C:\Users\Owner\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries/shapes\
+pgflibraryshapes.geometric.code.tex
+File: pgflibraryshapes.geometric.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+))
+(C:\Users\Owner\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibr
+aryarrows.meta.code.tex
+File: pgflibraryarrows.meta.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+\pgfarrowinset=\dimen379
+\pgfarrowlength=\dimen380
+\pgfarrowwidth=\dimen381
+\pgfarrowlinewidth=\dimen382
+)
+(C:\Users\Owner\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
+z/libraries\tikzlibrarypositioning.code.tex
+File: tikzlibrarypositioning.code.tex 2025-08-29 v3.1.11a (3.1.11a)
+)
 
 Package fontspec Info: 
 (fontspec)             Font family 'SimHei(0)' created for font 'SimHei' with
@@ -1730,59 +1748,6 @@ Package fontspec Info:
 
 
 Package fontspec Info: 
-(fontspec)             Font family 'FangSong(0)' created for font 'FangSong'
-(fontspec)             with options
-(fontspec)             [Script={CJK},AutoFakeBold={4},AutoFakeSlant={0.167}].
-(fontspec)              
-(fontspec)              This font family consists of the following NFSS
-(fontspec)             series/shapes:
-(fontspec)              
-(fontspec)             - 'normal' (m/n) with NFSS spec.:
-(fontspec)             <->"FangSong/OT:script=hani;language=dflt;"
-(fontspec)             - 'bold' (b/n) with NFSS spec.:
-(fontspec)             <->"FangSong/OT:script=hani;language=dflt;embolden=4;"
-(fontspec)             - 'italic' (m/it) with NFSS spec.:
-(fontspec)             <->"FangSong/OT:script=hani;language=dflt;slant=0.167;"
-(fontspec)             - 'bold italic' (b/it) with NFSS spec.:
-(fontspec)             <->"FangSong/OT:script=hani;language=dflt;embolden=4;sla
-nt=0.167;"
-
-
-LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <22.08249> not available
-(Font)              size <20.74> substituted on input line 117.
-
-
-LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <16.06> not available
-(Font)              size <17.28> substituted on input line 117.
-
-
-Package fontspec Info: 
-(fontspec)             Font family 'SimSun(1)' created for font 'SimSun' with
-(fontspec)             options
-(fontspec)             [Script={CJK},AutoFakeBold={4},AutoFakeSlant={0.167}].
-(fontspec)              
-(fontspec)              This font family consists of the following NFSS
-(fontspec)             series/shapes:
-(fontspec)              
-(fontspec)             - 'normal' (m/n) with NFSS spec.:
-(fontspec)             <->"SimSun/OT:script=hani;language=dflt;"
-(fontspec)             - 'bold' (b/n) with NFSS spec.:
-(fontspec)             <->"SimSun/OT:script=hani;language=dflt;embolden=4;"
-(fontspec)             - 'italic' (m/it) with NFSS spec.:
-(fontspec)             <->"SimSun/OT:script=hani;language=dflt;slant=0.167;"
-(fontspec)             - 'bold italic' (b/it) with NFSS spec.:
-(fontspec)             <->"SimSun/OT:script=hani;language=dflt;embolden=4;slant
-=0.167;"
-
-
-LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <10.53937> not available
-(Font)              size <10.95> substituted on input line 117.
-
-[1
-
-] (Experimental_Report.toc
-
-Package fontspec Info: 
 (fontspec)             Font family 'KaiTi(0)' created for font 'KaiTi' with
 (fontspec)             options
 (fontspec)             [Script={CJK},AutoFakeBold={4},AutoFakeSlant={0.167}].
@@ -1800,62 +1765,52 @@ Package fontspec Info:
 (fontspec)             <->"KaiTi/OT:script=hani;language=dflt;embolden=4;slant=
 0.167;"
 
+
+Package fontspec Info: 
+(fontspec)             Font family 'FangSong(0)' created for font 'FangSong'
+(fontspec)             with options
+(fontspec)             [Script={CJK},AutoFakeBold={4},AutoFakeSlant={0.167}].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <->"FangSong/OT:script=hani;language=dflt;"
+(fontspec)             - 'bold' (b/n) with NFSS spec.:
+(fontspec)             <->"FangSong/OT:script=hani;language=dflt;embolden=4;"
+(fontspec)             - 'italic' (m/it) with NFSS spec.:
+(fontspec)             <->"FangSong/OT:script=hani;language=dflt;slant=0.167;"
+(fontspec)             - 'bold italic' (b/it) with NFSS spec.:
+(fontspec)             <->"FangSong/OT:script=hani;language=dflt;embolden=4;sla
+nt=0.167;"
+
  [1
 
-
-] [2] [3])
-\tf@toc=\write5
-\openout5 = `Experimental_Report.toc'.
-
- [4]
-Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
-put line 158.
- [1
-
-
-
-]
-Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
-nput line 185.
-LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <9.03374> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 187.
- [2] [3] [4] [5
-
-] [6] [7
-
-]
-[8] [9
-
-] [10] [11
-
-] [12] [13
-
-] [14
-
-] (Experimental_Report.bbl) [15
-
-
-]
-(Experimental_Report.aux)
+] (Experimental_Report.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2022/08/05>
  ***********
 
 
-LaTeX Font Warning: Size substitutions with differences
-(Font)              up to 1.34248pt have occurred.
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
-Package rerunfilecheck Info: File `Experimental_Report.out' has not changed.
-(rerunfilecheck)             Checksum: 6F53159E2101E29B2AA1448D9E638211;10685.
+
+Package rerunfilecheck Warning: File `Experimental_Report.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `Experimental_Report.out':
+(rerunfilecheck)             Before: <no file>
+(rerunfilecheck)             After:  D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 43069 strings out of 402987
- 1018865 string characters out of 5448524
- 1766287 words of memory out of 5000000
- 71105 multiletter control sequences out of 15000+600000
- 645272 words of font info for 167 fonts, out of 8000000 for 9000
+ 43482 strings out of 402987
+ 1025356 string characters out of 5448524
+ 1714287 words of memory out of 5000000
+ 71578 multiletter control sequences out of 15000+600000
+ 630577 words of font info for 82 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 88i,12n,129p,1289b,1179s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 88i,11n,125p,1211b,887s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on Experimental_Report.pdf (20 pages).
+Output written on Experimental_Report.pdf (1 page).

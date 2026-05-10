@@ -110,324 +110,36 @@
 
 \begin{document}
 
-% 如果不希望模板默认展示示例参考文献，可删除下一行 \nocite 命令。
-\nocite{csapp, gdb-manual, lab-manual}
-
-\maketitle
-
-\clearpage
-
-\pagenumbering{Roman}
-
-\tableofcontents[level=3]
-\clearpage
-
-\pagenumbering{arabic}
-
-% 使用说明：
-% 1. 每次新建实验报告时，先修改封面信息。
-% 2. 按需填写“实验1”的完整内容；如果一份报告包含多个实验，复制实验1的结构继续向下写。
-% 3. 插图统一放在 images/Screenshots 下，代码与命令输出建议使用 lstlisting 环境。
-% 4. 如无参考文献，可保留 bibliography 命令；如需引用，请在正文中使用 \cite{...} 并维护 .bib 文件。
-
-\section{实验1：填写实验名称}
-
-\subsection{实验概述}
-\subsubsection{实验目的与意义}
-\templatehint{介绍本次实验的背景、目的、意义，以及实验与课程知识点之间的联系。}
-
-\subsubsection{实验目标与要求}
-\templatehint{说明本次实验需要达到的目标、完成标准、提交要求和时间安排。}
-
-\subsection{实验内容}
-\subsubsection{主要任务}
-\templatehint{介绍本次实验的主要内容、任务要求、输入输出约束，以及需要完成的功能。}
-
-\subsubsection{阶段安排}
-\templatehint{如果实验分阶段进行，可按阶段说明每一部分的目标、任务和对应产出。}
-
-\subsection{实验设计}
-
-\subsubsection{解题思路分析}
-\templatehint{给出问题分析、总体求解思路，以及为什么采用当前方案来完成实验任务。}
-
-\subsubsection{技术与方法}
-\templatehint{说明拟采用的技术、方法、数据结构、关键算法、模块划分或实现策略。若实验偏重系统分析，可在此说明文件格式、内存布局、寄存器约定或调用关系。}
-
-\begin{algorithm}[H]
-  \caption{算法示例}
-  \label{alg:template}
-  \begin{algorithmic}[1]
-    \Input 输入数据或系统状态
-    \Output 程序输出或分析结果
-    \State \templatehint{在此填写算法步骤或删除本示例}
-  \end{algorithmic}
-\end{algorithm}
-
-\subsection{实验过程}
-
-\subsubsection{环境准备}
-\begin{itemize}
-  \item 操作系统：\templatehint{例如 Windows 11 / Ubuntu 22.04}
-  \item 编译器或解释器：\templatehint{例如 GCC 13 / Clang 17 / Python 3.12}
-  \item 开发工具：\templatehint{例如 VS Code / Visual Studio / GDB / Readelf / Objdump}
-  \item 其他依赖：\templatehint{例如 Make / CMake / LaTeX / Docker}
-\end{itemize}
-
-\subsubsection{具体实施步骤}
-\begin{enumerate}
-  \item \templatehint{步骤1：准备实验文件、配置运行环境，并明确实验输入与目标。}
-  \item \templatehint{步骤2：根据设计思路编写、修改或分析程序，记录关键操作。}
-  \item \templatehint{步骤3：编译、运行、调试程序，并保存中间结果、截图或日志。}
-  \item \templatehint{步骤4：根据实验现象继续修正、优化和验证，直至满足实验要求。}
-\end{enumerate}
-
-\begin{lstlisting}[language=Shell, caption={命令行操作示例}, label={lst:template-shell}]
-# 在此填写实验中使用的命令行操作
-gcc -Wall -Wextra -O0 -g main.c -o main
-./main
-\end{lstlisting}
-
-\begin{lstlisting}[language=C, caption={核心代码示例}, label={lst:template-code}]
-/* 在此填写核心代码片段，保留最能体现思路的部分 */
-int main(void) {
-    return 0;
-}
-\end{lstlisting}
-
-\subsection{实验结果}
-
-\subsubsection{结果展示}
-\begin{table}[H]
-  \centering
-  \caption{测试结果记录表}
-  \label{tbl:test-result}
-  \begin{tabular}{p{0.16\textwidth}p{0.24\textwidth}p{0.24\textwidth}p{0.2\textwidth}}
-    \toprule
-    测试编号 & 输入或场景 & 预期结果 & 实际结果 \\
-    \midrule
-    Test 1 & \templatehint{填写测试输入} & \templatehint{填写预期结果} & \templatehint{填写实际结果} \\
-    Test 2 & \templatehint{填写测试输入} & \templatehint{填写预期结果} & \templatehint{填写实际结果} \\
-    Test 3 & \templatehint{填写测试输入} & \templatehint{填写预期结果} & \templatehint{填写实际结果} \\
-    \bottomrule
-  \end{tabular}
-\end{table}
+% 仅用于编译和预览插图/表格（如 TikZ 等画图代码）
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning}
 
 \begin{figure}[H]
   \centering
-  \fbox{\rule{0pt}{0.24\textheight}\rule{0.78\textwidth}{0pt}}
-  \caption{实验截图占位图}
-  \label{fig:template-screenshot}
+  \begin{tikzpicture}[
+    node distance=1.5cm and 2cm,
+    box/.style={rectangle, draw, rounded corners, minimum width=2.5cm, minimum height=1cm, align=center, fill=black!5},
+    arrow/.style={-Latex, thick}
+  ]
+  
+  \node[box] (data) {读取数据};
+  \node[box, right=of data] (encode) {标签编码};
+  \node[box, right=of encode] (split) {10 折划分};
+  \node[box, below=of split] (train) {训练弱分类器};
+  \node[box, left=of train] (update) {AdaBoost \\ 更新权重};
+  \node[box, left=of update] (predict) {集成预测};
+  \node[box, below=of predict] (output) {输出结果文件};
+  
+  \draw[arrow] (data) -- (encode);
+  \draw[arrow] (encode) -- (split);
+  \draw[arrow] (split) -- (train);
+  \draw[arrow] (train) -- (update);
+  \draw[arrow] (update.north) to[bend left] node[midway, above, font=\footnotesize] {未达T轮} (train.north);
+  \draw[arrow] (update) -- node[midway, above, font=\footnotesize] {完成T轮} (predict);
+  \draw[arrow] (predict) -- (output);
+  
+  \end{tikzpicture}
+  \caption{AdaBoost 实验整体流程图}
+  \label{fig:adaboost-flow}
 \end{figure}
-
-\subsubsection{结果分析}
-\templatehint{结合实验结果进行必要分析，说明实验是否达到预期，并分析错误原因、边界情况、性能表现或与理论值的偏差。}
-
-\subsection{实验小结}
-\subsubsection{理论与方法总结}
-\templatehint{对本次实验使用到的理论、技术、方法和关键实现思路进行总结。}
-
-\subsubsection{结果与收获总结}
-\templatehint{总结本次实验的结果、收获、存在的问题，以及后续可改进的方向。}
-
-\section{实验2：填写实验名称（如无可删除）}
-\subsection{实验概述}
-\subsubsection{实验目的与意义}
-\templatehint{介绍本次实验的背景、目的、意义，以及实验与课程知识点之间的联系。}
-
-\subsubsection{实验目标与要求}
-\templatehint{说明本次实验需要达到的目标、完成标准、提交要求和时间安排。}
-
-\subsection{实验内容}
-\subsubsection{主要任务}
-\templatehint{介绍本次实验的主要内容、任务要求、输入输出约束，以及需要完成的功能。}
-
-\subsubsection{阶段安排}
-\templatehint{如果实验分阶段进行，可按阶段说明每一部分的目标、任务和对应产出。}
-
-\subsection{实验设计}
-\subsubsection{解题思路分析}
-\templatehint{给出问题分析、总体求解思路，以及为什么采用当前方案来完成实验任务。}
-
-\subsubsection{技术与方法}
-\templatehint{说明拟采用的技术、方法、数据结构、关键算法、模块划分或实现策略。}
-
-\subsection{实验过程}
-\subsubsection{环境准备}
-\templatehint{说明本实验使用的软硬件环境、工具链和依赖配置。}
-
-\subsubsection{具体实施步骤}
-\templatehint{按步骤详细描述实验的具体操作过程，可结合命令、代码修改、调试记录和关键截图展开说明。}
-
-\subsection{实验结果}
-\subsubsection{结果展示}
-\templatehint{展示实验输出、测试结果、运行截图或关键现象。}
-
-\subsubsection{结果分析}
-\templatehint{对实验结果进行必要分析，说明实验是否达到预期，并分析原因。}
-
-\subsection{实验小结}
-\subsubsection{理论与方法总结}
-\templatehint{对本次实验使用到的理论、技术、方法和关键实现思路进行总结。}
-
-\subsubsection{结果与收获总结}
-\templatehint{总结本次实验的结果、收获、存在的问题，以及后续可改进的方向。}
-
-\section{实验3：填写实验名称（如无可删除）}
-\subsection{实验概述}
-\subsubsection{实验目的与意义}
-\templatehint{介绍本次实验的背景、目的、意义，以及实验与课程知识点之间的联系。}
-
-\subsubsection{实验目标与要求}
-\templatehint{说明本次实验需要达到的目标、完成标准、提交要求和时间安排。}
-
-\subsection{实验内容}
-\subsubsection{主要任务}
-\templatehint{介绍本次实验的主要内容、任务要求、输入输出约束，以及需要完成的功能。}
-
-\subsubsection{阶段安排}
-\templatehint{如果实验分阶段进行，可按阶段说明每一部分的目标、任务和对应产出。}
-
-\subsection{实验设计}
-\subsubsection{解题思路分析}
-\templatehint{给出问题分析、总体求解思路，以及为什么采用当前方案来完成实验任务。}
-
-\subsubsection{技术与方法}
-\templatehint{说明拟采用的技术、方法、数据结构、关键算法、模块划分或实现策略。}
-
-\subsection{实验过程}
-\subsubsection{环境准备}
-\templatehint{说明本实验使用的软硬件环境、工具链和依赖配置。}
-
-\subsubsection{具体实施步骤}
-\templatehint{按步骤详细描述实验的具体操作过程，可结合命令、代码修改、调试记录和关键截图展开说明。}
-
-\subsection{实验结果}
-\subsubsection{结果展示}
-\templatehint{展示实验输出、测试结果、运行截图或关键现象。}
-
-\subsubsection{结果分析}
-\templatehint{对实验结果进行必要分析，说明实验是否达到预期，并分析原因。}
-
-\subsection{实验小结}
-\subsubsection{理论与方法总结}
-\templatehint{对本次实验使用到的理论、技术、方法和关键实现思路进行总结。}
-
-\subsubsection{结果与收获总结}
-\templatehint{总结本次实验的结果、收获、存在的问题，以及后续可改进的方向。}
-
-\section{实验4：填写实验名称（如无可删除）}
-\subsection{实验概述}
-\subsubsection{实验目的与意义}
-\templatehint{介绍本次实验的背景、目的、意义，以及实验与课程知识点之间的联系。}
-
-\subsubsection{实验目标与要求}
-\templatehint{说明本次实验需要达到的目标、完成标准、提交要求和时间安排。}
-
-\subsection{实验内容}
-\subsubsection{主要任务}
-\templatehint{介绍本次实验的主要内容、任务要求、输入输出约束，以及需要完成的功能。}
-
-\subsubsection{阶段安排}
-\templatehint{如果实验分阶段进行，可按阶段说明每一部分的目标、任务和对应产出。}
-
-\subsection{实验设计}
-\subsubsection{解题思路分析}
-\templatehint{给出问题分析、总体求解思路，以及为什么采用当前方案来完成实验任务。}
-
-\subsubsection{技术与方法}
-\templatehint{说明拟采用的技术、方法、数据结构、关键算法、模块划分或实现策略。}
-
-\subsection{实验过程}
-\subsubsection{环境准备}
-\templatehint{说明本实验使用的软硬件环境、工具链和依赖配置。}
-
-\subsubsection{具体实施步骤}
-\templatehint{按步骤详细描述实验的具体操作过程，可结合命令、代码修改、调试记录和关键截图展开说明。}
-
-\subsection{实验结果}
-\subsubsection{结果展示}
-\templatehint{展示实验输出、测试结果、运行截图或关键现象。}
-
-\subsubsection{结果分析}
-\templatehint{对实验结果进行必要分析，说明实验是否达到预期，并分析原因。}
-
-\subsection{实验小结}
-\subsubsection{理论与方法总结}
-\templatehint{对本次实验使用到的理论、技术、方法和关键实现思路进行总结。}
-
-\subsubsection{结果与收获总结}
-\templatehint{总结本次实验的结果、收获、存在的问题，以及后续可改进的方向。}
-
-\section{实验5：填写实验名称（如无可删除）}
-\subsection{实验概述}
-\subsubsection{实验目的与意义}
-\templatehint{介绍本次实验的背景、目的、意义，以及实验与课程知识点之间的联系。}
-
-\subsubsection{实验目标与要求}
-\templatehint{说明本次实验需要达到的目标、完成标准、提交要求和时间安排。}
-
-\subsection{实验内容}
-\subsubsection{主要任务}
-\templatehint{介绍本次实验的主要内容、任务要求、输入输出约束，以及需要完成的功能。}
-
-\subsubsection{阶段安排}
-\templatehint{如果实验分阶段进行，可按阶段说明每一部分的目标、任务和对应产出。}
-
-\subsection{实验设计}
-\subsubsection{解题思路分析}
-\templatehint{给出问题分析、总体求解思路，以及为什么采用当前方案来完成实验任务。}
-
-\subsubsection{技术与方法}
-\templatehint{说明拟采用的技术、方法、数据结构、关键算法、模块划分或实现策略。}
-
-\subsection{实验过程}
-\subsubsection{环境准备}
-\templatehint{说明本实验使用的软硬件环境、工具链和依赖配置。}
-
-\subsubsection{具体实施步骤}
-\templatehint{按步骤详细描述实验的具体操作过程，可结合命令、代码修改、调试记录和关键截图展开说明。}
-
-\subsection{实验结果}
-\subsubsection{结果展示}
-\templatehint{展示实验输出、测试结果、运行截图或关键现象。}
-
-\subsubsection{结果分析}
-\templatehint{对实验结果进行必要分析，说明实验是否达到预期，并分析原因。}
-
-\subsection{实验小结}
-\subsubsection{理论与方法总结}
-\templatehint{对本次实验使用到的理论、技术、方法和关键实现思路进行总结。}
-
-\subsubsection{结果与收获总结}
-\templatehint{总结本次实验的结果、收获、存在的问题，以及后续可改进的方向。}
-
-\section{实验总结}
-\templatehint{全面总结本次实验的整体成果，归纳实验中使用到的理论、技术、方法与最终结果，并结合实际过程描述通过实验获得的能力提升、问题认识和经验收获。建议本节正文不少于400字。}
-
-\appendix
-
-\section{附录：实验源代码}
-
-\subsection{实验目录结构}
-\begin{lstlisting}[language={}, caption={实验目录结构示例}, label={lst:template-tree}]
-LAB_1/
-  main.c
-  helper.c
-  helper.h
-  Makefile
-  README.md
-\end{lstlisting}
-
-\subsection{核心程序源代码}
-\begin{lstlisting}[language=C, caption={附录代码示例}, label={lst:appendix-code}]
-/* 在附录中放置完整源码或关键源码 */
-int add(int left, int right) {
-    return left + right;
-}
-\end{lstlisting}
-
-% 正文引用示例：\cite{csapp}
-\bibliography{Experimental_Report}
 
 \end{document}

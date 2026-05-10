@@ -1,0 +1,21 @@
+\begin{tikzpicture}[node distance=1.8cm, auto,
+  block/.style={rectangle, draw, fill=blue!10, text width=7em, text centered, rounded corners, minimum height=3em},
+  line/.style={draw, ->, thick, >=stealth}]
+  
+  \node [block] (init) {程序启动\\(读取学号)};
+  \node [block, right of=init, node distance=3.5cm] (phase1) {Phase 1\\(字符串比较)};
+  \node [block, right of=phase1, node distance=3.5cm] (phase2) {Phase 2\\(循环与递推)};
+  \node [block, right of=phase2, node distance=3.5cm] (phase3) {Phase 3\\(跳转表)};
+  \node [block, below of=phase3] (phase4) {Phase 4\\(递归路径限制)};
+  \node [block, left of=phase4, node distance=3.5cm] (phase5) {Phase 5\\(数组掩码映射)};
+  \node [block, left of=phase4, node distance=7cm] (phase6) {Phase 6\\(链表重排)};
+  \node [block, left of=phase4, node distance=10.5cm, fill=green!20] (defused) {成功通关};
+
+  \path [line] (init) -- (phase1);
+  \path [line] (phase1) -- (phase2);
+  \path [line] (phase2) -- (phase3);
+  \path [line] (phase3) -- (phase4);
+  \path [line] (phase4) -- (phase5);
+  \path [line] (phase5) -- (phase6);
+  \path [line] (phase6) -- (defused);
+\end{tikzpicture}
