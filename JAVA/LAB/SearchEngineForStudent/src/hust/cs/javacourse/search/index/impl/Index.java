@@ -47,23 +47,29 @@ public class Index extends AbstractIndex {
      */
     @Override
     public void addDocument(AbstractDocument document) {
+        // 记录 docId 与文档路径的映射
         this.docIdToDocPathMapping.put(document.getDocId(), document.getDocPath());
 
+        // 遍历文档的词项元组并更新倒排索引
         for (AbstractTermTuple tmp : document.getTuples()) {
             PostingList postingList = (PostingList) this.termToPostingListMapping.get(tmp.term);
 
             if (postingList == null) {
+                // 该词首次出现，创建新的 posting 列表
                 postingList = new PostingList();
                 this.termToPostingListMapping.put(tmp.term, postingList);
             }
 
+            // 查找该文档是否已经在 posting 列表中
             int i = postingList.indexOf(document.getDocId());
 
             if (i == -1) {
+                // 新文档命中该词，创建 posting 并记录位置
                 Posting posting = new Posting(document.getDocId(), 1, new ArrayList<Integer>());
                 posting.getPositions().add(tmp.curPos);
                 postingList.add(posting);
             } else {
+                // 已存在则更新词频与位置信息
                 AbstractPosting posting = postingList.get(i);
                 posting.setFreq(posting.getFreq() + 1);
                 posting.getPositions().add(tmp.curPos);

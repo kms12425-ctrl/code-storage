@@ -16,6 +16,7 @@ public class SimpleSorter implements Sort {
         Collections.sort(hits, new Comparator<AbstractHit>() {
             @Override
             public int compare(AbstractHit hit1, AbstractHit hit2) {
+                // 先按得分降序，再按 docId 升序
                 int scoreComparison = Double.compare(hit2.getScore(), hit1.getScore());
                 if (scoreComparison != 0) {
                     return scoreComparison;
@@ -29,6 +30,7 @@ public class SimpleSorter implements Sort {
     public double score(AbstractHit hit) {
         // 可以根据具体的算法来算分，例如这里简单用频次之和作为分值
         double score = 0;
+        // 将该命中中所有词项的词频累加
         for (AbstractPosting posting : hit.getTermPostingMapping().values()) {
             score += posting.getFreq();
         }

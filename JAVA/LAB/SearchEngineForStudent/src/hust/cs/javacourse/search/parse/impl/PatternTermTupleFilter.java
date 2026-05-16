@@ -22,6 +22,7 @@ public class PatternTermTupleFilter extends AbstractTermTupleFilter {
             if (tuple == null) {
                 return null;
             }
+            // 仅保留匹配正则的词项
             if (tuple.term.getContent().matches(this.pattern)) {
                 return tuple;
             }

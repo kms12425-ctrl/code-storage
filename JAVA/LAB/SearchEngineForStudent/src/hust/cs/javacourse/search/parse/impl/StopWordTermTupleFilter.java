@@ -22,6 +22,7 @@ public class StopWordTermTupleFilter extends AbstractTermTupleFilter {
             }
 
             boolean isStopWord = false;
+            // 若命中停用词则丢弃该词项
             for (String stopWord : StopWords.STOP_WORDS) {
                 if (stopWord.equals(tuple.term.getContent())) {
                     isStopWord = true;

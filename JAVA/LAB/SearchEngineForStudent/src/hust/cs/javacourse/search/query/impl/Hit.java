@@ -76,6 +76,7 @@ public class Hit extends AbstractHit {
 
     @Override
     public int compareTo(AbstractHit o) {
+        // 按得分进行比较（默认升序）
         return (int) (this.score - o.getScore());
     }
 }

@@ -25,6 +25,7 @@ public class LengthTermTupleFilter extends AbstractTermTupleFilter {
             }
 
             int length = tuple.term.getContent().length();
+            // 仅保留长度在范围内的词项
             if (length >= this.minLength && length <= this.maxLength) {
                 return tuple;
             }

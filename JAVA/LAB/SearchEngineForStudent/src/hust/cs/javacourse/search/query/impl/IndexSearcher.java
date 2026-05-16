@@ -29,6 +29,7 @@ public class IndexSearcher extends AbstractIndexSearcher {
             return new AbstractHit[0];
         }
 
+        // 将 posting 列表转换为命中结果
         List<AbstractHit> hits = new ArrayList<AbstractHit>();
 
         for (int i = 0; i < postingList.size(); i++) {
@@ -42,6 +43,7 @@ public class IndexSearcher extends AbstractIndexSearcher {
             hits.add(hit);
         }
 
+        // 评分并排序
         sorter.sort(hits);
         return hits.toArray(new AbstractHit[0]);
     }
@@ -50,6 +52,7 @@ public class IndexSearcher extends AbstractIndexSearcher {
     public AbstractHit[] search(AbstractTerm queryTerm1, AbstractTerm queryTerm2, Sort sorter,
             LogicalCombination combine) {
 
+        // 分别取出两个词项的 posting 列表
         AbstractPostingList list1 = this.index.search(queryTerm1);
         AbstractPostingList list2 = this.index.search(queryTerm2);
 
@@ -71,6 +74,7 @@ public class IndexSearcher extends AbstractIndexSearcher {
                 AbstractPosting p2 = list2.get(j);
 
                 if (p1.getDocId() == p2.getDocId()) {
+                    // 两个词都出现的文档
                     Map<AbstractTerm, AbstractPosting> map = new TreeMap<AbstractTerm, AbstractPosting>();
                     map.put(queryTerm1, p1);
                     map.put(queryTerm2, p2);

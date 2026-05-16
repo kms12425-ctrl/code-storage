@@ -24,9 +24,11 @@ public class DocumentBuilder extends AbstractDocumentBuilder {
         document.setDocId(docId);
         document.setDocPath(docPath);
         AbstractTermTuple tuple;
+        // 逐个读取词项并加入文档
         while ((tuple = termTupleStream.next()) != null) {
             document.addTuple(tuple);
         }
+        // 关闭流，释放资源
         termTupleStream.close();
         return document;
     }
@@ -35,6 +37,7 @@ public class DocumentBuilder extends AbstractDocumentBuilder {
     public AbstractDocument build(int docId, String docPath, File file) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(file));
+            // 构建词项流：扫描，然后正则过滤，然后停用词过滤，然后长度过滤
             AbstractTermTupleStream stream = new TermTupleScanner(reader);
             stream = new PatternTermTupleFilter(stream);
             stream = new StopWordTermTupleFilter(stream);

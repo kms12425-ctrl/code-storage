@@ -15,6 +15,7 @@ public class TermTuple extends AbstractTermTuple {
             return true;
         if (!(obj instanceof AbstractTermTuple))
             return false;
+        // 比较词项内容、当前位置与词频是否一致
         AbstractTermTuple tmp = (AbstractTermTuple) obj;
         return (this.term.equals(tmp.term) && this.curPos == tmp.curPos && this.freq == tmp.freq);
     }

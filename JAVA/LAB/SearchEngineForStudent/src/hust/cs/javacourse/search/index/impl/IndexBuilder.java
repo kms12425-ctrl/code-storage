@@ -21,12 +21,14 @@ public class IndexBuilder extends AbstractIndexBuilder {
     public AbstractIndex buildIndex(String rootDirectory) {
         Index index = new Index();
 
+        // 遍历目录下所有 .txt 文档，构建并加入索引
         for (String filepath : FileUtil.list(rootDirectory, ".txt")) {
             File file = new File(filepath);
             AbstractDocument document = this.docBuilder.build(docId, file.getPath(), file);
             index.addDocument(document);
             this.docId++;
         }
+        // 优化索引并持久化到磁盘
         index.optimize();
         index.save(new File(Config.INDEX_DIR + "index.dat"));
         return index;

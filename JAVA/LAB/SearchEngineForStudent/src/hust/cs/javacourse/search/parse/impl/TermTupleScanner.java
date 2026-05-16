@@ -34,9 +34,11 @@ public class TermTupleScanner extends AbstractTermTupleScanner {
                         continue;
                     }
 
+                    // 按配置进行规范化处理（忽略大小写）
                     if (Config.IGNORE_CASE) {
                         termContent = termContent.toLowerCase();
                     }
+                    // 构建当前词项及其位置
                     TermTuple tuple = new TermTuple();
                     Term term = new Term();
                     term.setContent(termContent);
@@ -45,6 +47,7 @@ public class TermTupleScanner extends AbstractTermTupleScanner {
                     return tuple;
                 }
 
+                // 读取下一行并切分为词项，供后续迭代使用
                 String line = input.readLine();
                 if (line == null) {
                     return null;
