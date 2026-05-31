@@ -1,56 +1,60 @@
-# encoding:GBK
+# encoding: latin-1
 
 import zipfile
-from unrar import rarfile
 import fileutil
 import os
 import exception
 
+
 def unzip(zipfile_name, dest_folder):
     """
-        ½âÑ¹zipÎÄ¼þ
-        zipfile_name    £º   zipÎÄ¼þÃû
-        dest_folder     £º   ½âÑ¹µ½µÄÄ¿Â¼
+        ï¿½ï¿½Ñ¹zipï¿½Ä¼ï¿½
+        zipfile_name    ï¿½ï¿½   zipï¿½Ä¼ï¿½ï¿½ï¿½
+        dest_folder     ï¿½ï¿½   ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½Ä¿Â¼
     """
     # print('unzip ' + zipfile_name + ' to ' + dest_folder)
     zip_file = None
     try:
         zip_file = zipfile.ZipFile(zipfile_name)
-        zip_list = zip_file.namelist()  # µÃµ½Ñ¹Ëõ°üÀïËùÓÐÎÄ¼þ
+        zip_list = zip_file.namelist()  # ï¿½Ãµï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
         for f in zip_list:
-            zip_file.extract(f, dest_folder)  # Ñ­»·½âÑ¹ÎÄ¼þµ½Ö¸¶¨Ä¿Â¼
+            zip_file.extract(f, dest_folder)  # Ñ­ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½Ä¼ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½Ä¿Â¼
     except Exception as e:
         # print(e)
-        raise exception.UncompressError('½âÑ¹´íÎó:' + e.__str__())
+        raise exception.UncompressError('ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½:' + e.__str__())
 
     if zip_file is None:
         return
     else:
-        zip_file.close()  # ¹Ø±ÕÎÄ¼þ£¬±ØÐëÓÐ£¬ÊÍ·ÅÄÚ´æ
+        zip_file.close()  # ï¿½Ø±ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½Í·ï¿½ï¿½Ú´ï¿½
 
 
 def unrar(rarfile_name, dest_folder):
     """
-        ½âÑ¹rarÎÄ¼þ
-        rarfile_name    £º   rarÎÄ¼þÃû
-        dest_folder     £º   ½âÑ¹µ½µÄÄ¿Â¼
+        ï¿½ï¿½Ñ¹rarï¿½Ä¼ï¿½
+        rarfile_name    ï¿½ï¿½   rarï¿½Ä¼ï¿½ï¿½ï¿½
+        dest_folder     ï¿½ï¿½   ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½Ä¿Â¼
     """
     try:
-        rf = rarfile.RarFile(rarfile_name, mode='r')  # modeµÄÖµÖ»ÄÜÎª'r'
-        rf_list = rf.namelist()  # µÃµ½Ñ¹Ëõ°üÀïËùÓÐµÄÎÄ¼þ
+        from unrar import rarfile
+        rf = rarfile.RarFile(rarfile_name, mode='r')  # modeï¿½ï¿½ÖµÖ»ï¿½ï¿½Îª'r'
+        rf_list = rf.namelist()  # ï¿½Ãµï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½Ä¼ï¿½
         for f in rf_list:
-            rf.extract(f, dest_folder)  # Ñ­»·½âÑ¹£¬½«ÎÄ¼þ½âÑ¹µ½Ö¸¶¨Â·¾¶
+            rf.extract(f, dest_folder)  # Ñ­ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½Ö¸ï¿½ï¿½Â·ï¿½ï¿½
+    except (ImportError, LookupError) as e:
+        raise exception.UncompressError(
+            'unrar dependency missing or not configured: ' + e.__str__())
     except Exception as e:
-        raise exception.UncompressError('½âÑ¹´íÎó:' + e.__str__())
+        raise exception.UncompressError('ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½:' + e.__str__())
 
     # print('unrar ' + rarfile_name + ' to ' + dest_folder)
 
 
 def decompression(file_full_path, dest_folder):
     """
-    µÝ¹é½âÑ¹Ñ¹ËõÎÄ¼þµ½Ä¿±êÄ¿Â¼
-    :param file_full_path:  Ñ¹ËõÎÄ¼þÍêÈ«Â·¾¶
-    :param dest_folder: Ä¿±êÄ¿Â¼
+    ï¿½Ý¹ï¿½ï¿½Ñ¹Ñ¹ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½Ä¿Â¼
+    :param file_full_path:  Ñ¹ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½È«Â·ï¿½ï¿½
+    :param dest_folder: Ä¿ï¿½ï¿½Ä¿Â¼
     :return:
     """
     file_suffix = fileutil.find_file_suffix(file_full_path)
@@ -60,18 +64,20 @@ def decompression(file_full_path, dest_folder):
     elif file_suffix == '.rar':
         unrar(file_full_path, dest_folder)
     else:
-        compress_format_error = exception.CompressFormatError('Ñ¹Ëõ¸ñÊ½²»Ê¶±ð')
-        raise compress_format_error  # Å×³öÒì³£
+        compress_format_error = exception.CompressFormatError('Ñ¹ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½Ê¶ï¿½ï¿½')
+        raise compress_format_error  # ï¿½×³ï¿½ï¿½ì³£
 
-    # µÝ¹éÕÒµ½Ä¿±êÄ¿Â¼ÏÂËùÓÐÑ¹ËõÎÄ¼þ
+    # ï¿½Ý¹ï¿½ï¿½Òµï¿½Ä¿ï¿½ï¿½Ä¿Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½Ä¼ï¿½
     file_list = fileutil.find_compressed_files(dest_folder)
     for f in file_list:
         file_tuple = tuple(f)
         parent_dir_full_path = file_tuple[0]
         f_name = file_tuple[1]
         f_suffix = file_tuple[2]
-        f_full_path = os.path.join(parent_dir_full_path, f_name + f_suffix)  # Ñ¹ËõÎÄ¼þµÄÍêÈ«Â·¾¶
-        target_full_path = os.path.join(parent_dir_full_path, f_name)  # Ñ¹ËõÎÄ¼þÒª½âÑ¹µ½µÄÄ¿±êÄ¿Â¼
+        f_full_path = os.path.join(
+            parent_dir_full_path, f_name + f_suffix)  # Ñ¹ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½È«Â·ï¿½ï¿½
+        target_full_path = os.path.join(
+            parent_dir_full_path, f_name)  # Ñ¹ï¿½ï¿½ï¿½Ä¼ï¿½Òªï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½Ä¿Â¼
         if not os.path.exists(target_full_path):
             os.mkdir(target_full_path)
         decompression(f_full_path, target_full_path)

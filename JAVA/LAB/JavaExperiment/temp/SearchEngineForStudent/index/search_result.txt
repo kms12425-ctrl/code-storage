@@ -1,0 +1,144 @@
+*********²éÑ¯µ¥´Ê:walesdocId: 2
+docPath: C:\Users\Owner\code\JAVA\LAB\SearchEngineForStudent\text\ÓÃÓÚ¼ìË÷µÄ²âÊÔ´Ê.txt
+score: 2.0
+content: ï»¿coronavirus
+wales
+circumstances
+government
+google
+health
+luxembourg
+recognition
+wales
+all-star
+kobe
+termPostingMapping: 
+wales->docID: 2, freq: 2, positions: [1, 8]
+*********²éÑ¯µ¥´Ê:circumstancesdocId: 2
+docPath: C:\Users\Owner\code\JAVA\LAB\SearchEngineForStudent\text\ÓÃÓÚ¼ìË÷µÄ²âÊÔ´Ê.txt
+score: 1.0
+content: ï»¿coronavirus
+wales
+circumstances
+government
+google
+health
+luxembourg
+recognition
+wales
+all-star
+kobe
+termPostingMapping: 
+circumstances->docID: 2, freq: 1, positions: [2]
+*********²éÑ¯µ¥´Ê:governmentdocId: 2
+docPath: C:\Users\Owner\code\JAVA\LAB\SearchEngineForStudent\text\ÓÃÓÚ¼ìË÷µÄ²âÊÔ´Ê.txt
+score: 1.0
+content: ï»¿coronavirus
+wales
+circumstances
+government
+google
+health
+luxembourg
+recognition
+wales
+all-star
+kobe
+termPostingMapping: 
+government->docID: 2, freq: 1, positions: [3]
+*********²éÑ¯µ¥´Ê:googledocId: 2
+docPath: C:\Users\Owner\code\JAVA\LAB\SearchEngineForStudent\text\ÓÃÓÚ¼ìË÷µÄ²âÊÔ´Ê.txt
+score: 1.0
+content: ï»¿coronavirus
+wales
+circumstances
+government
+google
+health
+luxembourg
+recognition
+wales
+all-star
+kobe
+termPostingMapping: 
+google->docID: 2, freq: 1, positions: [4]
+*********²éÑ¯µ¥´Ê:healthdocId: 2
+docPath: C:\Users\Owner\code\JAVA\LAB\SearchEngineForStudent\text\ÓÃÓÚ¼ìË÷µÄ²âÊÔ´Ê.txt
+score: 1.0
+content: ï»¿coronavirus
+wales
+circumstances
+government
+google
+health
+luxembourg
+recognition
+wales
+all-star
+kobe
+termPostingMapping: 
+health->docID: 2, freq: 1, positions: [5]
+*********²éÑ¯µ¥´Ê:luxembourgdocId: 2
+docPath: C:\Users\Owner\code\JAVA\LAB\SearchEngineForStudent\text\ÓÃÓÚ¼ìË÷µÄ²âÊÔ´Ê.txt
+score: 1.0
+content: ï»¿coronavirus
+wales
+circumstances
+government
+google
+health
+luxembourg
+recognition
+wales
+all-star
+kobe
+termPostingMapping: 
+luxembourg->docID: 2, freq: 1, positions: [6]
+*********²éÑ¯µ¥´Ê:recognitiondocId: 2
+docPath: C:\Users\Owner\code\JAVA\LAB\SearchEngineForStudent\text\ÓÃÓÚ¼ìË÷µÄ²âÊÔ´Ê.txt
+score: 1.0
+content: ï»¿coronavirus
+wales
+circumstances
+government
+google
+health
+luxembourg
+recognition
+wales
+all-star
+kobe
+termPostingMapping: 
+recognition->docID: 2, freq: 1, positions: [7]
+*********²éÑ¯µ¥´Ê:walesdocId: 2
+docPath: C:\Users\Owner\code\JAVA\LAB\SearchEngineForStudent\text\ÓÃÓÚ¼ìË÷µÄ²âÊÔ´Ê.txt
+score: 2.0
+content: ï»¿coronavirus
+wales
+circumstances
+government
+google
+health
+luxembourg
+recognition
+wales
+all-star
+kobe
+termPostingMapping: 
+wales->docID: 2, freq: 2, positions: [1, 8]
+*********²éÑ¯µ¥´Ê:all-star*********²éÑ¯µ¥´Ê:kobedocId: 2
+docPath: C:\Users\Owner\code\JAVA\LAB\SearchEngineForStudent\text\ÓÃÓÚ¼ìË÷µÄ²âÊÔ´Ê.txt
+score: 1.0
+content: ï»¿coronavirus
+wales
+circumstances
+government
+google
+health
+luxembourg
+recognition
+wales
+all-star
+kobe
+termPostingMapping: 
+kobe->docID: 2, freq: 1, positions: [10]

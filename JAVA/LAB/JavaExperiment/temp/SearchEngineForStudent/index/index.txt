@@ -1,0 +1,41 @@
+docIdToDocPathMapping: 
+0->C:\Users\Owner\code\JAVA\LAB\SearchEngineForStudent\text\1.txt
+1->C:\Users\Owner\code\JAVA\LAB\SearchEngineForStudent\text\2.txt
+2->C:\Users\Owner\code\JAVA\LAB\SearchEngineForStudent\text\ÓÃÓÚ¼ìË÷µÄ²âÊÔ´Ê.txt
+termToPostingListMapping: 
+aaa->docID: 0, freq: 3, positions: [0, 1, 7]
+docID: 1, freq: 1, positions: [0]
+
+bbb->docID: 0, freq: 2, positions: [2, 8]
+docID: 1, freq: 1, positions: [1]
+
+ccc->docID: 0, freq: 2, positions: [3, 9]
+docID: 1, freq: 1, positions: [2]
+
+circumstances->docID: 2, freq: 1, positions: [2]
+
+ddd->docID: 0, freq: 2, positions: [4, 10]
+docID: 1, freq: 1, positions: [3]
+
+eee->docID: 0, freq: 2, positions: [5, 11]
+docID: 1, freq: 1, positions: [4]
+
+fff->docID: 0, freq: 1, positions: [6]
+docID: 1, freq: 2, positions: [5, 7]
+
+ggg->docID: 1, freq: 2, positions: [6, 8]
+
+google->docID: 2, freq: 1, positions: [4]
+
+government->docID: 2, freq: 1, positions: [3]
+
+health->docID: 2, freq: 1, positions: [5]
+
+kobe->docID: 2, freq: 1, positions: [10]
+
+luxembourg->docID: 2, freq: 1, positions: [6]
+
+recognition->docID: 2, freq: 1, positions: [7]
+
+wales->docID: 2, freq: 2, positions: [1, 8]
+

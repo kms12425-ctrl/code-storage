@@ -3,7 +3,7 @@ import os
 import fileutil
 import shell
 
-java_home_dir = 'D:\\jdk-13.0.2-64bit'
+java_home_dir = 'C:/Program Files/Java/jdk-17.0.18'
 java_cmd_path = java_home_dir + '\\bin'
 
 
@@ -11,6 +11,7 @@ class TestEnvironment:
     """
     测试环境
     """
+
     def __init__(self, auto_test_dir):
         """
         构造函数
@@ -31,7 +32,8 @@ class TestEnvironment:
         # class_path += ';' + self.env_vars['TO_BE_TEST_CLASSPAH'] + ';' + self.env_vars['TEST_SUITE_CLASSPATH']
 
         # 设置环境变量classpath, 如果按照上面的代码，会导致classpath的长度超过32767 characters，而抛出异常
-        class_path = self.env_vars['TO_BE_TEST_CLASSPAH'] + ';' + self.env_vars['TEST_SUITE_CLASSPATH']
+        class_path = self.env_vars['TO_BE_TEST_CLASSPAH'] + \
+            ';' + self.env_vars['TEST_SUITE_CLASSPATH']
         lib_files = fileutil.find_files(self.env_vars['LIB_DIR'])
         for f in lib_files:
             class_path += ';' + f
@@ -44,7 +46,6 @@ class TestEnvironment:
         # 设置新的环境变量path
         path = java_cmd_path + ';' + path
         self.env_vars['PATH'] = path
-
 
     def get_env_vars(self):
         """
@@ -76,8 +77,6 @@ class TestEnvironment:
         return self.auto_test_dir
 
 
-
-
 class TestExecutor:
     """
     自动测试执行器
@@ -90,7 +89,8 @@ class TestExecutor:
         """
         self.test_env = TestEnvironment(auto_test_dir)
         self.cmd = 'java  org.testng.TestNG ' + os.path.join(self.test_env.get_auto_test_dir(), 'testng.xml') + \
-                   ' -d ' + os.path.join(self.test_env.get_auto_test_dir(), 'test-output')
+                   ' -d ' + \
+            os.path.join(self.test_env.get_auto_test_dir(), 'test-output')
 
         # 设置系统环境变量.此更改只对当前分配的进程有效，不会永久更改该值。子进程将自动继承父进程的环境
         os.environ['JAVA_HONE'] = self.test_env.get_env_var('JAVA_HOME')
@@ -117,13 +117,16 @@ class TestExecutor:
             if s.startswith('Total tests run'):
                 parts = s.split(',')   # 根据,切分成子串列表parts
                 # 得到运行测试个数
-                num_begin_index = parts[0].rfind(':') + 1  # 找到子串parts[0]里数字的起始索引
+                num_begin_index = parts[0].rfind(
+                    ':') + 1  # 找到子串parts[0]里数字的起始索引
                 total_test_run = parts[0][num_begin_index:].strip()
                 # 得到失败的个数
-                num_begin_index = parts[1].rfind(':') + 1  # 找到子串parts[1]里数字的起始索引
+                num_begin_index = parts[1].rfind(
+                    ':') + 1  # 找到子串parts[1]里数字的起始索引
                 failures = parts[1][num_begin_index:].strip()
                 # 得到忽略的个数
-                num_begin_index = parts[2].rfind(':') + 1  # 找到子串parts[2]里数字的起始索引
+                num_begin_index = parts[2].rfind(
+                    ':') + 1  # 找到子串parts[2]里数字的起始索引
                 skips = parts[2][num_begin_index:].strip()
                 return total_test_run, failures, skips
 

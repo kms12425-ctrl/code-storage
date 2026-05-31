@@ -1,6 +1,6 @@
-# encoding:GBK
+# encoding: latin-1
 
-import uncompressor  # import uncompressor°üÊ±£¬»á×Ô¶¯Ö´ÐÐimport uncompressor°üÏÂÃæµÄ__init__.py
+import uncompressor  # import uncompressor???import uncompressor__init__.py
 import fileutil
 import parse
 import exception
@@ -9,62 +9,112 @@ import shell
 import autotest
 import os
 import excelutil
+import pandas as pd
 
-# Ñ§ÉúÌá½»ÎÄµµµÄ¸ùÄ¿Â¼ £¬ÐèÒª¸ù¾ÝÊµ¼ÊÔËÐÐ»·¾³ÖØÐÂÉèÖÃ
-# ¸ÃÄ¿Â¼ÏÂ°üº¬Ñ§ÉúÌá½»µÄÑ¹ËõÎÄ¼þ£¬Ñ¹ËõÎÄ¼þ±ØÐë×ñÑ­µÄÃüÃû¹æ·¶
+# ?????¼ ???
+# ?¼°????????
 # submit_root_dir = r'E:\JavaExperimentTest\18'
 # submit_root_dir = r'E:\JavaExperimentTest\19'
-submit_root_dir = r'E:\JavaExperimentTest\20'
+# submit_root_dir = r'E:\JavaExperimentTest\20'
+submit_root_dir = os.path.dirname(os.path.abspath(__file__))
 
 if submit_root_dir[-1] != '\\':
     submit_root_dir += '\\'
 
-# ½âÑ¹µÄÄ¿±êÄ¿Â¼
+# ???¼
 uncompress_test_target = submit_root_dir + r'temp'
 if not os.path.exists(uncompress_test_target):
     os.mkdir(uncompress_test_target)
 
-# ÔËÐÐ²âÊÔµÄÄ¿Â¼, ½âÑ¹ºóµÄÑ§Éú²âÊÔÄ¿Â¼ÄÚÈÝ¿½±´µ½ÕâÀï£¬½â¾öÑ§Éú´úÂëÂ·¾¶´æÔÚÖÐÎÄµÄÎÊÌâ
+# ???¼, ???¼???·?
 running_test_dir = submit_root_dir + r'run'
 if not os.path.exists(running_test_dir):
     os.mkdir(running_test_dir)
 
 
-# ÈÕÖ¾Ä¿Â¼
+# ??¼
 logger_path = submit_root_dir + r'logs'
 if not os.path.exists(logger_path):
     os.mkdir(logger_path)
 
-# È«¾ÖµÄlogger
+# ??logger
 run_logger = logger.Logger('run logger', logger_path).get_logger()
 
-# ÊÇ·ñÐèÒª½«²âÊÔ½á¹ûÐ´ÈëExcel,Èç¹ûÉèÖÃÎªFalse, ÔòÏÂÃæ¶þ¸öÈ«¾Ö±äÁ¿original_score_excel_fileºÍtest_score_excel_fileÎÞÐ§
-# Èç¹ûÊÇÑ§Éú×Ô¼ºÔËÐÐ£¬ÇëÉèÎªFalse
+# ????Excel,?False, ??original_score_excel_filetest_score_excel_file?
+# ????False
 record_test_result_to_excel = True
 
-# Ô­Ê¼³É¼¨¼ÇÔØµ¥
-# original_score_excel_file = submit_root_dir + r'JAVA ÓïÑÔ³ÌÐòÉè¼Æ(18¼¶×ÛºÏ¼ÇÔØµ¥×îÐÂ).xlsx'
-# original_score_excel_file = submit_root_dir + r'JAVA ÓïÑÔ³ÌÐòÉè¼ÆÊµÑé(19¼¶ÊµÑé¿Î×ÛºÏ¼ÇÔØµ¥).xlsx'
-original_score_excel_file = submit_root_dir + r'JAVA ÓïÑÔ³ÌÐòÉè¼ÆÊµÑé.xlsx'
 
-# ×Ô¶¯²âÊÔ½á¹û¼ÇÔØµ¥£¬¿ÉÒÔÊÂÏÈ²»´æÔÚ
-# test_score_excel_file = submit_root_dir + r'JAVA ÓïÑÔ³ÌÐòÉè¼Æ(18¼¶×ÛºÏ¼ÇÔØµ¥×îÐÂ)-ÊµÑé²âÊÔ½á¹û.xlsx'
-test_score_excel_file = submit_root_dir + r'JAVA ÓïÑÔ³ÌÐòÉè¼ÆÊµÑé-ÊµÑé²âÊÔ½á¹û.xlsx'
+def find_input_excel(dir_full_path, exclude_file_name):
+    """
+    Find the first .xlsx file in the given directory, excluding the output file name.
+    """
+    files = fileutil.find_files(dir_full_path)
+    for f in files:
+        if f.lower().endswith('.xlsx') and os.path.basename(f).lower() != exclude_file_name.lower():
+            return f
+    return ''
+
+
+# ????
+# test_score_excel_file = submit_root_dir + r'JAVA ?(18???)-??.xlsx'
+test_score_excel_file = os.path.join(submit_root_dir, 'test-output.xlsx')
+
+# ????
+# original_score_excel_file = submit_root_dir + r'JAVA ?(18???).xlsx'
+# original_score_excel_file = submit_root_dir + r'JAVA ??(19????).xlsx'
+original_score_excel_file = find_input_excel(
+    submit_root_dir, os.path.basename(test_score_excel_file))
+
+excel = None
+fallback_rows = []
+fallback_headers = ['s_id', 's_class', 's_name',
+                    'total', 'failures', 'skips', 'detail']
 
 if record_test_result_to_excel:
-    excel = excelutil.Excel(original_score_excel_file, test_score_excel_file)  # ¼ÓÔØExcelÎÄ¼þ original_score_excel_file
+    if original_score_excel_file != '':
+        # Excel? original_score_excel_file
+        excel = excelutil.Excel(
+            original_score_excel_file, test_score_excel_file)
+    else:
+        run_logger.warning(
+            'No input Excel found. Will write a standalone output Excel at: ' + test_score_excel_file)
+
+
+def append_fallback_row(sinfo, final_result=None, detail=''):
+    """
+    Append a row to the fallback output when no input Excel is provided.
+    """
+    if not record_test_result_to_excel or excel is not None:
+        return
+    if sinfo is None:
+        return
+    row = {
+        's_id': sinfo.s_id,
+        's_class': sinfo.s_class,
+        's_name': sinfo.s_name,
+        'total': '',
+        'failures': '',
+        'skips': '',
+        'detail': detail,
+    }
+    if final_result is not None:
+        row['total'] = final_result[0]
+        row['failures'] = final_result[1]
+        row['skips'] = final_result[2]
+    fallback_rows.append(row)
 
 
 def find_all_submit_files(root_dir):
     """
-    ·µ»ØÖ¸¶¨Ä¿Â¼ÏÂËùÓÐÑ§ÉúÌá½»µÄÎÄµµ
-    :param root_dir: Ö¸¶¨Ä¿Â¼
-    :return: Ñ§ÉúÌá½»µÄÎÄµµÁÐ±í
+    ??¼???
+    :param root_dir: ??¼
+    :return: ????
     """
     li = []
     submit_files = fileutil.find_files(submit_root_dir)
     for f in submit_files:
-        f_suffix = fileutil.find_file_suffix(f)  # µÃµ½fµÄºó×º
+        f_suffix = fileutil.find_file_suffix(f)  # õf??
         if f_suffix == '.zip' or f_suffix == '.rar':
             li.append(f)
 
@@ -73,103 +123,137 @@ def find_all_submit_files(root_dir):
 
 def handle_per_compressed_file(compressed_file):
     """
-    ´¦ÀíÃ¿¸öÑ§ÉúÌá½»µÄÑ¹ËõÎÄ¼þ
-    :param compressed_file: Ñ§ÉúÌá½»µÄÑ¹ËõÎÄ¼þµÄÍêÈ«Â·¾¶
+    ÿ????
+    :param compressed_file: ?????·
     :return:
     """
-    run_logger.info('---->²âÊÔ' + compressed_file + 'ÏÂµÄÑ§Éú´úÂë')
+    run_logger.info('---->' + compressed_file + 'µ?')
 
-    # µÃµ½²»´øºó×ºµÄÑ¹ËõÎÄ¼þÃû
-    file_name_without_suffix = fileutil.find_file_name_without_suffix(compressed_file)
-    # ´ÓÑ¹ËõÎÄ¼þÃû½âÎöÑ§ÉúÐÅÏ¢
+    # õ???
+    file_name_without_suffix = fileutil.find_file_name_without_suffix(
+        compressed_file)
+    # ????
     try:
         sinfo = parse.parse_student_info(file_name_without_suffix)
     except exception.FileNameFormatError as e:
         run_logger.error('-------->' + e)
-        return  # Èç¹ûÑ§ÉúÐÅÏ¢½âÎö´íÎó, Ö±½Ó·µ»Ø£¬²»×öÏÂÒ»²½´¦Àí
+        return  # ??, ????
 
-    if record_test_result_to_excel:
-        student_index_excel = excel.find_student(0, sinfo)  # ²éÕÒ¸ÃÑ§ÉúÊÇ·ñÔÚExcelÀï
+    if record_test_result_to_excel and excel is not None:
+        student_index_excel = excel.find_student(
+            0, sinfo)  # ???Excel
         if student_index_excel == -1:
-            run_logger.warning('-------->Ñ§ÉúÐÅÏ¢:Ñ§ºÅ=' + sinfo.s_id + ',°à¼¶=' + sinfo.s_class + ',ÐÕÃû=' + sinfo.s_name + 'µÄÑ§Éú²»ÔÚ»¨Ãû²áÀï')
-            return  # Èç¹û¸ÃÑ§Éú²»ÔÚExcelÀïÖ±½Ó·µ»Ø²»´¦Àí
+            run_logger.warning('-------->??:?=' + sinfo.s_id + ',?=' +
+                               sinfo.s_class + ',=' + sinfo.s_name + '??')
+            return  # ?Excel???
 
-    run_logger.info('-------->Ñ§ÉúÐÅÏ¢:Ñ§ºÅ=' + sinfo.s_id + ',°à¼¶=' + sinfo.s_class + ',ÐÕÃû=' + sinfo.s_name)
+    run_logger.info('-------->??:?=' + sinfo.s_id +
+                    ',?=' + sinfo.s_class + ',=' + sinfo.s_name)
 
-    # ½âÑ¹Ñ§ÉúÎÄ¼þ
-    fileutil.remove_subdir(uncompress_test_target)  # Ê×ÏÈÇå¿Õ½âÑ¹µÄÄ¿±êÄ¿Â¼
+    # ???
+    fileutil.remove_subdir(uncompress_test_target)  # ????¼
     try:
         uncompressor.decompression(compressed_file, uncompress_test_target)
-        run_logger.info('-------->½âÑ¹' + compressed_file + 'µ½Ä¿±êÎÄ¼þ¼Ð' + uncompress_test_target)
+        run_logger.info('-------->?' + compressed_file +
+                        '??' + uncompress_test_target)
     except Exception as e:
         run_logger.error('-------->' + e.__str__())
-        return  # Èç¹û½âÑ¹´íÎó, Ö±½Ó·µ»Ø£¬²»×öÏÂÒ»²½´¦Àí
+        return  # ?, ????
 
-    # ÕÒµ½½âÑ¹ºóÑ§Éú´úÂëµÄ×Ô¶¯²âÊÔÄ¿Â¼
-    run_logger.info('---------------->¿ªÊ¼²âÊÔÑ§ºÅ=' + sinfo.s_id + ',°à¼¶=' + sinfo.s_class + ',ÐÕÃû=' + sinfo.s_name + 'µÄ´úÂë')
-    test_dir = parse.find_test_dir(uncompress_test_target)  # ÕÒµ½½âÑ¹ºóÑ§Éú´úÂëµÄ×Ô¶¯²âÊÔÄ¿Â¼
+    # ?????¼
+    run_logger.info('---------------->??=' + sinfo.s_id +
+                    ',?=' + sinfo.s_class + ',=' + sinfo.s_name + '?')
+    test_dir = parse.find_test_dir(
+        uncompress_test_target)  # ?????¼
     if test_dir == '':
-        run_logger.error('---------------->Ñ§ºÅ=' + sinfo.s_id + ',°à¼¶=' + sinfo.s_class + ',ÐÕÃû=' + sinfo.s_name + 'µÄ×Ô¶¯²âÊÔÄ¿Â¼²»´æÔÚ»òÕß´æÔÚÎÊÌâ')
-        if record_test_result_to_excel:
-            # ÔÚExcelÀï¼ÇÂ¼¸ÃÉúµÄ²âÊÔÏêÇé
-            excel.write_cell_in_dataframe(0, student_index_excel, excelutil.sheet0_auto_test_detail_excel_col_index, '×Ô¶¯²âÊÔÄ¿Â¼²»´æÔÚ»òÕß´æÔÚÎÊÌâ')
-        return  # Èç¹ûÕÒ²»µ½²âÊÔÄ¿Â¼£¬ÔòÖ±½Ó·µ»Ø£¬²»×öÏÂÒ»²½´¦Àí
+        run_logger.error('---------------->?=' + sinfo.s_id + ',?=' +
+                         sinfo.s_class + ',=' + sinfo.s_name + '??¼??')
+        if record_test_result_to_excel and excel is not None:
+            # Excel¼?
+            excel.write_cell_in_dataframe(
+                0, student_index_excel, excelutil.sheet0_auto_test_detail_excel_col_index, '??¼??')
+        else:
+            append_fallback_row(
+                sinfo, detail='auto test dir missing or invalid')
+        return  # ??¼????
 
-    # ¿½±´×Ô¶¯²âÊÔÄ¿Â¼test_dirµÄÄÚÈÝµ½ÔËÐÐ²âÊÔµÄÄ¿Â¼running_test_dir
-    fileutil.remove_subdir(running_test_dir)  # ÏÈÇå¿ÕÔËÐÐ²âÊÔµÄÄ¿Â¼running_test_dir
+    # ??¼test_dir????¼running_test_dir
+    fileutil.remove_subdir(running_test_dir)  # ???¼running_test_dir
     fileutil.copy_dir(test_dir, running_test_dir)
 
-    # ¿ªÊ¼²âÊÔrunning_test_dirÀïÃæµÄ´úÂë
+    # ?running_test_dir?
     # test_executor = autotest.TestExecutor(test_dir)
     test_executor = autotest.TestExecutor(running_test_dir)
     result = test_executor.run_test()
     if result.code != 0:
-        # ½«²âÊÔ¹ý³ÌÖÐµÄ´íÎóÐ´Èë¸ÃÑ§ÉúµÄÈÕÖ¾ÎÄ¼þ
-        student_error_log_file = sinfo.s_id + '_' + sinfo.s_class + '_' + sinfo.s_name + '_error.log'
-        student_error_log_file_full_path = os.path.join(logger_path, student_error_log_file)
+        # ???????
+        student_error_log_file = sinfo.s_id + '_' + \
+            sinfo.s_class + '_' + sinfo.s_name + '_error.log'
+        student_error_log_file_full_path = os.path.join(
+            logger_path, student_error_log_file)
         fileutil.write_to_file(student_error_log_file_full_path, result.error)
 
-
-        student_out_log_file = sinfo.s_id + '_' + sinfo.s_class + '_' + sinfo.s_name + '_out.log'
-        student_out_log_file_full_path = os.path.join(logger_path, student_out_log_file)
+        student_out_log_file = sinfo.s_id + '_' + \
+            sinfo.s_class + '_' + sinfo.s_name + '_out.log'
+        student_out_log_file_full_path = os.path.join(
+            logger_path, student_out_log_file)
         fileutil.write_to_file(student_out_log_file_full_path, result.out)
 
-        run_logger.error('---------------->Ñ§ºÅ=' + sinfo.s_id + ',°à¼¶=' + sinfo.s_class + ',ÐÕÃû=' + sinfo.s_name + 'µÄ×Ô¶¯²âÊÔ´æÔÚÎÊÌâ,Çë²é¿´ÎÄ¼þ' +
-                         student_error_log_file_full_path + 'ºÍ' + student_out_log_file_full_path)
-
+        run_logger.error('---------------->?=' + sinfo.s_id + ',?=' + sinfo.s_class + ',=' + sinfo.s_name + '??,??' +
+                         student_error_log_file_full_path + '' + student_out_log_file_full_path)
 
     final_result = test_executor.parse_final_result(result)
     if final_result is None:
-        run_logger.error('---------------->Ñ§ºÅ=' + sinfo.s_id + ',°à¼¶=' + sinfo.s_class + ',ÐÕÃû=' + sinfo.s_name + 'µÄ´úÂë²âÊÔÃ»ÓÐµÃµ½×îÖÕ²âÊÔ½á¹û')
-        if record_test_result_to_excel:
-            # ÔÚExcelÀï¼ÇÂ¼¸ÃÉúµÄ²âÊÔÏêÇé
-            excel.write_cell_in_dataframe(0, student_index_excel, excelutil.sheet0_auto_test_detail_excel_col_index, '´úÂë²âÊÔÃ»ÓÐµÃµ½×îÖÕ²âÊÔ½á¹û')
+        run_logger.error('---------------->?=' + sinfo.s_id + ',?=' +
+                         sinfo.s_class + ',=' + sinfo.s_name + '?û?õ??')
+        if record_test_result_to_excel and excel is not None:
+            # Excel¼?
+            excel.write_cell_in_dataframe(
+                0, student_index_excel, excelutil.sheet0_auto_test_detail_excel_col_index, 'û?õ??')
+        else:
+            append_fallback_row(sinfo, detail='no final test result')
     else:
-        run_logger.info('---------------->Ñ§ºÅ=' + sinfo.s_id + ',°à¼¶=' + sinfo.s_class + ',ÐÕÃû=' + sinfo.s_name +
-                        'µÄ´úÂë²âÊÔ½á¹ûÎª£º²âÊÔ×ÜÊý=' + str(final_result[0]) + ',Ê§°Ü¸öÊý=' + str(final_result[1]) + ',ºöÂÔ¸öÊý=' + str(final_result[2]))
-        if record_test_result_to_excel:
-            # ÔÚExcelÀï¼ÇÂ¼¸ÃÉúµÄ²âÊÔÏêÇé
-            record_info = str(final_result[0]) + '-' + str(final_result[1]) + '-' + str(final_result[2])
-            excel.write_cell_in_dataframe(0, student_index_excel, excelutil.sheet0_auto_test_detail_excel_col_index, record_info)
+        run_logger.info('---------------->?=' + sinfo.s_id + ',?=' + sinfo.s_class + ',=' + sinfo.s_name +
+                        '???=' + str(final_result[0]) + ',??=' + str(final_result[1]) + ',?=' + str(final_result[2]))
+        if record_test_result_to_excel and excel is not None:
+            # Excel¼?
+            record_info = str(
+                final_result[0]) + '-' + str(final_result[1]) + '-' + str(final_result[2])
+            excel.write_cell_in_dataframe(
+                0, student_index_excel, excelutil.sheet0_auto_test_detail_excel_col_index, record_info)
+        else:
+            append_fallback_row(sinfo, final_result=final_result, detail='ok')
 
     None
 
-def run_auto_test():
-    run_logger.info('¿ªÊ¼×Ô¶¯²âÊÔ' + submit_root_dir + 'ÏÂµÄËùÓÐÑ§Éú´úÂë')
 
-    # ·µ»ØËùÓÐÑ§ÉúÌá½»µÄÑ¹ËõÎÄµµÁÐ±í
+def run_auto_test():
+    run_logger.info('??' + submit_root_dir + 'µ?')
+
+    # ?????
     compressed_file_list = find_all_submit_files(submit_root_dir)
     # print(compressed_file_list)
 
-    # ´¦ÀíÃ¿¸öÑ§ÉúµÄÑ¹ËõÎÄµµ
+    # ÿ???
     for file in compressed_file_list:
         handle_per_compressed_file(file)
 
-    run_logger.info('²âÊÔÍê±Ï')
+    run_logger.info('')
     if record_test_result_to_excel:
-        excel.save_to_new_excel(0)
+        if excel is not None:
+            excel.save_to_new_excel(0)
+        else:
+            if len(fallback_rows) > 0:
+                df = pd.DataFrame(fallback_rows, columns=fallback_headers)
+                df.to_excel(test_score_excel_file, index=False)
+                run_logger.info(
+                    'Standalone output Excel written to: ' + test_score_excel_file)
+            else:
+                run_logger.warning(
+                    'No results to write to: ' + test_score_excel_file)
 
     None
+
 
 if __name__ == "__main__":
     run_auto_test()

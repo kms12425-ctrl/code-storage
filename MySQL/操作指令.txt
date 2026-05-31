@@ -27,3 +27,14 @@ ID char(18) unique
 
 insert into client (c_id,c_name,c_id_card,c_phone,c_password)
 values(33,'蔡依婷','350972199204227621','18820762130','MKwEuc1sc6');
+
+c_name
+c_id_card
+i_name
+i_project
+pro_status
+pro_quantity
+i_amount
+i_year
+pro_income
+pro_purchase_time
